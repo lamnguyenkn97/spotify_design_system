@@ -10,6 +10,20 @@ const preview: Preview = {
         date: /Date$/i,
       },
     },
+    sorting: {
+      method: 'configure',
+      order: [
+        'Atoms',
+        ['Button', ['Button', 'TextButton']],
+        ['Typography', ['Text', 'TextLink']],
+        ['Input', ['SearchInput']],
+        ['Icon', ['Icon']],
+        'Molecules',
+        ['Card', ['Card']],
+        ['Footer', ['Footer']],
+        ['Banner', ['Banner']],
+      ],
+    },
   },
   decorators: [
     (Story) => (

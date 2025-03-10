@@ -1,31 +1,26 @@
 import styled from 'styled-components';
-import { borderRadius, colors, fontSizes, spacing } from '../../../styles';
+import { borderRadius, colors, fontSizes, spacing } from '../../../../styles';
 import { ButtonSize, ButtonVariant } from './Button.types';
 
-export interface ButtonStyleProps {
-  size: ButtonSize; // Size of the button
-  variant: ButtonVariant; // Variant of the button
-}
-
-const getSizeStyles = (size: ButtonSize) => {
+export const getSizeStyles = (size: ButtonSize) => {
   switch (size) {
     case ButtonSize.Small:
       return `
         padding: ${spacing.xs} ${spacing.sm};
-        font-size: ${fontSizes.sm};
+        font-size: ${fontSizes.sm}rem;
         font-family: 'Circular-Medium', sans-serif;
       `;
     case ButtonSize.Large:
       return `
         padding: ${spacing.md} ${spacing.lg};
-        font-size: ${fontSizes.lg};
+        font-size: ${fontSizes.lg}rem;
         font-family: 'Circular-Bold', sans-serif;
       `;
     case ButtonSize.Medium:
     default:
       return `
         padding: ${spacing.sm} ${spacing.md};
-        font-size: ${fontSizes.md};
+        font-size: ${fontSizes.md}rem;
         font-family: 'Circular-Medium', sans-serif;
       `;
   }
@@ -41,6 +36,8 @@ const getVariantStyles = (variant: ButtonVariant) => {
         &:hover {
           color: ${colors.primary.white};
           border-color: ${colors.primary.white};
+          transform: scale(1.07);
+          font-size: calc(${ButtonSize.Medium}rem * 1.1);
         }
       `;
     case ButtonVariant.White:
@@ -49,7 +46,19 @@ const getVariantStyles = (variant: ButtonVariant) => {
         color: ${colors.primary.black};
         &:hover {
           background-color: ${colors.grey.grey6};
-          
+          transform: scale(1.07);
+          font-size: 1.05em;
+        }
+      `;
+    case ButtonVariant.FlatWhite:
+      return `
+        background-color: transparent;
+        color: ${colors.primary.white};
+        border: 2px solid ${colors.grey.grey6};
+        &:hover {
+          border: 2px solid ${colors.primary.white};
+          transform: scale(1.07);
+          font-size: 1.05em;
         }
       `;
     case ButtonVariant.Primary:
@@ -58,6 +67,8 @@ const getVariantStyles = (variant: ButtonVariant) => {
         background-color: ${colors.primary.brand};
         color: ${colors.primary.black};
         &:hover {
+          transform: scale(1.07);
+          font-size: 1.05em;
           background-color: ${colors.primary.brandHighlight};
         }
       `;
@@ -69,16 +80,21 @@ export const StyledButton = styled.button<{
   variant: ButtonVariant;
 }>`
   ${(props) => getSizeStyles(props.size)};
-  ${(props) => getVariantStyles(props.variant)};
   border: none;
+  ${(props) => getVariantStyles(props.variant)};
   font-family: inherit;
+  display: inline-flex;
+  align-items: center; /* Vertically center content */
+  justify-content: center; /* Optional: center everything */
+  gap: ${spacing.xs};
   border-radius: ${borderRadius.xl};
   cursor: pointer;
-  transition:
-    background-color 0.3s ease,
-    color 0.3s ease;
-
+  transition: all 0.3s ease-in-out;
   &:disabled {
     cursor: not-allowed;
+  }
+  .icon {
+    display: inline-flex; /* Keeps the icon properly centered within itself */
+    align-items: center;
   }
 `;
