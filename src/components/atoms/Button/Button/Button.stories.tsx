@@ -1,9 +1,11 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { Button } from './Button';
 import { ButtonProps, ButtonSize, ButtonVariant } from './Button.types';
+import React from 'react';
+import { FaCoffee } from 'react-icons/fa';
 
 const meta: Meta<ButtonProps> = {
-  title: 'Components/Button',
+  title: 'Atoms/Buttons/Button',
   component: Button,
   argTypes: {
     variant: {
@@ -44,6 +46,24 @@ const meta: Meta<ButtonProps> = {
 export default meta;
 
 type Story = StoryObj<ButtonProps>;
+
+export const WithIconPrimary: Story = {
+  args: {
+    text: 'Click Me',
+    size: ButtonSize.Small,
+    variant: ButtonVariant.Primary,
+    icon: <FaCoffee />,
+  },
+};
+
+export const WithIconMedium: Story = {
+  args: {
+    text: 'Click Me',
+    size: ButtonSize.Medium,
+    variant: ButtonVariant.Primary,
+    icon: <FaCoffee />,
+  },
+};
 
 export const Primary: Story = {
   args: {

@@ -1,9 +1,10 @@
-import { MouseEventHandler } from 'react';
+import React, { MouseEventHandler } from 'react';
 
 export enum ButtonVariant {
   Primary = 'primary',
   Secondary = 'secondary',
   White = 'white',
+  FlatWhite = 'flat-white',
 }
 
 export enum ButtonSize {
@@ -18,4 +19,5 @@ export type ButtonProps = {
   size: ButtonSize;
   text: string;
   variant: ButtonVariant;
+  icon?: React.ReactNode;
 };

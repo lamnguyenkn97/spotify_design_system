@@ -79,7 +79,10 @@ export const fontFaces = css`
 `;
 
 export const fontSizes = {
-  sm: '12px',
-  md: '16px',
-  lg: '20px',
+  sm: '0.875',
+  md: '1',
+  lg: '1.125',
+  xl: '2',
+  xxl: '3',
+  '2xl': '4',
 };
