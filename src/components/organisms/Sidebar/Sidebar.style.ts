@@ -34,15 +34,3 @@ export const SearchWrapper = styled.div`
 export const RecentsWrapper = styled.div`
   margin-bottom: 8px;
 `;
-
-export const LibraryList = styled.div`
-  flex: 1;
-  overflow-y: auto;
-`;
-
-export const LibraryListItem = styled.div`
-  display: flex;
-  align-items: center;
-  gap: ${spacing.md};
-  margin-bottom: 16px;
-`; 
