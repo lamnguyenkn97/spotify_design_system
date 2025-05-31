@@ -1,11 +1,11 @@
 import React from 'react';
 import {
-  StyledTable,
-  StyledTh,
-  StyledTd,
-  StyledTr,
-  StyledThead,
-  StyledTbody,
+  TableWrapper,
+  TableHeader,
+  TableCell,
+  TableRow,
+  TableHead,
+  TableBody,
 } from './Table.style';
 
 export interface TableProps<T> {
@@ -20,31 +20,31 @@ export interface TableProps<T> {
 
 export const Table = <T,>({ data, columns }: TableProps<T>) => {
   return (
-    <StyledTable>
-      <StyledThead>
+    <TableWrapper>
+      <TableHead>
         <tr>
           {columns.map((col) => (
-            <StyledTh key={col.key as string} style={{ width: col.width }}>
+            <TableHeader key={col.key as string} style={{ width: col.width }}>
               {col.label}
-            </StyledTh>
+            </TableHeader>
           ))}
         </tr>
-      </StyledThead>
-      <StyledTbody>
+      </TableHead>
+      <TableBody>
         {data.map((row, rowIndex) => (
-          <StyledTr key={rowIndex}>
+          <TableRow key={rowIndex}>
             {columns.map((col) => (
-              <StyledTd key={col.key as string}>
+              <TableCell key={col.key as string}>
                 {
                   col.renderCell
                     ? col.renderCell(row)
                     : (row[col.key] as React.ReactNode) // ✅ Type assertion to ReactNode
                 }
-              </StyledTd>
+              </TableCell>
             ))}
-          </StyledTr>
+          </TableRow>
         ))}
-      </StyledTbody>
-    </StyledTable>
+      </TableBody>
+    </TableWrapper>
   );
 };

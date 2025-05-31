@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { ElementType } from 'react';
 import { StyledTextLink, TextLinkProps } from './TextLink.style';
 
 type Props = TextLinkProps & {
   href?: string;
   children: React.ReactNode;
-  component?: 'a' | 'span' | 'button'; // Allows flexibility
+  component?: ElementType;
   className?: string;
 };
 

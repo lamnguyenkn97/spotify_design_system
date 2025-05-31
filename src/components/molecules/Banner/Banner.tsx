@@ -1,69 +1,93 @@
 import React, { useEffect, useState } from 'react';
-import ColorThief from 'color-thief-browser';
-import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
-import { Icon } from '../../atoms/Icon';
-import { BannerProps } from './Banner.types';
-import {
-  BannerWrapper,
-  ContentWrapper,
-  BannerImage,
-  TextContent,
-  PodcastSubtitle,
-  Title,
-  Subtitle,
-} from './Banner.style';
+import { Wrapper } from './Banner.style';
+import { getImageGradient } from './utils';
+import { Stack } from '../../atoms/Layout/Stack';
+import { Image } from '../../atoms/Image/Image';
+import { Typography } from '../../atoms/Typography/Text/Typography';
 
-const Banner: React.FC<BannerProps> = ({
+const bannerTypeLabelClass = 'banner-type-label';
+const bannerTitleClass = 'banner-title';
+const bannerMarginTopClass = 'banner-margin-top';
+
+export type BannerType = 'album' | 'playlist' | 'podcast' | 'artist';
+
+interface BannerProps {
+  type: BannerType;
+  title: string;
+  subtitle?: string;
+  description?: string;
+  image: string;
+}
+
+export const Banner: React.FC<BannerProps> = ({
   type,
-  imageUrl,
   title,
   subtitle,
   description,
-  verified,
+  image,
 }) => {
-  const [backgroundGradient, setBackgroundGradient] = useState<string>(
-    'linear-gradient(135deg, #333, #111)'
-  );
+  const [background, setBackground] = useState<string>('#121212');
 
   useEffect(() => {
-    const img = new Image();
-    img.crossOrigin = 'Anonymous'; // Allow fetching images from different origins
-    img.src = imageUrl;
-
-    img.onload = () => {
-      const colorThief = new ColorThief();
-      const colors = colorThief.getPalette(img, 2); // Extract 2 dominant colors
-
-      if (colors && colors.length >= 2) {
-        const [color1, color2] = colors.map((rgb) => `rgb(${rgb.join(',')})`);
-        setBackgroundGradient(`linear-gradient(135deg, ${color1}, ${color2})`);
-      }
-    };
-  }, [imageUrl]);
+    getImageGradient(image)
+      .then((gradient) => setBackground(gradient))
+      .catch(() => setBackground('#121212'));
+  }, [image]);
 
   return (
-    <BannerWrapper backgroundGradient={backgroundGradient}>
-      <ContentWrapper>
-        {type !== 'artist' && (
-          <BannerImage src={imageUrl} alt={title} type={type} />
-        )}
-        <TextContent>
-          {type === 'podcast' && (
-            <PodcastSubtitle>Podcast Episode</PodcastSubtitle>
+    <>
+      <Wrapper style={{ background }}>
+        <Image
+          src={image}
+          alt={`${title} cover`}
+          width={200}
+          aspectRatio={1}
+          borderRadius="md"
+          style={{ boxShadow: '0 16px 24px rgba(0,0,0,0.5)' }}
+        />
+        <Stack direction="column" spacing="sm" align="start">
+          <Typography
+            variant="body2"
+            weight="bold"
+            color="secondary"
+            className={bannerTypeLabelClass}
+          >
+            {type === 'album'
+              ? 'Album'
+              : type === 'playlist'
+                ? 'Playlist'
+                : type === 'podcast'
+                  ? 'Podcast'
+                  : 'Verified Artist'}
+          </Typography>
+          <Typography
+            variant="h1"
+            weight="bold"
+            color="primary"
+            component="h1"
+            className={bannerTitleClass}
+          >
+            {title}
+          </Typography>
+          {type === 'artist' ? (
+            <Typography
+              variant="body1"
+              color="secondary"
+              className={bannerMarginTopClass}
+            >
+              {description}
+            </Typography>
+          ) : (
+            <Typography
+              variant="body1"
+              color="secondary"
+              className={bannerMarginTopClass}
+            >
+              {subtitle}
+            </Typography>
           )}
-          {verified && (
-            <PodcastSubtitle>
-              <Icon icon={faCheckCircle} size={'medium'} color="#1DB954" />
-              Verified Artist
-            </PodcastSubtitle>
-          )}
-          <Title>{title}</Title>
-          {subtitle && <Subtitle>{subtitle}</Subtitle>}
-          {description && <Subtitle>{description}</Subtitle>}
-        </TextContent>
-      </ContentWrapper>
-    </BannerWrapper>
+        </Stack>
+      </Wrapper>
+    </>
   );
 };
-
-export default Banner;

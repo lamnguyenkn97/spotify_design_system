@@ -1,11 +1,11 @@
-import React, { JSX } from 'react';
+import React, { HTMLAttributes, JSX } from 'react';
 import { StyledStack, StackProps } from './Stack.style';
 
 type Props = StackProps & {
   component?: keyof JSX.IntrinsicElements; // Allows <section>, <ul>, etc.
   children: React.ReactNode;
   className?: string;
-};
+} & HTMLAttributes<HTMLDivElement>;
 
 export const Stack: React.FC<Props> = ({
   component = 'div',
