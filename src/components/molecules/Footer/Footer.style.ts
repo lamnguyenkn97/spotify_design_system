@@ -1,9 +1,10 @@
 import styled from 'styled-components';
+import { colors, spacing, fontSizes } from '../../../styles';
 
 export const FooterWrapper = styled.footer`
-  background-color: #000;
-  color: #b3b3b3;
-  padding: 40px 80px;
+  background-color: ${colors.primary.black};
+  color: ${colors.grey.grey6};
+  padding: ${spacing.xl} ${spacing.xl};
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -11,18 +12,18 @@ export const FooterWrapper = styled.footer`
 
   @media (max-width: 768px) {
     flex-direction: column;
-    padding: 40px 20px;
+    padding: ${spacing.xl} ${spacing.md};
   }
 `;
 
 export const FooterColumns = styled.div`
   display: flex;
   flex: 1;
-  gap: 50px;
+  gap: ${spacing.xl};
 
   @media (max-width: 768px) {
     flex-direction: column;
-    gap: 20px;
+    gap: ${spacing.md};
   }
 `;
 
@@ -32,37 +33,37 @@ export const FooterColumn = styled.div`
 `;
 
 export const ColumnTitle = styled.h4`
-  font-size: 16px;
-  color: white;
+  font-size: ${fontSizes.md}rem;
+  color: ${colors.primary.white};
   font-weight: bold;
-  margin-bottom: 10px;
+  margin-bottom: ${spacing.sm};
 `;
 
 export const FooterLink = styled.a`
-  color: #b3b3b3;
+  color: ${colors.grey.grey6};
   text-decoration: none;
-  font-size: 14px;
-  margin-bottom: 8px;
+  font-size: ${fontSizes.sm}rem;
+  margin-bottom: ${spacing.xs};
   transition: color 0.3s ease-in-out;
 
   &:hover {
-    color: white;
+    color: ${colors.primary.white};
   }
 `;
 
 export const SocialIcons = styled.div`
   display: flex;
-  gap: 15px;
+  gap: ${spacing.md};
 
   @media (max-width: 768px) {
-    margin-top: 20px;
+    margin-top: ${spacing.md};
   }
 `;
 
 export const IconWrapper = styled.a`
-  width: 40px;
-  height: 40px;
-  background-color: #222;
+  width: ${spacing.xl};
+  height: ${spacing.xl};
+  background-color: ${colors.grey.grey1};
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -70,11 +71,11 @@ export const IconWrapper = styled.a`
   transition: background 0.3s ease-in-out;
 
   &:hover {
-    background-color: #333;
+    background-color: ${colors.grey.grey2};
   }
 
   svg {
-    color: white;
-    font-size: 18px;
+    color: ${colors.primary.white};
+    font-size: ${fontSizes.md}rem;
   }
 `;

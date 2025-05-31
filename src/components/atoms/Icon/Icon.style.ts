@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { fontSizes, spacing } from '../../../styles';
+import { fontSizes, spacing, colors } from '../../../styles';
 
 export type IconProps = {
   size?: 'small' | 'medium' | 'large';
@@ -14,9 +14,7 @@ export const StyledIcon = styled.span<IconProps>`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition:
-    color 0.2s ease,
-    transform 0.2s ease; /* ✅ Smooth color & hover effects */
+  transition: all 0.2s ease-in-out;
 
   ${({ size }) => {
     switch (size) {
@@ -41,12 +39,12 @@ export const StyledIcon = styled.span<IconProps>`
     }
   }}
 
-  color: ${({ color }) => color || 'inherit'}; /* ✅ Set default color */
+  color: ${({ color }) => color || colors.primary.white};
 
   ${({ withBackground, bgColor }) =>
     withBackground &&
     css`
-      background-color: ${bgColor || 'black'};
+      background-color: ${bgColor || colors.primary.black};
       border-radius: 50%;
       padding: ${spacing.lg};
     `}
@@ -56,8 +54,8 @@ export const StyledIcon = styled.span<IconProps>`
     css`
       cursor: pointer;
       &:hover {
-        color: ${hoverColor || 'gray'}; /* ✅ Hover color change */
-        transform: scale(1.1); /* ✅ Slight scaling effect */
+        color: ${hoverColor || colors.grey.grey6};
+        transform: scale(1.1);
       }
       &:active {
         transform: scale(0.95);

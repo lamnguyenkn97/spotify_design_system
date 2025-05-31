@@ -4,6 +4,7 @@ import { borderRadius } from '../../../styles';
 export const ImageWrapper = styled.div<{
   width: string | number;
   height: string | number;
+  aspectRatio?: string | number;
 }>`
   display: flex;
   justify-content: center;
@@ -12,6 +13,8 @@ export const ImageWrapper = styled.div<{
   height: ${({ height }) =>
     typeof height === 'number' ? `${height}px` : height};
   overflow: hidden;
+  ${({ aspectRatio }) =>
+    aspectRatio ? `aspect-ratio: ${aspectRatio};` : ''}
 `;
 
 export const StyledImage = styled.img<{

@@ -8,6 +8,7 @@ export interface ImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   height?: string | number;
   borderRadius?: keyof typeof import('../../../styles/tokens').borderRadius;
   fallbackSrc?: string; // Image to show if the main src fails
+  aspectRatio?: string | number;
 }
 
 export const Image: React.FC<ImageProps> = ({
@@ -17,6 +18,7 @@ export const Image: React.FC<ImageProps> = ({
   height = 'auto',
   borderRadius = 'md',
   fallbackSrc = '/fallback-image.png', // Default fallback image
+  aspectRatio,
   ...props
 }) => {
   const [imageSrc, setImageSrc] = useState(src);
@@ -26,7 +28,7 @@ export const Image: React.FC<ImageProps> = ({
   };
 
   return (
-    <ImageWrapper width={width} height={height}>
+    <ImageWrapper width={width} height={height} aspectRatio={aspectRatio}>
       <StyledImage
         src={imageSrc}
         alt={alt}

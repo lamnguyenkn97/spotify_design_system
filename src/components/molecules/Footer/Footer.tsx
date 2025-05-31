@@ -5,16 +5,11 @@ import {
   faFacebook,
 } from '@fortawesome/free-brands-svg-icons';
 import { FooterLinkItem, SocialLinkItem } from './Footer.types';
-import {
-  FooterWrapper,
-  FooterColumns,
-  FooterColumn,
-  ColumnTitle,
-  FooterLink,
-  SocialIcons,
-  IconWrapper,
-} from './Footer.style';
-import { Icon } from '../../atoms/Icon'; // Import your custom Icon component
+import { FooterWrapper } from './Footer.style';
+import { Stack } from '../../atoms/Layout/Stack';
+import { Typography } from '../../atoms/Typography/Text/Typography';
+import { Icon } from '../../atoms/Icon/Icon';
+import { colors, spacing } from '../../../styles';
 
 const footerLinks: FooterLinkItem[] = [
   {
@@ -61,36 +56,61 @@ const socialLinks: SocialLinkItem[] = [
 const Footer: React.FC = () => {
   return (
     <FooterWrapper>
-      {/* Left Section - Links */}
-      <FooterColumns>
+      <Stack direction="row" spacing="xl" align="start" justify="space-between" wrap style={{ flex: 1 }}>
         {footerLinks.map((column, index) => (
-          <FooterColumn key={index}>
-            <ColumnTitle>{column.title}</ColumnTitle>
+          <Stack key={index} direction="column" spacing="sm" align="start">
+            <Typography variant="body1" weight="bold" color="primary" component="h4">
+              {column.title}
+            </Typography>
             {column.links.map((link, linkIndex: number) => (
-              <FooterLink key={linkIndex} href={link.url}>
+              <a
+                key={linkIndex}
+                href={link.url}
+                style={{
+                  color: colors.grey.grey6,
+                  textDecoration: 'none',
+                  fontSize: '0.875rem',
+                  marginBottom: spacing.xs,
+                  transition: 'color 0.3s',
+                }}
+                onMouseOver={e => (e.currentTarget.style.color = colors.primary.white)}
+                onMouseOut={e => (e.currentTarget.style.color = colors.grey.grey6)}
+              >
                 {link.name}
-              </FooterLink>
+              </a>
             ))}
-          </FooterColumn>
+          </Stack>
         ))}
-      </FooterColumns>
-
-      {/* Right Section - Social Media Icons */}
-      <SocialIcons>
-        {socialLinks.map((social, index) => (
-          <IconWrapper key={index} href={social.url}>
-            <Icon
-              icon={social.icon}
-              size={'medium'}
-              color="white"
-              hoverColor="#1DB954"
-              withBackground={true}
-              bgColor="#222"
-              clickable={true}
-            />
-          </IconWrapper>
-        ))}
-      </SocialIcons>
+        <Stack direction="row" spacing="md" align="center" style={{ marginTop: spacing.md }}>
+          {socialLinks.map((social, index) => (
+            <a
+              key={index}
+              href={social.url}
+              style={{
+                width: spacing.xl,
+                height: spacing.xl,
+                background: colors.grey.grey1,
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'background 0.3s',
+              }}
+              onMouseOver={e => (e.currentTarget.style.background = colors.grey.grey2)}
+              onMouseOut={e => (e.currentTarget.style.background = colors.grey.grey1)}
+            >
+              <Icon
+                icon={social.icon}
+                size={'medium'}
+                color={colors.primary.white}
+                hoverColor="#1DB954"
+                withBackground={false}
+                clickable={true}
+              />
+            </a>
+          ))}
+        </Stack>
+      </Stack>
     </FooterWrapper>
   );
 };

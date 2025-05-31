@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { borderRadius, colors, fontSizes, spacing } from '../../../../styles';
+import { borderRadius, colors, fontSizes, spacing, fonts } from '../../../../styles';
 import { ButtonSize, ButtonVariant } from './Button.types';
 
 export const getSizeStyles = (size: ButtonSize) => {
@@ -8,20 +8,20 @@ export const getSizeStyles = (size: ButtonSize) => {
       return `
         padding: ${spacing.xs} ${spacing.sm};
         font-size: ${fontSizes.sm}rem;
-        font-family: 'Circular-Medium', sans-serif;
+        font-family: ${fonts.circular.medium}, sans-serif;
       `;
     case ButtonSize.Large:
       return `
         padding: ${spacing.md} ${spacing.lg};
         font-size: ${fontSizes.lg}rem;
-        font-family: 'Circular-Bold', sans-serif;
+        font-family: ${fonts.circular.bold}, sans-serif;
       `;
     case ButtonSize.Medium:
     default:
       return `
         padding: ${spacing.sm} ${spacing.md};
         font-size: ${fontSizes.md}rem;
-        font-family: 'Circular-Medium', sans-serif;
+        font-family: ${fonts.circular.medium}, sans-serif;
       `;
   }
 };
@@ -37,7 +37,7 @@ const getVariantStyles = (variant: ButtonVariant) => {
           color: ${colors.primary.white};
           border-color: ${colors.primary.white};
           transform: scale(1.07);
-          font-size: calc(${ButtonSize.Medium}rem * 1.1);
+          font-size: calc(${fontSizes.md}rem * 1.1);
         }
       `;
     case ButtonVariant.White:
@@ -47,7 +47,7 @@ const getVariantStyles = (variant: ButtonVariant) => {
         &:hover {
           background-color: ${colors.grey.grey6};
           transform: scale(1.07);
-          font-size: 1.05em;
+          font-size: calc(${fontSizes.md}rem * 1.05);
         }
       `;
     case ButtonVariant.FlatWhite:
@@ -58,7 +58,7 @@ const getVariantStyles = (variant: ButtonVariant) => {
         &:hover {
           border: 2px solid ${colors.primary.white};
           transform: scale(1.07);
-          font-size: 1.05em;
+          font-size: calc(${fontSizes.md}rem * 1.05);
         }
       `;
     case ButtonVariant.Primary:
@@ -68,7 +68,7 @@ const getVariantStyles = (variant: ButtonVariant) => {
         color: ${colors.primary.black};
         &:hover {
           transform: scale(1.07);
-          font-size: 1.05em;
+          font-size: calc(${fontSizes.md}rem * 1.05);
           background-color: ${colors.primary.brandHighlight};
         }
       `;

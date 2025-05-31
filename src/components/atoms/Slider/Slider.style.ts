@@ -1,26 +1,26 @@
 import styled from 'styled-components';
-import { borderRadius } from '../../../styles';
+import { borderRadius, colors, spacing } from '../../../styles';
 // Use border-radius tokens
 
 export const StyledSlider = styled.div`
   position: relative;
   width: 100%;
-  height: 8px;
-  background: rgba(255, 255, 255, 0.2);
+  height: ${spacing.sm};
+  background: ${colors.grey.grey2};
   border-radius: ${borderRadius.md};
 `;
 
 export const StyledTrack = styled.div`
   position: absolute;
   height: 100%;
-  background: #1db954; // Spotify Green
+  background: ${colors.primary.brand};
   border-radius: ${borderRadius.md};
 `;
 
 export const StyledThumb = styled.input`
   position: absolute;
   width: 100%;
-  height: 8px;
+  height: ${spacing.sm};
   appearance: none;
   background: transparent;
   outline: none;
@@ -28,9 +28,9 @@ export const StyledThumb = styled.input`
 
   &::-webkit-slider-thumb {
     appearance: none;
-    width: 12px;
-    height: 12px;
-    background: white;
+    width: ${spacing.md};
+    height: ${spacing.md};
+    background: ${colors.primary.white};
     border-radius: 50%;
     cursor: pointer;
     transition: transform 0.2s ease;
