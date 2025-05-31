@@ -3,11 +3,18 @@ import { Stack } from '../../atoms/Layout/Stack';
 import { Typography } from '../../atoms/Typography/Text/Typography';
 import { Button } from '../../atoms/Button/Button';
 import { Icon } from '../../atoms/Icon/Icon';
-import { Image } from '../../atoms/Image/Image';
 import { SearchInput } from '../../atoms/Input/SearchInput';
 import { faSpotify } from '@fortawesome/free-brands-svg-icons';
-import { faPlus, faExpand, faList, faGripHorizontal } from '@fortawesome/free-solid-svg-icons';
-import { ButtonSize, ButtonVariant } from '../../atoms/Button/Button/Button.types';
+import {
+  faPlus,
+  faExpand,
+  faList,
+  faGripHorizontal,
+} from '@fortawesome/free-solid-svg-icons';
+import {
+  ButtonSize,
+  ButtonVariant,
+} from '../../atoms/Button/Button/Button.types';
 import {
   SidebarContainer,
   LogoWrapper,
@@ -15,7 +22,6 @@ import {
   SectionTitle,
   SearchWrapper,
   RecentsWrapper,
-  LibraryList,
 } from './Sidebar.style';
 import { HorizontalTileCard } from '../../molecules/horizontalTIleCard';
 
@@ -57,10 +63,28 @@ export const Sidebar: React.FC = () => {
       </SectionTitle>
       <FiltersWrapper>
         {filters.map((filter) => (
-          <Button key={filter} text={filter} size={ButtonSize.Small} variant={ButtonVariant.Secondary} onClick={() => {}} />
+          <Button
+            key={filter}
+            text={filter}
+            size={ButtonSize.Small}
+            variant={ButtonVariant.Secondary}
+            onClick={() => {}}
+          />
         ))}
-        <Button icon={<Icon icon={faPlus} size="small" />} size={ButtonSize.Small} variant={ButtonVariant.Secondary} text="" onClick={() => {}} />
-        <Button icon={<Icon icon={faExpand} size="small" />} size={ButtonSize.Small} variant={ButtonVariant.Secondary} text="" onClick={() => {}} />
+        <Button
+          icon={<Icon icon={faPlus} size="small" />}
+          size={ButtonSize.Small}
+          variant={ButtonVariant.Secondary}
+          text=""
+          onClick={() => {}}
+        />
+        <Button
+          icon={<Icon icon={faExpand} size="small" />}
+          size={ButtonSize.Small}
+          variant={ButtonVariant.Secondary}
+          text=""
+          onClick={() => {}}
+        />
       </FiltersWrapper>
 
       {/* Search */}
@@ -71,7 +95,9 @@ export const Sidebar: React.FC = () => {
       {/* Recents & Toggle */}
       <RecentsWrapper>
         <Stack direction="row" align="center" justify="space-between">
-          <Typography variant="body2" color="secondary">Recents</Typography>
+          <Typography variant="body2" color="secondary">
+            Recents
+          </Typography>
           <Stack direction="row" spacing="xs">
             <Icon icon={faList} size="small" />
             <Icon icon={faGripHorizontal} size="small" />
@@ -80,7 +106,7 @@ export const Sidebar: React.FC = () => {
       </RecentsWrapper>
 
       {/* Library List */}
-      <LibraryList>
+      <Stack justify={'space-evenly'}>
         {libraryItems.map((item, idx) => (
           <HorizontalTileCard
             key={idx}
@@ -89,9 +115,10 @@ export const Sidebar: React.FC = () => {
             subtitle={item.subtitle}
             width="100%"
             onClick={() => {}}
+            size="small"
           />
         ))}
-      </LibraryList>
+      </Stack>
     </SidebarContainer>
   );
-}; 
+};
