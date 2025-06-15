@@ -2,12 +2,7 @@ import React from 'react';
 import { Stack } from '../../atoms/Layout/Stack';
 import { Slider } from '../../atoms/Slider/Slider';
 import { Typography } from '../../atoms/Typography/Text/Typography';
-
-interface ProgressBarProps {
-  currentTime: number;
-  duration: number;
-  onSeek: (time: number) => void;
-}
+import { ProgressBarProps } from './MusicPlayer.types';
 
 export const ProgressBar: React.FC<ProgressBarProps> = ({
   currentTime,
@@ -28,12 +23,13 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
         max={duration}
         step={1}
         onChange={onSeek}
+        aria-label={`Seek to position: ${formatTime(currentTime)} of ${formatTime(duration)}`}
       />
       <Stack direction="row" justify="space-between" style={{ width: '100%' }}>
-        <Typography variant="caption" color="secondary" component="span">
+        <Typography variant="caption" color="secondary">
           {formatTime(currentTime)}
         </Typography>
-        <Typography variant="caption" color="secondary" component="span">
+        <Typography variant="caption" color="secondary">
           {formatTime(duration)}
         </Typography>
       </Stack>

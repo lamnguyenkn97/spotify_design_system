@@ -2,12 +2,7 @@ import React from 'react';
 import { Stack } from '../../atoms/Layout/Stack';
 import { Typography } from '../../atoms/Typography/Text/Typography';
 import { Image } from '../../atoms/Image/Image';
-
-interface NowPlayingProps {
-  title?: string;
-  artist?: string;
-  coverUrl?: string;
-}
+import { NowPlayingProps } from './MusicPlayer.types';
 
 export const NowPlaying: React.FC<NowPlayingProps> = ({
   title = 'Not Playing',
@@ -21,25 +16,41 @@ export const NowPlaying: React.FC<NowPlayingProps> = ({
         alt={`${title} album cover`}
         width={56}
         height={56}
-        borderRadius="xs"
+        shape="rounded"
       />
       <Stack direction="column" spacing="xs" style={{ minWidth: 0 }}>
-        <Typography
-          variant="body1"
-          weight="bold"
-          color="primary"
-          component="span"
+        <Stack
+          style={{
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            width: '100%',
+          }}
         >
-          {title}
-        </Typography>
-        <Typography
-          variant="body2"
-          weight="regular"
-          color="secondary"
-          component="span"
+          <Typography
+            variant="body1"
+            weight="medium"
+            color="primary"
+          >
+            {title}
+          </Typography>
+        </Stack>
+        <Stack
+          style={{
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            width: '100%',
+          }}
         >
-          {artist}
-        </Typography>
+          <Typography
+            variant="body2"
+            weight="regular"
+            color="secondary"
+          >
+            {artist}
+          </Typography>
+        </Stack>
       </Stack>
     </Stack>
   );

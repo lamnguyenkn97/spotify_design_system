@@ -1,23 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Wrapper } from './Banner.style';
-import { getImageGradient } from './utils';
+import { getImageGradient, getBannerTypeLabel } from './utils';
+import { BannerProps, BannerType } from './Banner.types';
 import { Stack } from '../../atoms/Layout/Stack';
 import { Image } from '../../atoms/Image/Image';
 import { Typography } from '../../atoms/Typography/Text/Typography';
 
-const bannerTypeLabelClass = 'banner-type-label';
-const bannerTitleClass = 'banner-title';
-const bannerMarginTopClass = 'banner-margin-top';
-
-export type BannerType = 'album' | 'playlist' | 'podcast' | 'artist';
-
-interface BannerProps {
-  type: BannerType;
-  title: string;
-  subtitle?: string;
-  description?: string;
-  image: string;
-}
+type GradientState = {
+  background: string;
+  isLoading: boolean;
+  error: Error | null;
+};
 
 export const Banner: React.FC<BannerProps> = ({
   type,
@@ -26,68 +18,110 @@ export const Banner: React.FC<BannerProps> = ({
   description,
   image,
 }) => {
-  const [background, setBackground] = useState<string>('#121212');
+  const [gradientState, setGradientState] = useState<GradientState>({
+    background: '#121212',
+    isLoading: true,
+    error: null,
+  });
 
   useEffect(() => {
-    getImageGradient(image)
-      .then((gradient) => setBackground(gradient))
-      .catch(() => setBackground('#121212'));
+    let isMounted = true;
+
+    const loadGradient = async () => {
+      try {
+        setGradientState(prev => ({ ...prev, isLoading: true, error: null }));
+        const gradient = await getImageGradient(image);
+        if (isMounted) {
+          setGradientState({
+            background: gradient,
+            isLoading: false,
+            error: null,
+          });
+        }
+      } catch (error) {
+        if (isMounted) {
+          setGradientState({
+            background: '#121212',
+            isLoading: false,
+            error: error instanceof Error ? error : new Error('Failed to load gradient'),
+          });
+        }
+      }
+    };
+
+    loadGradient();
+
+    return () => {
+      isMounted = false;
+    };
   }, [image]);
 
+  // Validate required props
+  if (!type || !title || !image) {
+    console.error('Banner: Missing required props');
+    return null;
+  }
+
+  // Validate type-specific props
+  if (type === 'artist' && !description) {
+    console.error('Banner: Artist type requires description prop');
+    return null;
+  }
+
+  if (type !== 'artist' && !subtitle) {
+    console.error('Banner: Non-artist types require subtitle prop');
+    return null;
+  }
+
   return (
-    <>
-      <Wrapper style={{ background }}>
-        <Image
-          src={image}
-          alt={`${title} cover`}
-          width={200}
-          aspectRatio={1}
-          borderRadius="md"
-          style={{ boxShadow: '0 16px 24px rgba(0,0,0,0.5)' }}
-        />
-        <Stack direction="column" spacing="sm" align="start">
-          <Typography
-            variant="body2"
-            weight="bold"
-            color="secondary"
-            className={bannerTypeLabelClass}
-          >
-            {type === 'album'
-              ? 'Album'
-              : type === 'playlist'
-                ? 'Playlist'
-                : type === 'podcast'
-                  ? 'Podcast'
-                  : 'Verified Artist'}
-          </Typography>
-          <Typography
-            variant="h1"
-            weight="bold"
-            color="primary"
-            component="h1"
-            className={bannerTitleClass}
-          >
-            {title}
-          </Typography>
-          {type === 'artist' ? (
-            <Typography
-              variant="body1"
-              color="secondary"
-              className={bannerMarginTopClass}
-            >
-              {description}
-            </Typography>
-          ) : (
-            <Typography
-              variant="body1"
-              color="secondary"
-              className={bannerMarginTopClass}
-            >
-              {subtitle}
-            </Typography>
-          )}
-        </Stack>
-      </Wrapper>
-    </>
+    <Stack 
+      direction="row" 
+      spacing="lg" 
+      align="end" 
+      padding="lg"
+      style={{ 
+        background: gradientState.background,
+        height: '300px',
+        borderRadius: '8px',
+        transition: 'background 0.3s ease-in-out',
+      }}
+      role="banner"
+      aria-label={`${getBannerTypeLabel(type)} banner`}
+    >
+      <Image
+        src={image}
+        alt={`${title} cover`}
+        width="200px"
+        aspectRatio={1}
+        shape="rounded"
+        style={{ boxShadow: '0 16px 24px rgba(0,0,0,0.5)' }}
+      />
+      
+      <Stack direction="column" spacing="sm" align="start">
+        <Typography
+          variant="body2"
+          weight="bold"
+          color="secondary"
+        >
+          {getBannerTypeLabel(type)}
+        </Typography>
+        
+        <Typography
+          variant="h1"
+          weight="bold"
+          color="primary"
+          component="h1"
+        >
+          {title}
+        </Typography>
+        
+        <Typography
+          variant="body1"
+          color="secondary"
+        >
+          {type === 'artist' ? description : subtitle}
+        </Typography>
+      </Stack>
+    </Stack>
   );
 };

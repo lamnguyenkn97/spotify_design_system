@@ -1,20 +1,6 @@
 import styled, { css } from 'styled-components';
 import { colors, fontSizes } from '../../../../styles';
-
-export type TypographyProps = {
-  variant?:
-    | 'h1'
-    | 'h2'
-    | 'h3'
-    | 'h4'
-    | 'h5'
-    | 'h6'
-    | 'body1'
-    | 'body2'
-    | 'caption';
-  weight?: 'light' | 'regular' | 'medium' | 'bold';
-  color?: 'primary' | 'secondary' | 'muted' | 'danger';
-};
+import { TypographyProps } from './Typography.types';
 
 export const StyledTypography = styled.span<TypographyProps>`
   ${({ variant }) => {

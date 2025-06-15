@@ -3,7 +3,7 @@ import { Stack } from '../../atoms/Layout/Stack';
 import { Typography } from '../../atoms/Typography/Text/Typography';
 import { Button } from '../../atoms/Button/Button';
 import { Icon } from '../../atoms/Icon/Icon';
-import { SearchInput } from '../../atoms/Input/SearchInput';
+import { Input } from '../../atoms/Input';
 import { faSpotify } from '@fortawesome/free-brands-svg-icons';
 import {
   faPlus,
@@ -11,10 +11,7 @@ import {
   faList,
   faGripHorizontal,
 } from '@fortawesome/free-solid-svg-icons';
-import {
-  ButtonSize,
-  ButtonVariant,
-} from '../../atoms/Button/Button/Button.types';
+import { ButtonSize, ButtonVariant } from '../../atoms/Button';
 import {
   SidebarContainer,
   LogoWrapper,
@@ -23,7 +20,7 @@ import {
   SearchWrapper,
   RecentsWrapper,
 } from './Sidebar.style';
-import { HorizontalTileCard } from '../../molecules/horizontalTIleCard';
+import { HorizontalTileCard } from '../../molecules/horizontalTileCard';
 
 const filters = ['Playlists', 'Artists', 'Albums', 'Podcasts & Shows'];
 
@@ -89,7 +86,12 @@ export const Sidebar: React.FC = () => {
 
       {/* Search */}
       <SearchWrapper>
-        <SearchInput placeholder="Search in Your Library" />
+        <Input
+          variant="search"
+          placeholder="Search in Your Library"
+          size="sm"
+          clearable
+        />
       </SearchWrapper>
 
       {/* Recents & Toggle */}

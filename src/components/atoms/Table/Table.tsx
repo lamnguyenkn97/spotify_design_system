@@ -1,4 +1,5 @@
 import React from 'react';
+import { TableProps } from './Table.types';
 import {
   TableWrapper,
   TableHeader,
@@ -7,16 +8,6 @@ import {
   TableHead,
   TableBody,
 } from './Table.style';
-
-export interface TableProps<T> {
-  data: T[];
-  columns: {
-    key: keyof T;
-    label: string;
-    width?: string; // Optional column width
-    renderCell?: (item: T) => React.ReactNode; // Custom cell rendering
-  }[];
-}
 
 export const Table = <T,>({ data, columns }: TableProps<T>) => {
   return (
