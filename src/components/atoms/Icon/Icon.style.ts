@@ -1,66 +1,201 @@
 import styled, { css } from 'styled-components';
-import { fontSizes, spacing } from '../../../styles';
+import { fontSizes, spacing, colors, borderRadius } from '../../../styles';
+import { IconSize, IconColor, IconVariant } from './Icon.types';
 
-export type IconProps = {
-  size?: 'small' | 'medium' | 'large';
-  color?: string; // ✅ Allow any string (hex, rgb, CSS colors)
-  hoverColor?: string; // ✅ New: Color on hover
-  withBackground?: boolean;
-  bgColor?: string; // ✅ Allow custom background colors
-  clickable?: boolean;
+// Icon size tokens mapping
+const sizeTokens = {
+  xs: {
+    dimension: spacing.sm,
+    fontSize: fontSizes.sm,
+    padding: spacing.sm,
+  },
+  small: {
+    dimension: spacing.md,
+    fontSize: fontSizes.md,
+    padding: spacing.md,
+  },
+  medium: {
+    dimension: spacing.lg,
+    fontSize: fontSizes.lg,
+    padding: spacing.md,
+  },
+  large: {
+    dimension: spacing.xl,
+    fontSize: fontSizes.xl,
+    padding: spacing.lg,
+  },
+  xl: {
+    dimension: '2rem', // spacing.xxl if available
+    fontSize: fontSizes.xl,
+    padding: spacing.lg,
+  },
+} as const;
+
+// Color tokens mapping that can be easily extended
+const colorTokens = {
+  primary: colors.primary.white,
+  secondary: colors.grey.grey6,
+  muted: colors.grey.grey3,
+  brand: colors.primary.brand,
+  error: colors.decorative.redRedWine,
+  warning: colors.decorative.mellowYellow,
+  success: colors.decorative.evergreen,
+  inherit: 'currentColor',
+} as const;
+
+// Default design tokens for icon
+const iconDefaults = {
+  size: 'medium' as IconSize,
+  color: 'inherit' as IconColor,
+  variant: 'default' as IconVariant,
+  clickable: false,
+  spin: false,
+  pulse: false,
+  disabled: false,
 };
 
-export const StyledIcon = styled.span<IconProps>`
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition:
-    color 0.2s ease,
-    transform 0.2s ease; /* ✅ Smooth color & hover effects */
+const getColorValue = (color: IconColor): string => {
+  return colorTokens[color as keyof typeof colorTokens] || color;
+};
 
-  ${({ size }) => {
-    switch (size) {
-      case 'small':
-        return css`
-          width: ${spacing.md};
-          height: ${spacing.md};
-          font-size: ${fontSizes.md}rem;
-        `;
-      case 'large':
-        return css`
-          width: ${spacing.xl};
-          height: ${spacing.xl};
-          font-size: ${fontSizes.xl}rem;
-        `;
-      default:
-        return css`
-          width: ${spacing.lg};
-          height: ${spacing.lg};
-          font-size: ${fontSizes.lg}rem;
-        `;
-    }
-  }}
+const getSizeStyles = (size: IconSize) => {
+  const sizeConfig = sizeTokens[size] || sizeTokens.medium;
 
-  color: ${({ color }) => color || 'inherit'}; /* ✅ Set default color */
+  return css`
+    width: ${sizeConfig.dimension};
+    height: ${sizeConfig.dimension};
+    font-size: ${sizeConfig.fontSize}rem;
+  `;
+};
 
-  ${({ withBackground, bgColor }) =>
-    withBackground &&
-    css`
-      background-color: ${bgColor || 'black'};
-      border-radius: 50%;
-      padding: ${spacing.lg};
-    `}
+const getVariantStyles = (
+  variant: IconVariant,
+  backgroundColor?: IconColor,
+  size: IconSize = 'medium'
+) => {
+  const sizeConfig = sizeTokens[size] || sizeTokens.medium;
 
-  ${({ clickable, hoverColor }) =>
-    clickable &&
-    css`
+  switch (variant) {
+    case 'rounded':
+      return css`
+        background-color: ${backgroundColor
+          ? getColorValue(backgroundColor)
+          : colors.grey.grey2};
+        border-radius: 50%;
+        padding: ${sizeConfig.padding};
+      `;
+    case 'outlined':
+      return css`
+        border: 1px solid
+          ${backgroundColor
+            ? getColorValue(backgroundColor)
+            : colors.grey.grey3};
+        border-radius: ${borderRadius.sm};
+        padding: ${sizeConfig.padding};
+      `;
+    case 'filled':
+      return css`
+        background-color: ${backgroundColor
+          ? getColorValue(backgroundColor)
+          : colors.grey.grey2};
+        border-radius: ${borderRadius.sm};
+        padding: ${sizeConfig.padding};
+      `;
+    case 'default':
+    default:
+      return css`
+        /* No additional styles for default variant */
+      `;
+  }
+};
+
+const getInteractiveStyles = (
+  clickable: boolean,
+  disabled: boolean,
+  hoverColor?: IconColor
+) => {
+  if (disabled) {
+    return css`
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    `;
+  }
+
+  if (clickable) {
+    return css`
       cursor: pointer;
+      transition: all 0.2s ease;
+
       &:hover {
-        color: ${hoverColor || 'gray'}; /* ✅ Hover color change */
-        transform: scale(1.1); /* ✅ Slight scaling effect */
+        color: ${hoverColor ? getColorValue(hoverColor) : colors.primary.brand};
+        transform: scale(1.1);
       }
+
       &:active {
         transform: scale(0.95);
       }
-    `}
+
+      &:focus-visible {
+        outline: 2px solid ${colors.primary.brand};
+        outline-offset: 2px;
+        border-radius: ${borderRadius.xs};
+      }
+    `;
+  }
+
+  return css`
+    /* No interactive styles */
+  `;
+};
+
+export const StyledIcon = styled.span.withConfig({
+  shouldForwardProp: (prop) =>
+    ![
+      'size',
+      'color',
+      'hoverColor',
+      'variant',
+      'backgroundColor',
+      'clickable',
+      'disabled',
+    ].includes(prop),
+})<{
+  size: IconSize;
+  color: IconColor;
+  hoverColor?: IconColor;
+  variant: IconVariant;
+  backgroundColor?: IconColor;
+  clickable: boolean;
+  disabled: boolean;
+}>`
+  /* Base styles */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  line-height: 1;
+
+  /* Size styles */
+  ${({ size }) => getSizeStyles(size)};
+
+  /* Color styles */
+  color: ${({ color }) => getColorValue(color)};
+
+  /* Variant styles */
+  ${({ variant, backgroundColor, size }) =>
+    getVariantStyles(variant, backgroundColor, size)};
+
+  /* Interactive styles */
+  ${({ clickable, disabled, hoverColor }) =>
+    getInteractiveStyles(clickable, disabled, hoverColor)};
+
+  /* FontAwesome icon container */
+  svg {
+    width: 1em;
+    height: 1em;
+  }
 `;
+
+// Export tokens and defaults for reuse
+export { iconDefaults, sizeTokens, colorTokens };

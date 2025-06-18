@@ -1,13 +1,8 @@
-import React, { JSX } from 'react';
-import { StyledTypography, TypographyProps } from './Typography.style';
+import React from 'react';
+import { StyledTypography } from './Typography.style';
+import { TypographyProps } from './Typography.types';
 
-type Props = TypographyProps & {
-  component?: keyof JSX.IntrinsicElements;
-  children: React.ReactNode;
-  className?: string;
-};
-
-export const Typography: React.FC<Props> = ({
+export const Typography: React.FC<TypographyProps> = ({
   variant = 'body1',
   component = 'span',
   weight = 'regular',
@@ -15,7 +10,7 @@ export const Typography: React.FC<Props> = ({
   children,
   className = '',
 }) => {
-  const Component = component as keyof JSX.IntrinsicElements;
+  const Component = component as React.ElementType;
 
   return (
     <StyledTypography

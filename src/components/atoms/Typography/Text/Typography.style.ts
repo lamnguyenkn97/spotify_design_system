@@ -1,71 +1,58 @@
 import styled, { css } from 'styled-components';
-
-export type TypographyProps = {
-  variant?:
-    | 'h1'
-    | 'h2'
-    | 'h3'
-    | 'h4'
-    | 'h5'
-    | 'h6'
-    | 'body1'
-    | 'body2'
-    | 'caption';
-  weight?: 'light' | 'regular' | 'medium' | 'bold'; // Keep weight as readable values
-  color?: 'primary' | 'secondary' | 'muted' | 'danger';
-};
+import { colors, fontSizes } from '../../../../styles';
+import { TypographyProps } from './Typography.types';
 
 export const StyledTypography = styled.span<TypographyProps>`
   ${({ variant }) => {
     switch (variant) {
       case 'h1':
         return css`
-          font-size: 3rem;
+          font-size: ${fontSizes['2xl']}rem;
           font-weight: 700;
         `;
       case 'h2':
         return css`
-          font-size: 2.5rem;
+          font-size: ${fontSizes.xxl}rem;
           font-weight: 700;
         `;
       case 'h3':
         return css`
-          font-size: 2rem;
+          font-size: ${fontSizes.xl}rem;
           font-weight: 700;
         `;
       case 'h4':
         return css`
-          font-size: 1.5rem;
+          font-size: ${fontSizes.lg}rem;
           font-weight: 500;
         `;
       case 'h5':
         return css`
-          font-size: 1.25rem;
+          font-size: ${fontSizes.md}rem;
           font-weight: 500;
         `;
       case 'h6':
         return css`
-          font-size: 1rem;
+          font-size: ${fontSizes.md}rem;
           font-weight: 500;
         `;
       case 'body1':
         return css`
-          font-size: 1rem;
+          font-size: ${fontSizes.md}rem;
           font-weight: 400;
         `;
       case 'body2':
         return css`
-          font-size: 0.875rem;
+          font-size: ${fontSizes.sm}rem;
           font-weight: 400;
         `;
       case 'caption':
         return css`
-          font-size: 0.75rem;
+          font-size: ${fontSizes.sm}rem;
           font-weight: 300;
         `;
       default:
         return css`
-          font-size: 1rem;
+          font-size: ${fontSizes.md}rem;
           font-weight: 400;
         `;
     }
@@ -80,7 +67,7 @@ export const StyledTypography = styled.span<TypographyProps>`
       case 'medium':
         return css`
           font-weight: 500;
-        `; // Fixed: Medium is 500
+        `;
       case 'bold':
         return css`
           font-weight: 700;
@@ -92,23 +79,23 @@ export const StyledTypography = styled.span<TypographyProps>`
     }
   }}
 
-    ${({ color }) => {
+  ${({ color }) => {
     switch (color) {
       case 'primary':
         return css`
-          color: white;
+          color: ${colors.primary.white};
         `;
       case 'secondary':
         return css`
-          color: gray;
+          color: ${colors.grey.grey6};
         `;
       case 'muted':
         return css`
-          color: lightgray;
+          color: ${colors.grey.grey4};
         `;
       case 'danger':
         return css`
-          color: red;
+          color: ${colors.decorative.redRedWine};
         `;
       default:
         return css`

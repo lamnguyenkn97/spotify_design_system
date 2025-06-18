@@ -1,35 +1,61 @@
-import React, { JSX } from 'react';
-import { StyledStack, StackProps } from './Stack.style';
+import React, { forwardRef } from 'react';
+import { StyledStack, stackDefaults } from './Stack.style';
+import { StackProps } from './Stack.types';
 
-type Props = StackProps & {
-  component?: keyof JSX.IntrinsicElements; // Allows <section>, <ul>, etc.
-  children: React.ReactNode;
-  className?: string;
-};
-
-export const Stack: React.FC<Props> = ({
-  component = 'div',
-  direction = 'column',
-  spacing = 0,
-  align = 'stretch',
-  justify = 'start',
-  wrap = false,
+export const Stack = forwardRef<HTMLDivElement, StackProps>(({
+  direction = stackDefaults.direction,
+  spacing = stackDefaults.spacing,
+  align = stackDefaults.align,
+  justify = stackDefaults.justify,
+  wrap = stackDefaults.wrap,
+  as = 'div',
+  width,
+  height,
+  grow = stackDefaults.grow,
+  shrink = stackDefaults.shrink,
+  minWidth,
+  maxWidth,
+  minHeight,
+  maxHeight,
+  scrollable = stackDefaults.scrollable,
+  padding,
+  margin,
+  centered = stackDefaults.centered,
+  backgroundColor,
+  borderRadius,
   children,
-  className = '',
-}) => {
-  const Component = component as keyof JSX.IntrinsicElements;
-
+  className,
+  ...props
+}, ref) => {
   return (
     <StyledStack
-      as={Component}
+      ref={ref}
+      as={as}
       direction={direction}
       spacing={spacing}
       align={align}
       justify={justify}
       wrap={wrap}
+      width={width}
+      height={height}
+      grow={grow}
+      shrink={shrink}
+      minWidth={minWidth}
+      maxWidth={maxWidth}
+      minHeight={minHeight}
+      maxHeight={maxHeight}
+      scrollable={scrollable}
+      padding={padding}
+      margin={margin}
+      centered={centered}
+      backgroundColor={backgroundColor}
+      borderRadius={borderRadius}
       className={className}
+      {...props}
     >
       {children}
     </StyledStack>
   );
-};
+});
+
+Stack.displayName = 'Stack';

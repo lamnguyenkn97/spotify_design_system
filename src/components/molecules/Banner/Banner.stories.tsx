@@ -1,55 +1,131 @@
+import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
-import { Meta, StoryFn } from '@storybook/react';
-import Banner from './Banner';
+import { Banner } from './Banner';
 
-export default {
+const meta: Meta<typeof Banner> = {
   title: 'Molecules/Banner',
   component: Banner,
-  argTypes: {
-    type: {
-      control: 'radio',
-      options: ['artist', 'playlist', 'album', 'podcast'],
+  parameters: {
+    layout: 'padded',
+    docs: {
+      description: {
+        component:
+          'A banner component that displays album, playlist, podcast, or artist information with dynamic background gradients generated from cover images.',
+      },
     },
   },
-} as Meta<typeof Banner>;
-
-const Template: StoryFn<typeof Banner> = (args) => <Banner {...args} />;
-
-export const Artist = Template.bind({});
-Artist.args = {
-  type: 'artist',
-  imageUrl: 'https://i.scdn.co/image/ab67616d0000b27336b12a4082f11d16a519b964',
-  title: 'Kelly Clarkson',
-  description: '17,116,897 monthly listeners',
-  verified: true,
+  tags: ['autodocs'],
+  argTypes: {
+    type: {
+      control: 'select',
+      options: ['album', 'playlist', 'podcast', 'artist'],
+      description: 'Type of content being displayed',
+    },
+    title: {
+      control: 'text',
+      description: 'Main title of the content',
+    },
+    subtitle: {
+      control: 'text',
+      description: 'Subtitle for albums, playlists, and podcasts',
+    },
+    description: {
+      control: 'text',
+      description: 'Description for artists (monthly listeners, etc.)',
+    },
+    image: {
+      control: 'text',
+      description: 'Cover image URL',
+    },
+  },
 };
 
-export const Playlist = Template.bind({});
-Playlist.args = {
-  type: 'playlist',
-  imageUrl:
-    'https://pickasso.spotifycdn.com/image/ab67c0de0000deef/dt/v1/img/daily/2/ab6761610000e5eb34dca195e6f7b02580155565/en',
-  title: 'Daily Mix 2',
-  subtitle: 'Trịnh Suy, Vũ Cát Tường, Ngọt and more',
-  description: '50 songs, about 3 hr 15 min',
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Album: Story = {
+  args: {
+    type: 'album',
+    title: 'MAYHEM',
+    subtitle: 'Lady Gaga • 2025 • 14 songs, 53 min 11 sec',
+    image:
+      'https://seed-mix-image.spotifycdn.com/v6/img/artist/1HY2Jd0NmPuamShAr6KMms/en/default',
+  },
 };
 
-export const Album = Template.bind({});
-Album.args = {
-  type: 'album',
-  imageUrl: 'https://i.scdn.co/image/ab67616d00001e028b58d20f1b77295730db15b4',
-  title: 'MAYHEM',
-  subtitle: 'Lady Gaga',
-  releaseYear: '2025',
-  songCount: '14',
-  duration: '53 min 11 sec',
+export const Playlist: Story = {
+  args: {
+    type: 'playlist',
+    title: 'Daily Mix 1',
+    subtitle: 'Taylor Swift, Lady Gaga, Olivia Rodrigo and more',
+    image:
+      'https://pickasso.spotifycdn.com/image/ab67c0de0000deef/dt/v1/img/daily/1/ab6761610000e5ebe672b5f553298dcdccb0e676/en',
+  },
 };
 
-export const Podcast = Template.bind({});
-Podcast.args = {
-  type: 'podcast',
-  imageUrl: 'https://i.scdn.co/image/ab6765630000ba8a314cd690c89ed6b8f1e91b6f',
-  title: 'Thanh Xuân Có Ta Yêu Người',
-  subtitle: 'Lùm Xùm',
-  backgroundGradient: 'linear-gradient(135deg, #001AFF, #0044FF)',
+export const Podcast: Story = {
+  args: {
+    type: 'podcast',
+    title: 'Lùm Xùm',
+    subtitle: 'Lùm Xùm',
+    image: 'https://i.scdn.co/image/ab67656300005f1f314cd690c89ed6b8f1e91b6f',
+  },
+};
+
+export const Artist: Story = {
+  args: {
+    type: 'artist',
+    title: 'Taylor Swift',
+    description: '82,240,376 monthly listeners',
+    image: 'https://i.scdn.co/image/ab67616d00001e025076e4160d018e378f488c33',
+  },
+};
+
+export const InvalidImage: Story = {
+  args: {
+    type: 'album',
+    title: 'Invalid Image Test',
+    subtitle: 'This should show a fallback background',
+    image: 'https://invalid-image-url.com/image.jpg',
+  },
+};
+
+// All variants showcase
+export const AllVariants: Story = {
+  render: () => (
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '24px',
+        backgroundColor: '#000',
+        padding: '24px',
+      }}
+    >
+      <Banner
+        type="album"
+        title="MAYHEM"
+        subtitle="Lady Gaga • 2025 • 14 songs, 53 min 11 sec"
+        image="https://seed-mix-image.spotifycdn.com/v6/img/artist/1HY2Jd0NmPuamShAr6KMms/en/default"
+      />
+      <Banner
+        type="playlist"
+        title="Daily Mix 1"
+        subtitle="Taylor Swift, Lady Gaga, Olivia Rodrigo and more"
+        image="https://pickasso.spotifycdn.com/image/ab67c0de0000deef/dt/v1/img/daily/1/ab6761610000e5ebe672b5f553298dcdccb0e676/en"
+      />
+      <Banner
+        type="podcast"
+        title="Lùm Xùm"
+        subtitle="Lùm Xùm"
+        image="https://i.scdn.co/image/ab67656300005f1f314cd690c89ed6b8f1e91b6f"
+      />
+      <Banner
+        type="artist"
+        title="Taylor Swift"
+        description="82,240,376 monthly listeners"
+        image="https://i.scdn.co/image/ab67616d00001e025076e4160d018e378f488c33"
+      />
+    </div>
+  ),
 };

@@ -1,38 +1,41 @@
 import styled from 'styled-components';
-import { borderRadius, spacing } from '../../../styles';
+import { Theme } from '../../../styles/theme';
 
-export const StyledTable = styled.table`
+export const TableWrapper = styled.table<{ theme: Theme }>`
   width: 100%;
   border-collapse: collapse;
-  background: rgba(255, 255, 255, 0.05); // Spotify dark theme
-  border-radius: ${borderRadius.xs};
+  border-radius: ${({ theme }) => theme.borderRadius.md};
   overflow: hidden;
+  background-color: ${({ theme }) => theme.colors.background.primary};
 `;
 
-export const StyledThead = styled.thead`
-  background: rgba(255, 255, 255, 0.1);
+export const TableHead = styled.thead<{ theme: Theme }>`
+  background-color: ${({ theme }) => theme.colors.background.secondary};
 `;
 
-export const StyledTh = styled.th`
-  padding: ${spacing.sm};
-  text-align: left;
-  color: rgba(255, 255, 255, 0.9);
-  font-weight: bold;
+export const TableBody = styled.tbody<{ theme: Theme }>`
+  background-color: ${({ theme }) => theme.colors.background.primary};
 `;
 
-export const StyledTbody = styled.tbody`
-  background: rgba(255, 255, 255, 0.02);
-`;
-
-export const StyledTr = styled.tr`
+export const TableRow = styled.tr<{ theme: Theme }>`
   &:hover {
-    background: rgba(30, 215, 96, 0.1); // Spotify green highlight on hover
+    background-color: ${({ theme }) => theme.colors.background.secondary};
   }
 `;
 
-export const StyledTd = styled.td`
-  padding: ${spacing.sm};
-  color: rgba(255, 255, 255, 0.8);
+export const TableHeader = styled.th<{ theme: Theme }>`
+  padding: ${({ theme }) => theme.spacing.md};
   text-align: left;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: ${({ theme }) => theme.colors.text.primary};
+  font-size: ${({ theme }) => theme.typography.fontSizes.sm}rem;
+  font-family: ${({ theme }) => theme.typography.fontFamily.secondary};
+  font-weight: 600;
+`;
+
+export const TableCell = styled.td<{ theme: Theme }>`
+  padding: ${({ theme }) => theme.spacing.md};
+  color: ${({ theme }) => theme.colors.text.primary};
+  font-size: ${({ theme }) => theme.typography.fontSizes.sm}rem;
+  font-family: ${({ theme }) => theme.typography.fontFamily.primary};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
 `;

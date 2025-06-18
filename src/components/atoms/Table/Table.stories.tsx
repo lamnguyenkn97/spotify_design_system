@@ -1,58 +1,288 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { Table, TableProps } from './Table';
+import { Table, TableProps } from './';
 import React from 'react';
 import { Typography } from '../Typography/Text';
+import { Image } from '../Image';
+import { Stack } from '../Layout';
+import { ThemeProvider } from '../../../styles/ThemeProvider';
+import { useTheme } from '../../../styles/ThemeProvider';
 
-type MockTrack = {
-  track: string;
+type SpotifyTrack = {
+  id: string;
+  title: string;
   artist: string;
+  album: string;
+  albumCover: string;
   duration: string;
+  dateAdded: string;
+  plays: number;
 };
 
-const meta: Meta<TableProps<MockTrack>> = {
+const meta: Meta<typeof Table<SpotifyTrack>> = {
   title: 'atoms/Table',
   component: Table,
   tags: ['autodocs'],
-  argTypes: {},
+  decorators: [
+    (Story) => (
+      <ThemeProvider>
+        <Story />
+      </ThemeProvider>
+    ),
+  ],
 };
 
 export default meta;
 
-type Story = StoryObj<TableProps<MockTrack>>;
+type Story = StoryObj<typeof Table<SpotifyTrack>>;
 
-const sampleData = [
-  { track: 'Blinding Lights', artist: 'The Weeknd', duration: '3:22' },
-  { track: 'Levitating', artist: 'Dua Lipa', duration: '3:50' },
-  { track: 'Save Your Tears', artist: 'The Weeknd', duration: '3:35' },
+const spotifyData: SpotifyTrack[] = [
+  {
+    id: '1',
+    title: 'Blinding Lights',
+    artist: 'The Weeknd',
+    album: 'After Hours',
+    albumCover: 'https://i.scdn.co/image/ab67616d0000b273ef6f581fdc8d5678b85ba4c3',
+    duration: '3:22',
+    dateAdded: '2 days ago',
+    plays: 2847582,
+  },
+  {
+    id: '2',
+    title: 'Levitating',
+    artist: 'Dua Lipa',
+    album: 'Future Nostalgia',
+    albumCover: 'https://i.scdn.co/image/ab67616d0000b273ef6f581fdc8d5678b85ba4c3',
+    duration: '3:23',
+    dateAdded: '1 week ago',
+    plays: 1956473,
+  },
+  {
+    id: '3',
+    title: 'Good 4 U',
+    artist: 'Olivia Rodrigo',
+    album: 'SOUR',
+    albumCover: 'https://i.scdn.co/image/ab67616d0000b273a91c10fe9472d9bd89802e5a',
+    duration: '2:58',
+    dateAdded: '3 days ago',
+    plays: 3245891,
+  },
+  {
+    id: '4',
+    title: 'Stay',
+    artist: 'The Kid LAROI & Justin Bieber',
+    album: 'Stay',
+    albumCover: 'https://i.scdn.co/image/ab67616d0000b273ef6f581fdc8d5678b85ba4c3',
+    duration: '2:21',
+    dateAdded: '5 days ago',
+    plays: 1789234,
+  },
+  {
+    id: '5',
+    title: 'Industry Baby',
+    artist: 'Lil Nas X & Jack Harlow',
+    album: 'MONTERO',
+    albumCover: 'https://i.scdn.co/image/ab67616d0000b273be82673b5f79d9658ec0a9fd',
+    duration: '3:32',
+    dateAdded: '1 week ago',
+    plays: 2156789,
+  },
+  {
+    id: '6',
+    title: 'Heat Waves',
+    artist: 'Glass Animals',
+    album: 'Dreamland',
+    albumCover: 'https://i.scdn.co/image/ab67616d0000b273ef6f581fdc8d5678b85ba4c3',
+    duration: '3:58',
+    dateAdded: '2 weeks ago',
+    plays: 4567823,
+  },
 ];
 
-const columns = [
+const formatPlays = (plays: number): string => {
+  if (plays >= 1000000) {
+    return `${(plays / 1000000).toFixed(1)}M`;
+  } else if (plays >= 1000) {
+    return `${(plays / 1000).toFixed(0)}K`;
+  }
+  return plays.toString();
+};
+
+const columns: TableProps<SpotifyTrack>['columns'] = [
   {
-    key: 'track' as keyof MockTrack,
-    label: 'Track',
-    renderCell: (item: MockTrack) => (
-      <Typography variant={'body2'}>{item?.track}</Typography>
+    key: 'title',
+    label: 'Title',
+    width: '40%',
+    renderCell: (item: SpotifyTrack) => (
+      <Stack direction="row" spacing="md" align="center">
+        <Image
+          src={item.albumCover}
+          alt={`${item.album} cover`}
+          width="40px"
+          height="40px"
+          shape="rounded"
+          placeholderType="album"
+          placeholderIconSize="lg"
+        />
+        <Stack direction="column" spacing="xs">
+          <Typography variant="body2" weight="medium">
+            {item.title}
+          </Typography>
+          <Typography variant="caption" color="muted">
+            {item.artist}
+          </Typography>
+        </Stack>
+      </Stack>
     ),
   },
   {
-    key: 'artist' as keyof MockTrack,
-    label: 'Artist',
-    renderCell: (item: MockTrack) => (
-      <Typography variant={'body2'}>{item?.artist}</Typography>
+    key: 'album',
+    label: 'Album',
+    width: '25%',
+    renderCell: (item: SpotifyTrack) => (
+      <Typography variant="body2" color="muted">
+        {item.album}
+      </Typography>
     ),
   },
   {
-    key: 'duration' as keyof MockTrack,
+    key: 'dateAdded',
+    label: 'Date added',
+    width: '15%',
+    renderCell: (item: SpotifyTrack) => (
+      <Typography variant="body2" color="muted">
+        {item.dateAdded}
+      </Typography>
+    ),
+  },
+  {
+    key: 'plays',
+    label: 'Plays',
+    width: '10%',
+    renderCell: (item: SpotifyTrack) => (
+      <Typography variant="body2" color="muted">
+        {formatPlays(item.plays)}
+      </Typography>
+    ),
+  },
+  {
+    key: 'duration',
     label: 'Duration',
-    renderCell: (item: MockTrack) => (
-      <Typography variant={'body2'}>{item?.duration} ⏱️</Typography>
+    width: '10%',
+    renderCell: (item: SpotifyTrack) => (
+      <Typography variant="body2" color="muted">
+        {item.duration}
+      </Typography>
     ),
   },
 ];
 
 export const Default: Story = {
   args: {
-    data: sampleData,
+    data: spotifyData,
     columns,
+  },
+};
+
+export const SpotifyPlaylist: Story = {
+  args: {
+    data: spotifyData,
+    columns,
+  },
+};
+
+const ThemeWrapper = ({ children, forceDarkMode }: { children: React.ReactNode; forceDarkMode: boolean }) => {
+  const { isDarkMode, toggleTheme } = useTheme();
+
+  React.useEffect(() => {
+    if (forceDarkMode !== isDarkMode) {
+      toggleTheme();
+    }
+  }, [forceDarkMode, isDarkMode, toggleTheme]);
+
+  return <>{children}</>;
+};
+
+export const LightMode: Story = {
+  args: {
+    data: spotifyData,
+    columns,
+  },
+  decorators: [
+    (Story) => (
+      <ThemeWrapper forceDarkMode={false}>
+        <Story />
+      </ThemeWrapper>
+    ),
+  ],
+};
+
+export const DarkMode: Story = {
+  args: {
+    data: spotifyData,
+    columns,
+  },
+  decorators: [
+    (Story) => (
+      <ThemeWrapper forceDarkMode={true}>
+        <Story />
+      </ThemeWrapper>
+    ),
+  ],
+};
+
+// Compact version without plays column
+const compactColumns: TableProps<SpotifyTrack>['columns'] = [
+  {
+    key: 'title',
+    label: 'Title',
+    width: '50%',
+    renderCell: (item: SpotifyTrack) => (
+      <Stack direction="row" spacing="sm" align="center">
+        <Image
+          src={item.albumCover}
+          alt={`${item.album} cover`}
+          width="32px"
+          height="32px"
+          shape="rounded"
+          placeholderType="album"
+          placeholderIconSize="sm"
+        />
+        <Stack direction="column" spacing="xs">
+          <Typography variant="body2" weight="medium">
+            {item.title}
+          </Typography>
+          <Typography variant="caption" color="muted">
+            {item.artist}
+          </Typography>
+        </Stack>
+      </Stack>
+    ),
+  },
+  {
+    key: 'album',
+    label: 'Album',
+    width: '30%',
+    renderCell: (item: SpotifyTrack) => (
+      <Typography variant="body2" color="muted">
+        {item.album}
+      </Typography>
+    ),
+  },
+  {
+    key: 'dateAdded',
+    label: 'Date added',
+    width: '20%',
+    renderCell: (item: SpotifyTrack) => (
+      <Typography variant="body2" color="muted">
+        {item.dateAdded}
+      </Typography>
+    ),
+  },
+];
+
+export const Compact: Story = {
+  args: {
+    data: spotifyData.slice(0, 4),
+    columns: compactColumns,
   },
 };

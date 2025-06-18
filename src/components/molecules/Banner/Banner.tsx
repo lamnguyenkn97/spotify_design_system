@@ -1,69 +1,127 @@
 import React, { useEffect, useState } from 'react';
-import ColorThief from 'color-thief-browser';
-import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
-import { Icon } from '../../atoms/Icon';
-import { BannerProps } from './Banner.types';
-import {
-  BannerWrapper,
-  ContentWrapper,
-  BannerImage,
-  TextContent,
-  PodcastSubtitle,
-  Title,
-  Subtitle,
-} from './Banner.style';
+import { getImageGradient, getBannerTypeLabel } from './utils';
+import { BannerProps, BannerType } from './Banner.types';
+import { Stack } from '../../atoms/Layout/Stack';
+import { Image } from '../../atoms/Image/Image';
+import { Typography } from '../../atoms/Typography/Text/Typography';
 
-const Banner: React.FC<BannerProps> = ({
+type GradientState = {
+  background: string;
+  isLoading: boolean;
+  error: Error | null;
+};
+
+export const Banner: React.FC<BannerProps> = ({
   type,
-  imageUrl,
   title,
   subtitle,
   description,
-  verified,
+  image,
 }) => {
-  const [backgroundGradient, setBackgroundGradient] = useState<string>(
-    'linear-gradient(135deg, #333, #111)'
-  );
+  const [gradientState, setGradientState] = useState<GradientState>({
+    background: '#121212',
+    isLoading: true,
+    error: null,
+  });
 
   useEffect(() => {
-    const img = new Image();
-    img.crossOrigin = 'Anonymous'; // Allow fetching images from different origins
-    img.src = imageUrl;
+    let isMounted = true;
 
-    img.onload = () => {
-      const colorThief = new ColorThief();
-      const colors = colorThief.getPalette(img, 2); // Extract 2 dominant colors
-
-      if (colors && colors.length >= 2) {
-        const [color1, color2] = colors.map((rgb) => `rgb(${rgb.join(',')})`);
-        setBackgroundGradient(`linear-gradient(135deg, ${color1}, ${color2})`);
+    const loadGradient = async () => {
+      try {
+        setGradientState(prev => ({ ...prev, isLoading: true, error: null }));
+        const gradient = await getImageGradient(image);
+        if (isMounted) {
+          setGradientState({
+            background: gradient,
+            isLoading: false,
+            error: null,
+          });
+        }
+      } catch (error) {
+        if (isMounted) {
+          setGradientState({
+            background: '#121212',
+            isLoading: false,
+            error: error instanceof Error ? error : new Error('Failed to load gradient'),
+          });
+        }
       }
     };
-  }, [imageUrl]);
+
+    loadGradient();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [image]);
+
+  // Validate required props
+  if (!type || !title || !image) {
+    console.error('Banner: Missing required props');
+    return null;
+  }
+
+  // Validate type-specific props
+  if (type === 'artist' && !description) {
+    console.error('Banner: Artist type requires description prop');
+    return null;
+  }
+
+  if (type !== 'artist' && !subtitle) {
+    console.error('Banner: Non-artist types require subtitle prop');
+    return null;
+  }
 
   return (
-    <BannerWrapper backgroundGradient={backgroundGradient}>
-      <ContentWrapper>
-        {type !== 'artist' && (
-          <BannerImage src={imageUrl} alt={title} type={type} />
-        )}
-        <TextContent>
-          {type === 'podcast' && (
-            <PodcastSubtitle>Podcast Episode</PodcastSubtitle>
-          )}
-          {verified && (
-            <PodcastSubtitle>
-              <Icon icon={faCheckCircle} size={'medium'} color="#1DB954" />
-              Verified Artist
-            </PodcastSubtitle>
-          )}
-          <Title>{title}</Title>
-          {subtitle && <Subtitle>{subtitle}</Subtitle>}
-          {description && <Subtitle>{description}</Subtitle>}
-        </TextContent>
-      </ContentWrapper>
-    </BannerWrapper>
+    <Stack 
+      direction="row" 
+      spacing="lg" 
+      align="end" 
+      padding="lg"
+      style={{ 
+        background: gradientState.background,
+        height: '300px',
+        borderRadius: '8px',
+        transition: 'background 0.3s ease-in-out',
+      }}
+      role="banner"
+      aria-label={`${getBannerTypeLabel(type)} banner`}
+    >
+      <Image
+        src={image}
+        alt={`${title} cover`}
+        width="200px"
+        aspectRatio={1}
+        shape="rounded"
+        style={{ boxShadow: '0 16px 24px rgba(0,0,0,0.5)' }}
+      />
+      
+      <Stack direction="column" spacing="sm" align="start">
+        <Typography
+          variant="body2"
+          weight="bold"
+          color="secondary"
+        >
+          {getBannerTypeLabel(type)}
+        </Typography>
+        
+        <Typography
+          variant="h1"
+          weight="bold"
+          color="primary"
+          component="h1"
+        >
+          {title}
+        </Typography>
+        
+        <Typography
+          variant="body1"
+          color="secondary"
+        >
+          {type === 'artist' ? description : subtitle}
+        </Typography>
+      </Stack>
+    </Stack>
   );
 };
-
-export default Banner;
