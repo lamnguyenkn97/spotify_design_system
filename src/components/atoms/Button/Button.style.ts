@@ -1,43 +1,62 @@
-import styled, { css, keyframes } from 'styled-components';
+import styled, { css } from 'styled-components';
 import {
   borderRadius,
   colors,
   fontSizes,
   spacing,
   fonts,
+  scale,
+  transitions,
+  keyframes,
 } from '../../../styles';
 import { ButtonSize, ButtonVariant } from './Button.types';
 
-const spin = keyframes`
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-`;
+// Design tokens for button-specific configurations
+const buttonTokens = {
+  border: {
+    width: '1px',
+    style: 'solid',
+  },
+  opacity: {
+    disabled: 0.5,
+  },
+  minHeight: {
+    small: '32px',
+    medium: '40px',
+    large: '48px',
+  },
+} as const;
+
+// Size configuration object - eliminates repetition and hardcoded values
+const sizeConfig = {
+  [ButtonSize.Small]: {
+    padding: `${spacing.xs} ${spacing.sm}`,
+    fontSize: `${fontSizes.sm}rem`,
+    fontFamily: `${fonts.circular.medium}, sans-serif`,
+    minHeight: buttonTokens.minHeight.small,
+  },
+  [ButtonSize.Medium]: {
+    padding: `${spacing.sm} ${spacing.md}`,
+    fontSize: `${fontSizes.md}rem`,
+    fontFamily: `${fonts.circular.medium}, sans-serif`,
+    minHeight: buttonTokens.minHeight.medium,
+  },
+  [ButtonSize.Large]: {
+    padding: `${spacing.md} ${spacing.lg}`,
+    fontSize: `${fontSizes.lg}rem`,
+    fontFamily: `${fonts.circular.bold}, sans-serif`,
+    minHeight: buttonTokens.minHeight.large,
+  },
+} as const;
 
 export const getSizeStyles = (size: ButtonSize) => {
-  switch (size) {
-    case ButtonSize.Small:
-      return css`
-        padding: ${spacing.xs} ${spacing.sm};
-        font-size: ${fontSizes.sm}rem;
-        font-family: ${fonts.circular.medium}, sans-serif;
-        min-height: 32px;
-      `;
-    case ButtonSize.Large:
-      return css`
-        padding: ${spacing.md} ${spacing.lg};
-        font-size: ${fontSizes.lg}rem;
-        font-family: ${fonts.circular.bold}, sans-serif;
-        min-height: 48px;
-      `;
-    case ButtonSize.Medium:
-    default:
-      return css`
-        padding: ${spacing.sm} ${spacing.md};
-        font-size: ${fontSizes.md}rem;
-        font-family: ${fonts.circular.medium}, sans-serif;
-        min-height: 40px;
-      `;
-  }
+  const config = sizeConfig[size] || sizeConfig[ButtonSize.Medium];
+  return css`
+    padding: ${config.padding};
+    font-size: ${config.fontSize};
+    font-family: ${config.fontFamily};
+    min-height: ${config.minHeight};
+  `;
 };
 
 const getVariantStyles = (variant: ButtonVariant) => {
@@ -46,7 +65,7 @@ const getVariantStyles = (variant: ButtonVariant) => {
       return css`
         background-color: ${colors.primary.black};
         color: ${colors.grey.grey6};
-        border: 1px solid ${colors.grey.grey3};
+        border: ${buttonTokens.border.width} ${buttonTokens.border.style} ${colors.grey.grey3};
         &:hover:not(:disabled) {
           color: ${colors.primary.white};
           border-color: ${colors.primary.white};
@@ -60,7 +79,7 @@ const getVariantStyles = (variant: ButtonVariant) => {
       return css`
         background-color: ${colors.primary.white};
         color: ${colors.primary.black};
-        border: 1px solid ${colors.primary.white};
+        border: ${buttonTokens.border.width} ${buttonTokens.border.style} ${colors.primary.white};
         &:hover:not(:disabled) {
           background-color: ${colors.grey.grey6};
         }
@@ -72,7 +91,7 @@ const getVariantStyles = (variant: ButtonVariant) => {
       return css`
         background-color: transparent;
         color: ${colors.primary.white};
-        border: 1px solid ${colors.grey.grey6};
+        border: ${buttonTokens.border.width} ${buttonTokens.border.style} ${colors.grey.grey6};
         &:hover:not(:disabled) {
           border-color: ${colors.primary.white};
           background-color: rgba(255, 255, 255, 0.1);
@@ -100,7 +119,7 @@ const getVariantStyles = (variant: ButtonVariant) => {
       return css`
         background-color: ${colors.primary.brand};
         color: ${colors.primary.black};
-        border: 1px solid ${colors.primary.brand};
+        border: ${buttonTokens.border.width} ${buttonTokens.border.style} ${colors.primary.brand};
         &:hover:not(:disabled) {
           background-color: ${colors.primary.brandHighlight};
           border-color: ${colors.primary.brandHighlight};
@@ -123,7 +142,7 @@ export const StyledButton = styled.button<{
   ${(props) => getSizeStyles(props.size)};
   ${(props) => getVariantStyles(props.variant)};
 
-  /* Base styles */
+  /* Base styles using global design tokens */
   font-family: inherit;
   display: inline-flex;
   align-items: center;
@@ -131,7 +150,7 @@ export const StyledButton = styled.button<{
   gap: ${spacing.xs};
   border-radius: ${borderRadius.xl};
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: ${transitions.button};
   text-decoration: none;
   outline: none;
   position: relative;
@@ -151,7 +170,7 @@ export const StyledButton = styled.button<{
       flex-direction: row-reverse;
     `}
   
-  /* Loading state */
+  /* Loading state using global keyframes */
   ${(props) =>
     props.loading &&
     css`
@@ -166,16 +185,16 @@ export const StyledButton = styled.button<{
         border: 2px solid currentColor;
         border-top: 2px solid transparent;
         border-radius: 50%;
-        animation: ${spin} 0.8s linear infinite;
+        animation: ${keyframes.spin} 0.8s linear infinite;
         color: ${props.variant === ButtonVariant.Primary
           ? colors.primary.black
           : colors.primary.white};
       }
     `}
   
-  /* Disabled state */
+  /* Disabled state using design tokens */
   &:disabled {
-    opacity: 0.5;
+    opacity: ${buttonTokens.opacity.disabled};
     cursor: not-allowed;
     pointer-events: none;
   }

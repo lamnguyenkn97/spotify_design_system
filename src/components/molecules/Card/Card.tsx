@@ -5,7 +5,7 @@ import { Image } from '../../atoms/Image/Image';
 import { Typography } from '../../atoms/Typography/Text/Typography';
 import { Icon } from '../../atoms/Icon';
 import { faPlay, faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { colors, spacing } from '../../../styles';
+import { colors, spacing, scale, transitions } from '../../../styles';
 
 // Utility function for card width calculation
 const getCardWidth = (size: string): string => {
@@ -52,7 +52,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         style={{
-          transition: 'all 0.3s ease-in-out',
+          transition: transitions.card,
           cursor: 'pointer',
           textAlign: variant === 'artist' ? 'center' : 'left',
           transform: isHovered ? 'translateY(-4px)' : 'translateY(0)',
@@ -80,8 +80,8 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
               aspectRatio={1}
               shape={isArtist ? 'circle' : 'rounded'}
               style={{
-                transition: 'transform 0.3s ease-in-out',
-                transform: isHovered ? 'scale(1.05)' : 'scale(1)',
+                transition: transitions.transform,
+                transform: isHovered ? `scale(${scale.small})` : `scale(${scale.none})`,
               }}
             />
           )}
@@ -104,9 +104,9 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
                 bottom: spacing.lg,
                 right: spacing.sm,
                 opacity: isHovered ? 1 : 0,
-                transition: 'all 0.3s ease-in-out',
+                transition: transitions.all,
                 transform: isHovered
-                  ? 'translateY(-2px) scale(1.1)'
+                  ? `translateY(-2px) scale(${scale.large})`
                   : 'translateY(8px) scale(1)',
                 zIndex: 10,
                 boxShadow: '0 4px 12px rgba(0, 0, 0, 0.4)',
