@@ -428,7 +428,7 @@ export const DismissButton = styled.button`
   margin-left: ${spacing.xs};
   opacity: 0.7;
   transition: ${pillConfig.transition};
-  
+
   &:hover {
     opacity: 1;
   }

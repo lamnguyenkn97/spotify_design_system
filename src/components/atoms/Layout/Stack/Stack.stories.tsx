@@ -402,7 +402,7 @@ export const RealWorldExamples: Story = {
             </Stack>
           </div>
           
-          <div>
+      <div>
             <div style={storyStyles.label}>Sidebar Layout</div>
             <Stack direction="row" spacing="md" height="300px">
               <Stack 
@@ -433,6 +433,6 @@ export const RealWorldExamples: Story = {
           </div>
         </Stack>
       </div>
-    </div>
-  ),
+      </div>
+    ),
 };
