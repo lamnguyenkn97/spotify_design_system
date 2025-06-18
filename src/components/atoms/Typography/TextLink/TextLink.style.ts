@@ -1,10 +1,6 @@
 import styled, { css } from 'styled-components';
-
-export type TextLinkProps = {
-  variant?: 'default' | 'muted' | 'danger';
-  weight?: 'light' | 'regular' | 'medium' | 'bold';
-  underline?: boolean;
-};
+import { colors } from '../../../../styles';
+import { TextLinkProps } from './TextLink.types';
 
 export const StyledTextLink = styled.a<TextLinkProps>`
   text-decoration: ${({ underline }) => (underline ? 'underline' : 'none')};
@@ -14,15 +10,15 @@ export const StyledTextLink = styled.a<TextLinkProps>`
     switch (variant) {
       case 'muted':
         return css`
-          color: lightgray;
+          color: ${colors.grey.grey4};
         `;
       case 'danger':
         return css`
-          color: red;
+          color: ${colors.decorative.redRedWine};
         `;
       default:
         return css`
-          color: white;
+          color: ${colors.primary.white};
         `;
     }
   }}
@@ -31,7 +27,7 @@ export const StyledTextLink = styled.a<TextLinkProps>`
     switch (weight) {
       case 'light':
         return css`
-          font-weight: 200;
+          font-weight: 300;
         `;
       case 'medium':
         return css`
@@ -48,7 +44,7 @@ export const StyledTextLink = styled.a<TextLinkProps>`
     }
   }}
 
-    &:hover {
+  &:hover {
     text-decoration: underline;
   }
 `;

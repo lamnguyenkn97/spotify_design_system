@@ -1,4 +1,3 @@
-import React from 'react';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 export interface FooterLinkItem {
@@ -9,4 +8,8 @@ export interface FooterLinkItem {
 export interface SocialLinkItem {
   icon: IconProp;
   url: string;
+}
+
+export interface FooterProps {
+  className?: string;
 }

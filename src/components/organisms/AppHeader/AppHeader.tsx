@@ -5,16 +5,15 @@ import {
   Divider,
   Icon,
   Image,
-  SearchInput,
+  Input,
   Stack,
-  TextButton,
   TextLink,
 } from '../../atoms';
 import { FaDownload } from 'react-icons/fa';
 import {
   ButtonSize,
   ButtonVariant,
-} from '../../atoms/Button/Button/Button.types';
+} from '../../atoms/Button';
 import { faSpotify } from '@fortawesome/free-brands-svg-icons';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 
@@ -53,19 +52,22 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
         >
           <Icon icon={faSpotify} size={'large'} />
           <Icon icon={faHome} size={'medium'} />
-          <SearchInput
+          <Input
+            variant="search"
             placeholder="What do you want to play?"
             onSearch={onSearch}
+            size="md"
+            clearable
           />
         </Stack>
         <Stack direction="row" spacing={'md'} align="center">
           {isAuthenticated ? (
             <>
-              <TextButton
+              <Button
                 onClick={onInstallApp}
                 text={'Install App'}
                 icon={<FaDownload />}
-                variant={ButtonVariant.Primary}
+                variant={ButtonVariant.Text}
                 size={ButtonSize.Small}
               />
               {user && (
@@ -82,15 +84,15 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
               <TextLink component={'h5'}>Premium</TextLink>
               <TextLink component={'h5'}>Support</TextLink>
               <TextLink component={'h5'}>Download</TextLink>
-              <Divider vertical color="#555" />
-              <TextButton
-                variant={ButtonVariant.Primary}
+              <Divider orientation="vertical" color="secondary" />
+              <Button
+                variant={ButtonVariant.Text}
                 onClick={onInstallApp}
                 icon={<FaDownload />}
                 text={'Install App'}
                 size={ButtonSize.Small}
               />
-              <TextButton
+              <Button
                 onClick={onSignUp}
                 text={'Sign Up'}
                 variant={ButtonVariant.White}

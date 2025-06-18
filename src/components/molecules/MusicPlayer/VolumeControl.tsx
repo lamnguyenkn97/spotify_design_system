@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { Stack } from '../../atoms/Layout/Stack';
 import { Button } from '../../atoms/Button/Button';
-import { ButtonSize, ButtonVariant } from '../../atoms/Button/Button/Button.types';
+import { ButtonSize, ButtonVariant } from '../../atoms/Button/Button.types';
 import { Icon } from '../../atoms/Icon/Icon';
 import { Slider } from '../../atoms/Slider/Slider';
-import { faVolumeMute, faVolumeDown, faVolumeUp } from '@fortawesome/free-solid-svg-icons';
-
-interface VolumeControlProps {
-  volume: number;
-  onVolumeChange: (volume: number) => void;
-}
+import { VolumeControlProps } from './MusicPlayer.types';
+import {
+  faVolumeMute,
+  faVolumeDown,
+  faVolumeUp,
+} from '@fortawesome/free-solid-svg-icons';
 
 export const VolumeControl: React.FC<VolumeControlProps> = ({
   volume,
@@ -39,14 +39,28 @@ export const VolumeControl: React.FC<VolumeControlProps> = ({
     }
   };
 
+  const getVolumeLabel = () => {
+    if (isMuted || volume === 0) {
+      return 'Unmute';
+    } else {
+      return 'Mute';
+    }
+  };
+
   return (
-    <Stack direction="row" spacing="sm" align="center" style={{ minWidth: 180 }}>
+    <Stack
+      direction="row"
+      spacing="sm"
+      align="center"
+      style={{ minWidth: 180 }}
+    >
       <Button
         onClick={handleMuteToggle}
         size={ButtonSize.Small}
         variant={ButtonVariant.Secondary}
         icon={<Icon icon={getVolumeIcon()} size="small" />}
         text=""
+        aria-label={getVolumeLabel()}
       />
       <Slider
         value={isMuted ? 0 : volume}
@@ -59,7 +73,8 @@ export const VolumeControl: React.FC<VolumeControlProps> = ({
             setIsMuted(false);
           }
         }}
+        aria-label={`Volume: ${isMuted ? 0 : volume}%`}
       />
     </Stack>
   );
-}; 
+};
