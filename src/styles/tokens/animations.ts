@@ -35,6 +35,8 @@ export const animations = {
     medium: '1.07',
     large: '1.1',
     xl: '1.15',
+    // Interactive states
+    pressed: '0.98', // For button active/pressed state
   },
 
   // Font size scaling for interactive elements

@@ -1,4 +1,6 @@
 import React, { forwardRef } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { ButtonProps, ButtonSize, ButtonVariant } from './Button.types';
 import { StyledButton } from './Button.style';
 
@@ -18,9 +20,16 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
 }, ref) => {
   const content = children || text;
   
-  const iconElement = icon && (
+  // Use Font Awesome spinner when loading, otherwise use provided icon
+  const iconElement = loading ? (
+    <FontAwesomeIcon 
+      icon={faSpinner} 
+      spin 
+      className="icon loading-spinner" 
+    />
+  ) : icon ? (
     <span className="icon">{icon}</span>
-  );
+  ) : null;
   
   return (
     <StyledButton
@@ -36,7 +45,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
       {...props}
     >
       {iconPosition === 'left' && iconElement}
-      {content}
+      {!loading && content}
       {iconPosition === 'right' && iconElement}
     </StyledButton>
   );
