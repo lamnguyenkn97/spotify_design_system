@@ -1,22 +1,8 @@
 import React, { ButtonHTMLAttributes } from 'react';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
-export type PillSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+export type PillSize = 'sm' | 'md' | 'lg';
 
-export type PillVariant = 
-  | 'default' 
-  | 'primary' 
-  | 'secondary' 
-  | 'success' 
-  | 'warning' 
-  | 'error' 
-  | 'brand' 
-  | 'outline'
-  | 'ghost';
-
-export type PillState = 'default' | 'selected' | 'disabled' | 'loading' | 'pressed';
-
-export type PillShape = 'rounded' | 'pill' | 'square';
+export type PillVariant = 'default' | 'selected' | 'filter';
 
 export interface PillProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'size'> {
   /**
@@ -37,19 +23,7 @@ export interface PillProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>,
   variant?: PillVariant;
   
   /**
-   * Current state of the pill
-   * @default 'default'
-   */
-  state?: PillState;
-  
-  /**
-   * Shape/border radius style
-   * @default 'pill'
-   */
-  shape?: PillShape;
-  
-  /**
-   * Whether the pill is selected
+   * Whether the pill is selected/active
    * @default false
    */
   selected?: boolean;
@@ -61,23 +35,7 @@ export interface PillProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>,
   disabled?: boolean;
   
   /**
-   * Whether the pill is in loading state
-   * @default false
-   */
-  loading?: boolean;
-  
-  /**
-   * Icon to display on the left side
-   */
-  leftIcon?: IconProp;
-  
-  /**
-   * Icon to display on the right side
-   */
-  rightIcon?: IconProp;
-  
-  /**
-   * Whether the pill is dismissible (shows X icon)
+   * Whether the pill is dismissible (shows X icon for filters)
    * @default false
    */
   dismissible?: boolean;
@@ -88,56 +46,6 @@ export interface PillProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>,
   onDismiss?: () => void;
   
   /**
-   * Badge content to display (number or text)
-   */
-  badge?: string | number;
-  
-  /**
-   * Position of the badge
-   * @default 'top-right'
-   */
-  badgePosition?: 'top-right' | 'top-left' | 'inline';
-  
-  /**
-   * Whether the pill takes full width
-   * @default false
-   */
-  fullWidth?: boolean;
-  
-  /**
-   * Whether the pill is interactive (clickable)
-   * @default true
-   */
-  interactive?: boolean;
-  
-  /**
-   * Custom background color (overrides variant)
-   */
-  customColor?: string;
-  
-  /**
-   * Custom text color
-   */
-  customTextColor?: string;
-  
-  /**
-   * Tooltip text on hover
-   */
-  tooltip?: string;
-  
-  /**
-   * Whether to animate on mount
-   * @default false
-   */
-  animate?: boolean;
-  
-  /**
-   * Animation delay in milliseconds
-   * @default 0
-   */
-  animationDelay?: number;
-  
-  /**
    * Click handler
    */
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
@@ -146,14 +54,4 @@ export interface PillProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>,
    * Custom className for additional styling
    */
   className?: string;
-  
-  /**
-   * Children elements (alternative to label)
-   */
-  children?: React.ReactNode;
-  
-  /**
-   * Test ID for automated testing
-   */
-  testId?: string;
 } 

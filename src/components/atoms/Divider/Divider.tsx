@@ -1,36 +1,31 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
 import { StyledDivider, dividerDefaults } from './Divider.style';
 import { DividerProps } from './Divider.types';
 
-export const Divider = forwardRef<HTMLHRElement, DividerProps>(({
+export const Divider: React.FC<DividerProps> = ({
   orientation = dividerDefaults.orientation,
   thickness = dividerDefaults.thickness,
   color = dividerDefaults.color,
   variant = dividerDefaults.variant,
   spacing = dividerDefaults.spacing,
-  customSpacing,
-  length = dividerDefaults.length,
-  fullSize = dividerDefaults.fullSize,
+  fullWidth = dividerDefaults.fullWidth,
   role = 'separator',
   'aria-orientation': ariaOrientation,
   ...props
-}, ref) => {
+}) => {
   return (
     <StyledDivider
-      ref={ref}
       orientation={orientation}
       thickness={thickness}
       color={color}
       variant={variant}
       spacing={spacing}
-      customSpacing={customSpacing}
-      length={length}
-      fullSize={fullSize}
+      fullWidth={fullWidth}
       role={role}
       aria-orientation={ariaOrientation || orientation}
       {...props}
     />
   );
-});
+};
 
 Divider.displayName = 'Divider';
