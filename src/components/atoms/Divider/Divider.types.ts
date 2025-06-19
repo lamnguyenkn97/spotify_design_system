@@ -1,12 +1,12 @@
 import { HTMLAttributes } from 'react';
 
-export type DividerVariant = 'solid' | 'dashed' | 'dotted' | 'double';
+export type DividerVariant = 'solid' | 'subtle';
 
 export type DividerOrientation = 'horizontal' | 'vertical';
 
-export type DividerColor = 'primary' | 'secondary' | 'muted' | 'brand' | string;
+export type DividerColor = 'muted' | 'subtle' | string;
 
-export type DividerSpacing = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+export type DividerSpacing = 'sm' | 'md' | 'lg';
 
 export interface DividerProps extends Omit<HTMLAttributes<HTMLHRElement>, 'color'> {
   /**
@@ -40,19 +40,8 @@ export interface DividerProps extends Omit<HTMLAttributes<HTMLHRElement>, 'color
   spacing?: DividerSpacing;
   
   /**
-   * Custom spacing override (CSS value)
-   */
-  customSpacing?: string;
-  
-  /**
-   * The length of the divider (width for horizontal, height for vertical)
-   * @default '100%'
-   */
-  length?: string | number;
-  
-  /**
    * Whether the divider should be full width/height
    * @default true
    */
-  fullSize?: boolean;
+  fullWidth?: boolean;
 }

@@ -4,35 +4,30 @@ import {
   DividerColor,
   DividerSpacing,
   DividerOrientation,
+  DividerVariant,
 } from './Divider.types';
 
-// Create a color token mapping that can be easily extended
+// Simplified color tokens for what Spotify actually uses
 const colorTokens = {
-  primary: colors.primary.white,
-  secondary: colors.grey.grey6,
   muted: colors.grey.grey3,
-  brand: colors.primary.brand,
+  subtle: colors.grey.grey2,
 } as const;
 
-// Create a spacing token mapping that can be easily extended
+// Simplified spacing tokens - only 3 options
 const spacingTokens = {
-  none: '0',
-  xs: spacing.xs,
   sm: spacing.sm,
   md: spacing.md,
   lg: spacing.lg,
-  xl: spacing.xl,
 } as const;
 
-// Default design tokens for divider
+// Simplified defaults for Spotify - using proper enum types
 const dividerDefaults = {
   thickness: 1,
   color: 'muted' as DividerColor,
-  variant: 'solid',
+  variant: 'solid' as DividerVariant,
   spacing: 'md' as DividerSpacing,
   orientation: 'horizontal' as DividerOrientation,
-  length: '100%',
-  fullSize: true,
+  fullWidth: true,
 };
 
 const getColorValue = (color: DividerColor): string => {
@@ -48,12 +43,9 @@ const getOrientationStyles = (
   thickness: number,
   variant: string,
   color: string,
-  length: string | number,
-  fullSize: boolean,
+  fullWidth: boolean,
   spacingValue: string
 ) => {
-  const lengthValue = typeof length === 'number' ? `${length}px` : length;
-
   const baseStyles = css`
     border: none;
     padding: 0;
@@ -65,7 +57,7 @@ const getOrientationStyles = (
     return css`
       ${baseStyles};
       width: ${thickness}px;
-      height: ${fullSize ? '100%' : lengthValue};
+      height: ${fullWidth ? '100%' : 'auto'};
       border-left: ${thickness}px ${variant} ${color};
       margin: 0 ${spacingValue};
       display: inline-block;
@@ -75,11 +67,16 @@ const getOrientationStyles = (
 
   return css`
     ${baseStyles};
-    width: ${fullSize ? '100%' : lengthValue};
+    width: ${fullWidth ? '100%' : 'auto'};
     height: ${thickness}px;
     border-top: ${thickness}px ${variant} ${color};
     margin: ${spacingValue} 0;
     display: block;
+
+    ${variant === 'subtle' &&
+    css`
+      opacity: 0.3;
+    `}
   `;
 };
 
@@ -91,9 +88,7 @@ export const StyledDivider = styled.hr.withConfig({
       'color',
       'variant',
       'spacing',
-      'customSpacing',
-      'length',
-      'fullSize',
+      'fullWidth',
     ].includes(prop),
 })<{
   orientation: DividerOrientation;
@@ -101,45 +96,39 @@ export const StyledDivider = styled.hr.withConfig({
   color: DividerColor;
   variant: string;
   spacing: DividerSpacing;
-  customSpacing?: string;
-  length: string | number;
-  fullSize: boolean;
+  fullWidth: boolean;
 }>`
-  /* Apply orientation-specific styles */
   ${({
     orientation,
     thickness,
     variant,
     color,
-    length,
-    fullSize,
+    fullWidth,
     spacing: spacingProp,
-    customSpacing,
   }) => {
     const colorValue = getColorValue(color);
-    const spacingValue = customSpacing || getSpacingValue(spacingProp);
+    const spacingValue = getSpacingValue(spacingProp);
 
     return getOrientationStyles(
       orientation,
       thickness,
       variant,
       colorValue,
-      length,
-      fullSize,
+      fullWidth,
       spacingValue
     );
   }};
 
-  /* Accessibility and focus states */
+  /* Focus states for accessibility */
   &:focus {
     outline: none;
   }
 
-  /* Ensure proper behavior in flex containers */
+  /* Proper behavior in flex containers */
   &[aria-orientation='vertical'] {
     align-self: stretch;
   }
 `;
 
-// Export the defaults for reuse
+// Export the simplified defaults
 export { dividerDefaults, colorTokens, spacingTokens };

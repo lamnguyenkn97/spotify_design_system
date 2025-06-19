@@ -1,56 +1,27 @@
 import styled, { css } from 'styled-components';
-import { fontSizes, spacing, colors, borderRadius } from '../../../styles';
-import { IconSize, IconColor, IconVariant } from './Icon.types';
+import { colors, spacing, opacity, animations, borderRadius } from '../../../styles';
+import { IconSize, IconColor } from './Icon.types';
 
-// Icon size tokens mapping
+// Simplified size tokens - only 3 sizes that Spotify actually uses
 const sizeTokens = {
-  xs: {
-    dimension: spacing.sm,
-    fontSize: fontSizes.sm,
-    padding: spacing.sm,
-  },
-  small: {
-    dimension: spacing.md,
-    fontSize: fontSizes.md,
-    padding: spacing.md,
-  },
-  medium: {
-    dimension: spacing.lg,
-    fontSize: fontSizes.lg,
-    padding: spacing.md,
-  },
-  large: {
-    dimension: spacing.xl,
-    fontSize: fontSizes.xl,
-    padding: spacing.lg,
-  },
-  xl: {
-    dimension: '2rem', // spacing.xxl if available
-    fontSize: fontSizes.xl,
-    padding: spacing.lg,
-  },
+  sm: spacing.md,   // 16px
+  md: spacing.lg,   // 20px  
+  lg: spacing.xl,   // 24px
 } as const;
 
-// Color tokens mapping that can be easily extended
+// Simplified color tokens - only what Spotify actually uses
 const colorTokens = {
   primary: colors.primary.white,
-  secondary: colors.grey.grey6,
   muted: colors.grey.grey3,
   brand: colors.primary.brand,
-  error: colors.decorative.redRedWine,
-  warning: colors.decorative.mellowYellow,
-  success: colors.decorative.evergreen,
   inherit: 'currentColor',
 } as const;
 
-// Default design tokens for icon
+// Simplified defaults for Spotify
 const iconDefaults = {
-  size: 'medium' as IconSize,
+  size: 'md' as IconSize,
   color: 'inherit' as IconColor,
-  variant: 'default' as IconVariant,
   clickable: false,
-  spin: false,
-  pulse: false,
   disabled: false,
 };
 
@@ -58,65 +29,14 @@ const getColorValue = (color: IconColor): string => {
   return colorTokens[color as keyof typeof colorTokens] || color;
 };
 
-const getSizeStyles = (size: IconSize) => {
-  const sizeConfig = sizeTokens[size] || sizeTokens.medium;
-
-  return css`
-    width: ${sizeConfig.dimension};
-    height: ${sizeConfig.dimension};
-    font-size: ${sizeConfig.fontSize}rem;
-  `;
+const getSizeValue = (size: IconSize): string => {
+  return sizeTokens[size] || sizeTokens.md;
 };
 
-const getVariantStyles = (
-  variant: IconVariant,
-  backgroundColor?: IconColor,
-  size: IconSize = 'medium'
-) => {
-  const sizeConfig = sizeTokens[size] || sizeTokens.medium;
-
-  switch (variant) {
-    case 'rounded':
-      return css`
-        background-color: ${backgroundColor
-          ? getColorValue(backgroundColor)
-          : colors.grey.grey2};
-        border-radius: 50%;
-        padding: ${sizeConfig.padding};
-      `;
-    case 'outlined':
-      return css`
-        border: 1px solid
-          ${backgroundColor
-            ? getColorValue(backgroundColor)
-            : colors.grey.grey3};
-        border-radius: ${borderRadius.sm};
-        padding: ${sizeConfig.padding};
-      `;
-    case 'filled':
-      return css`
-        background-color: ${backgroundColor
-          ? getColorValue(backgroundColor)
-          : colors.grey.grey2};
-        border-radius: ${borderRadius.sm};
-        padding: ${sizeConfig.padding};
-      `;
-    case 'default':
-    default:
-      return css`
-        /* No additional styles for default variant */
-      `;
-  }
-};
-
-const getInteractiveStyles = (
-  clickable: boolean,
-  disabled: boolean,
-  hoverColor?: IconColor
-) => {
+const getInteractiveStyles = (clickable: boolean, disabled: boolean) => {
   if (disabled) {
     return css`
-      opacity: 0.5;
+      opacity: ${opacity.disabled};
       cursor: not-allowed;
       pointer-events: none;
     `;
@@ -125,51 +45,38 @@ const getInteractiveStyles = (
   if (clickable) {
     return css`
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition:
+        color ${animations.duration.fast} ${animations.easing.easeInOut},
+        transform ${animations.duration.fast} ${animations.easing.easeInOut};
 
       &:hover {
-        color: ${hoverColor ? getColorValue(hoverColor) : colors.primary.brand};
-        transform: scale(1.1);
+        color: ${colors.primary.brand};
       }
 
       &:active {
-        transform: scale(0.95);
+        transform: scale(${animations.scale.pressed});
       }
 
       &:focus-visible {
-        outline: 2px solid ${colors.primary.brand};
-        outline-offset: 2px;
+        outline: ${spacing.xs} solid ${colors.primary.brand};
+        outline-offset: ${spacing.xs};
         border-radius: ${borderRadius.xs};
       }
     `;
   }
 
-  return css`
-    /* No interactive styles */
-  `;
+  return css``;
 };
 
 export const StyledIcon = styled.span.withConfig({
   shouldForwardProp: (prop) =>
-    ![
-      'size',
-      'color',
-      'hoverColor',
-      'variant',
-      'backgroundColor',
-      'clickable',
-      'disabled',
-    ].includes(prop),
+    !['size', 'color', 'clickable', 'disabled'].includes(prop),
 })<{
   size: IconSize;
   color: IconColor;
-  hoverColor?: IconColor;
-  variant: IconVariant;
-  backgroundColor?: IconColor;
   clickable: boolean;
   disabled: boolean;
 }>`
-  /* Base styles */
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -177,25 +84,22 @@ export const StyledIcon = styled.span.withConfig({
   line-height: 1;
 
   /* Size styles */
-  ${({ size }) => getSizeStyles(size)};
+  width: ${({ size }) => getSizeValue(size)};
+  height: ${({ size }) => getSizeValue(size)};
+  font-size: ${({ size }) => getSizeValue(size)};
 
   /* Color styles */
   color: ${({ color }) => getColorValue(color)};
 
-  /* Variant styles */
-  ${({ variant, backgroundColor, size }) =>
-    getVariantStyles(variant, backgroundColor, size)};
-
   /* Interactive styles */
-  ${({ clickable, disabled, hoverColor }) =>
-    getInteractiveStyles(clickable, disabled, hoverColor)};
+  ${({ clickable, disabled }) => getInteractiveStyles(clickable, disabled)};
 
-  /* FontAwesome icon container */
+  /* FontAwesome icon styling - 1em scales with container's font-size */
   svg {
-    width: 1em;
-    height: 1em;
+    width: 1em;   /* Scales with the icon container's font-size (design token) */
+    height: 1em;  /* Scales with the icon container's font-size (design token) */
   }
 `;
 
-// Export tokens and defaults for reuse
+// Export simplified tokens and defaults
 export { iconDefaults, sizeTokens, colorTokens };

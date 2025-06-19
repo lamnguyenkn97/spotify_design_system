@@ -2,17 +2,8 @@ export { Pill } from './Pill';
 export type { 
   PillProps, 
   PillSize, 
-  PillVariant, 
-  PillState, 
-  PillShape 
+  PillVariant
 } from './Pill.types';
 export {
-  sizeTokens,
-  variantTokens,
-  shapeTokens,
-  pillConfig,
-  pillDefaults,
-  getSizeStyles,
-  getVariantStyles,
-  getShapeStyles,
+  pillDefaults
 } from './Pill.style';

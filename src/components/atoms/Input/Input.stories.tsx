@@ -131,7 +131,7 @@ export const Search: Story = {
     variant: 'search',
     placeholder: 'Search for songs, artists, or playlists...',
     label: 'Search',
-    onSearch: (value) => console.log('Searching for:', value),
+    onSearch: (value: string) => console.log('Searching for:', value),
   },
 };
 
