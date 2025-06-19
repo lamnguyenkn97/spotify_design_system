@@ -3,6 +3,8 @@
  * These values ensure a cohesive user experience across all components
  */
 
+import { keyframes as styledKeyframes } from 'styled-components';
+
 export const animations = {
   // Transition durations
   duration: {
@@ -33,6 +35,8 @@ export const animations = {
     medium: '1.07',
     large: '1.1',
     xl: '1.15',
+    // Interactive states
+    pressed: '0.98', // For button active/pressed state
   },
 
   // Font size scaling for interactive elements
@@ -100,33 +104,33 @@ export const animations = {
     pulse: 'pulse 2s infinite',
     bounce: 'bounce 1s infinite',
   },
-
-  // Keyframes (CSS-in-JS compatible)
-  keyframes: {
-    spin: `
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    `,
-    pulse: `
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    `,
-    bounce: `
-      0%, 20%, 53%, 80%, 100% { transform: translateY(0); }
-      40%, 43% { transform: translateY(-8px); }
-      70% { transform: translateY(-4px); }
-      90% { transform: translateY(-2px); }
-    `,
-    fadeIn: `
-      from { opacity: 0; }
-      to { opacity: 1; }
-    `,
-    slideUp: `
-      from { transform: translateY(10px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    `,
-  },
 } as const;
 
+// Properly defined keyframes using styled-components
+export const keyframes = {
+  spin: styledKeyframes`
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  `,
+  pulse: styledKeyframes`
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  `,
+  bounce: styledKeyframes`
+    0%, 20%, 53%, 80%, 100% { transform: translateY(0); }
+    40%, 43% { transform: translateY(-8px); }
+    70% { transform: translateY(-4px); }
+    90% { transform: translateY(-2px); }
+  `,
+  fadeIn: styledKeyframes`
+    from { opacity: 0; }
+    to { opacity: 1; }
+  `,
+  slideUp: styledKeyframes`
+    from { transform: translateY(10px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  `,
+};
+
 // Export individual sections for easier imports
-export const { duration, easing, scale, fontScale, transitions, hover, loading, keyframes } = animations; 
+export const { duration, easing, scale, fontScale, transitions, hover, loading } = animations; 

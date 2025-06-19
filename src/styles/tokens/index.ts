@@ -4,3 +4,5 @@ export * from './radius';
 export * from './typography';
 export * from './fonts';
 export * from './animations';
+export * from './opacity';
+export * from './borders';

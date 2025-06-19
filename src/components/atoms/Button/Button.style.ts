@@ -5,26 +5,35 @@ import {
   fontSizes,
   spacing,
   fonts,
-  scale,
   transitions,
-  keyframes,
+  fontScale,
+  scale,
+  opacity,
+  borders,
 } from '../../../styles';
 import { ButtonSize, ButtonVariant } from './Button.types';
 
 // Design tokens for button-specific configurations
 const buttonTokens = {
-  border: {
-    width: '1px',
-    style: 'solid',
-  },
-  opacity: {
-    disabled: 0.5,
-  },
   minHeight: {
-    small: '32px',
-    medium: '40px',
-    large: '48px',
+    small: spacing.xl, // 32px
+    medium: spacing['2xl'], // 40px
+    large: spacing['3xl'], // 48px
   },
+  // Interactive state values
+  transform: {
+    active: `scale(${scale.pressed})`,
+    hover: `scale(${scale.subtle})`,
+  },
+  fontSize: {
+    hoverScale: fontScale.medium, // 1.1
+  },
+} as const;
+
+// Enhanced overlay colors using design tokens
+const overlayColors = {
+  whiteSubtle: `rgba(255, 255, 255, ${opacity.overlay.subtle})`,
+  whiteMedium: `rgba(255, 255, 255, ${opacity.overlay.medium})`,
 } as const;
 
 // Size configuration object - eliminates repetition and hardcoded values
@@ -59,80 +68,128 @@ export const getSizeStyles = (size: ButtonSize) => {
   `;
 };
 
+// Variant configuration object - eliminates hardcoded values and repetition
+interface VariantConfig {
+  backgroundColor: string;
+  color: string;
+  borderColor: string;
+  customBorder?: string; // For Text variant
+  customPadding?: string; // For Text variant
+  hover: {
+    backgroundColor?: string;
+    color?: string;
+    borderColor?: string;
+    fontSize?: string; // For Text variant size change on hover
+  };
+  active: {
+    backgroundColor?: string;
+    transform?: string;
+    color?: string; // For Text variant color change on active
+  };
+}
+
+const variantConfig: Record<ButtonVariant, VariantConfig> = {
+  [ButtonVariant.Primary]: {
+    backgroundColor: colors.primary.brand,
+    color: colors.primary.black,
+    borderColor: colors.primary.brand,
+    hover: {
+      backgroundColor: colors.primary.brandHighlight,
+      borderColor: colors.primary.brandHighlight,
+    },
+    active: {
+      backgroundColor: colors.primary.brand,
+      transform: buttonTokens.transform.active,
+    },
+  },
+  [ButtonVariant.Secondary]: {
+    backgroundColor: colors.primary.black,
+    color: colors.grey.grey6,
+    borderColor: colors.grey.grey3,
+    hover: {
+      color: colors.primary.white,
+      borderColor: colors.primary.white,
+      backgroundColor: colors.grey.grey1,
+    },
+    active: {
+      backgroundColor: colors.grey.grey2,
+    },
+  },
+  [ButtonVariant.White]: {
+    backgroundColor: colors.primary.white,
+    color: colors.primary.black,
+    borderColor: colors.primary.white,
+    hover: {
+      backgroundColor: colors.grey.grey6,
+    },
+    active: {
+      backgroundColor: colors.grey.grey5,
+    },
+  },
+  [ButtonVariant.FlatWhite]: {
+    backgroundColor: 'transparent',
+    color: colors.primary.white,
+    borderColor: colors.grey.grey6,
+    hover: {
+      borderColor: colors.primary.white,
+      backgroundColor: overlayColors.whiteSubtle,
+    },
+    active: {
+      backgroundColor: overlayColors.whiteMedium,
+    },
+  },
+  [ButtonVariant.Text]: {
+    backgroundColor: 'transparent',
+    color: colors.grey.grey6,
+    borderColor: 'transparent',
+    customBorder: 'none',
+    customPadding: spacing.xs,
+    hover: {
+      color: colors.primary.white,
+      fontSize: buttonTokens.fontSize.hoverScale,
+    },
+    active: {
+      color: colors.primary.white,
+    },
+  },
+} as const;
+
 const getVariantStyles = (variant: ButtonVariant) => {
-  switch (variant) {
-    case ButtonVariant.Secondary:
-      return css`
-        background-color: ${colors.primary.black};
-        color: ${colors.grey.grey6};
-        border: ${buttonTokens.border.width} ${buttonTokens.border.style} ${colors.grey.grey3};
-        &:hover:not(:disabled) {
-          color: ${colors.primary.white};
-          border-color: ${colors.primary.white};
-          background-color: ${colors.grey.grey1};
-        }
-        &:active:not(:disabled) {
-          background-color: ${colors.grey.grey2};
-        }
-      `;
-    case ButtonVariant.White:
-      return css`
-        background-color: ${colors.primary.white};
-        color: ${colors.primary.black};
-        border: ${buttonTokens.border.width} ${buttonTokens.border.style} ${colors.primary.white};
-        &:hover:not(:disabled) {
-          background-color: ${colors.grey.grey6};
-        }
-        &:active:not(:disabled) {
-          background-color: ${colors.grey.grey5};
-        }
-      `;
-    case ButtonVariant.FlatWhite:
-      return css`
-        background-color: transparent;
-        color: ${colors.primary.white};
-        border: ${buttonTokens.border.width} ${buttonTokens.border.style} ${colors.grey.grey6};
-        &:hover:not(:disabled) {
-          border-color: ${colors.primary.white};
-          background-color: rgba(255, 255, 255, 0.1);
-        }
-        &:active:not(:disabled) {
-          background-color: rgba(255, 255, 255, 0.2);
-        }
-      `;
-    case ButtonVariant.Text:
-      return css`
-        background-color: transparent;
-        color: ${colors.grey.grey6};
-        border: none;
-        padding: ${spacing.xs};
-        &:hover:not(:disabled) {
-          color: ${colors.primary.white};
-          background-color: rgba(255, 255, 255, 0.1);
-        }
-        &:active:not(:disabled) {
-          background-color: rgba(255, 255, 255, 0.2);
-        }
-      `;
-    case ButtonVariant.Primary:
-    default:
-      return css`
-        background-color: ${colors.primary.brand};
-        color: ${colors.primary.black};
-        border: ${buttonTokens.border.width} ${buttonTokens.border.style} ${colors.primary.brand};
-        &:hover:not(:disabled) {
-          background-color: ${colors.primary.brandHighlight};
-          border-color: ${colors.primary.brandHighlight};
-        }
-        &:active:not(:disabled) {
-          background-color: ${colors.primary.brand};
-          transform: scale(0.98);
-        }
-      `;
-  }
+  const config = variantConfig[variant];
+
+  return css`
+    background-color: ${config.backgroundColor};
+    color: ${config.color};
+    ${config.customBorder
+      ? `border: ${config.customBorder};`
+      : `border: ${borders.default.width} ${borders.default.style} ${config.borderColor};`}
+    ${config.customPadding ? `padding: ${config.customPadding};` : ''}
+    
+    &:hover:not(:disabled) {
+      ${config.hover.backgroundColor
+        ? `background-color: ${config.hover.backgroundColor};`
+        : ''}
+      ${config.hover.color ? `color: ${config.hover.color};` : ''}
+      ${config.hover.borderColor
+        ? `border-color: ${config.hover.borderColor};`
+        : ''}
+      ${config.hover.fontSize ? `font-size: ${config.hover.fontSize};` : ''}
+    }
+
+    &:active:not(:disabled) {
+      ${config.active.backgroundColor
+        ? `background-color: ${config.active.backgroundColor};`
+        : ''}
+      ${config.active.transform ? `transform: ${config.active.transform};` : ''}
+      ${config.active.color ? `color: ${config.active.color};` : ''}
+    }
+  `;
 };
 
-export const StyledButton = styled.button<{
+export const StyledButton = styled.button.withConfig({
+  shouldForwardProp: (prop) =>
+    !['size', 'variant', 'fullWidth', 'loading', 'iconPosition'].includes(prop),
+})<{
   size: ButtonSize;
   variant: ButtonVariant;
   fullWidth?: boolean;
@@ -170,31 +227,16 @@ export const StyledButton = styled.button<{
       flex-direction: row-reverse;
     `}
   
-  /* Loading state using global keyframes */
+  /* Loading state - Font Awesome spinner will be rendered in Button.tsx */
   ${(props) =>
     props.loading &&
     css`
-      color: transparent;
       pointer-events: none;
-
-      &::after {
-        content: '';
-        position: absolute;
-        width: 16px;
-        height: 16px;
-        border: 2px solid currentColor;
-        border-top: 2px solid transparent;
-        border-radius: 50%;
-        animation: ${keyframes.spin} 0.8s linear infinite;
-        color: ${props.variant === ButtonVariant.Primary
-          ? colors.primary.black
-          : colors.primary.white};
-      }
     `}
   
   /* Disabled state using design tokens */
   &:disabled {
-    opacity: ${buttonTokens.opacity.disabled};
+    opacity: ${opacity.disabled};
     cursor: not-allowed;
     pointer-events: none;
   }
@@ -203,12 +245,5 @@ export const StyledButton = styled.button<{
   &:focus-visible {
     outline: 2px solid ${colors.primary.brand};
     outline-offset: 2px;
-  }
-
-  /* Icon container */
-  .icon {
-    display: inline-flex;
-    align-items: center;
-    line-height: 1;
   }
 `;
