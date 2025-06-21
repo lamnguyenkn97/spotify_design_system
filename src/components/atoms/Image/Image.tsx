@@ -5,40 +5,20 @@ import {
   StyledImage,
   PlaceholderContent,
   imageDefaults,
-  placeholderConfig,
 } from './Image.style';
 import { ImageProps } from './Image.types';
-import { getPlaceholderIcon, PlaceholderType } from './Image.utils';
-
-// Helper function to get placeholder icon color based on state and type
-const getPlaceholderColor = (
-  hasError: boolean,
-  placeholderType: PlaceholderType
-): string => {
-  if (hasError) return placeholderConfig.colors.error;
-  if (placeholderType === 'spotify') return placeholderConfig.colors.spotify;
-  return placeholderConfig.colors.default;
-};
+import { getPlaceholderIcon } from './Image.utils';
 
 export const Image = forwardRef<HTMLImageElement, ImageProps>(
   (
     {
       src,
       alt,
-      width = imageDefaults.width,
-      height = imageDefaults.height,
+      size = imageDefaults.size,
       shape = imageDefaults.shape,
-      aspectRatio,
-      objectFit = imageDefaults.objectFit,
-      fallbackSrc = imageDefaults.fallbackSrc,
-      placeholder = imageDefaults.placeholder,
-      placeholderContent,
-      placeholderType = 'image',
-      placeholderIconSize = placeholderConfig.iconSize,
-      loading: loadingProp = imageDefaults.loading,
+      variant = imageDefaults.variant,
+      fallbackSrc,
       lazy = imageDefaults.lazy,
-      onError,
-      onLoad,
       className,
       ...props
     },
@@ -46,81 +26,54 @@ export const Image = forwardRef<HTMLImageElement, ImageProps>(
   ) => {
     const [imageSrc, setImageSrc] = useState(src);
     const [isLoading, setIsLoading] = useState(!!src);
-    const [hasError, setHasError] = useState(false);
-    const [showIconPlaceholder, setShowIconPlaceholder] = useState(!src);
+    const [showPlaceholder, setShowPlaceholder] = useState(!src);
 
     // Reset states when src changes
     useEffect(() => {
       if (src) {
         setImageSrc(src);
         setIsLoading(true);
-        setHasError(false);
-        setShowIconPlaceholder(false);
+        setShowPlaceholder(false);
       } else {
-        // Show FontAwesome icon placeholder when no src provided
         setImageSrc('');
-        setHasError(false);
         setIsLoading(false);
-        setShowIconPlaceholder(true);
+        setShowPlaceholder(true);
       }
-    }, [src, placeholderType]);
+    }, [src]);
 
-    const handleLoad = (
-      event: React.SyntheticEvent<HTMLImageElement, Event>
-    ) => {
+    const handleLoad = () => {
       setIsLoading(false);
-      onLoad?.(event);
     };
 
-    const handleError = (
-      event: React.SyntheticEvent<HTMLImageElement, Event>
-    ) => {
-      setHasError(true);
-      setIsLoading(false);
-
+    const handleError = () => {
       // Try fallback if available and not already using it
       if (fallbackSrc && imageSrc !== fallbackSrc) {
         setImageSrc(fallbackSrc);
         setIsLoading(true);
-        setHasError(false);
-        setShowIconPlaceholder(false);
+        setShowPlaceholder(false);
         return;
       }
 
-      // If no fallback or fallback also fails, show FontAwesome icon placeholder
+      // Show placeholder if no fallback or fallback fails
       setImageSrc('');
-      setShowIconPlaceholder(true);
-      setHasError(true);
       setIsLoading(false);
-
-      // Log the error for debugging
-      if (process.env.NODE_ENV === 'development') {
-        console.warn('Image failed to load:', src);
-      }
-
-      onError?.(event);
+      setShowPlaceholder(true);
     };
-
-    const showLoading = loadingProp || isLoading;
-    const showPlaceholder = showLoading || hasError;
 
     return (
       <ImageWrapper
-        width={width}
-        height={height}
-        aspectRatio={aspectRatio}
+        size={size}
         shape={shape}
-        loading={showLoading}
-        placeholder={placeholder}
+        variant={variant}
+        isLoading={isLoading}
         className={className}
       >
-        {/* Show image if we have a src and not showing icon placeholder */}
-        {imageSrc && !showIconPlaceholder && (
+        {/* Show image if we have a src and not showing placeholder */}
+        {imageSrc && !showPlaceholder && (
           <StyledImage
             ref={ref}
             src={imageSrc}
             alt={alt}
-            objectFit={objectFit}
             isLoading={isLoading}
             onLoad={handleLoad}
             onError={handleError}
@@ -130,23 +83,11 @@ export const Image = forwardRef<HTMLImageElement, ImageProps>(
         )}
 
         {/* Show FontAwesome icon placeholder */}
-        {showIconPlaceholder && (
-          <PlaceholderContent>
-            <FontAwesomeIcon
-              icon={getPlaceholderIcon(hasError ? 'broken' : placeholderType)}
-              size={placeholderIconSize}
-              color={getPlaceholderColor(hasError, placeholderType)}
-            />
+        {showPlaceholder && (
+          <PlaceholderContent variant={variant}>
+            <FontAwesomeIcon icon={getPlaceholderIcon(variant)} size="2x" />
           </PlaceholderContent>
         )}
-
-        {/* Show custom placeholder content */}
-        {showPlaceholder &&
-          placeholder === 'custom' &&
-          placeholderContent &&
-          !showIconPlaceholder && (
-            <PlaceholderContent>{placeholderContent}</PlaceholderContent>
-          )}
       </ImageWrapper>
     );
   }

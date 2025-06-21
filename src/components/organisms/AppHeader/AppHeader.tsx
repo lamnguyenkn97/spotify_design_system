@@ -15,7 +15,8 @@ import {
   ButtonVariant,
 } from '../../atoms/Button';
 import { faSpotify } from '@fortawesome/free-brands-svg-icons';
-import { faHome } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export interface AppHeaderProps {
   isAuthenticated: boolean;
@@ -53,11 +54,10 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
           <Icon icon={faSpotify} size={'large'} />
           <Icon icon={faHome} size={'medium'} />
           <Input
-            variant="search"
+            type="search"
             placeholder="What do you want to play?"
+            leftIcon={<FontAwesomeIcon icon={faSearch} />}
             onSearch={onSearch}
-            size="md"
-            clearable
           />
         </Stack>
         <Stack direction="row" spacing={'md'} align="center">

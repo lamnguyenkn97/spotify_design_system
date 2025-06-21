@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Stack } from '../../atoms/Layout/Stack';
+import { Stack } from '../../atoms/Stack';
 import { Button } from '../../atoms/Button/Button';
 import { ButtonSize, ButtonVariant } from '../../atoms/Button/Button.types';
 import { Icon } from '../../atoms/Icon/Icon';

@@ -1,71 +1,22 @@
-import React, { InputHTMLAttributes } from 'react';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import React, { InputHTMLAttributes, ReactNode } from 'react';
 
-export type InputSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-
-export type InputVariant = 'default' | 'search' | 'password' | 'number' | 'email' | 'url';
-
-export type InputState = 'default' | 'error' | 'success' | 'warning' | 'disabled';
-
+// SIMPLIFIED: Only essential props for Spotify's actual needs
 export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
-  /**
-   * Size of the input field
-   * @default 'md'
-   */
-  size?: InputSize;
-  
-  /**
-   * Variant of the input field
-   * @default 'default'
-   */
-  variant?: InputVariant;
-  
-  /**
-   * Visual state of the input
-   * @default 'default'
-   */
-  state?: InputState;
-  
   /**
    * Label text for the input
    */
   label?: string;
   
   /**
-   * Helper text below the input
+   * Message to display below the input (helper text or error message)
    */
-  helperText?: string;
+  message?: string;
   
   /**
-   * Error message to display
+   * Whether the message is an error message (changes styling)
+   * @default false
    */
-  errorMessage?: string;
-  
-  /**
-   * Success message to display
-   */
-  successMessage?: string;
-  
-  /**
-   * Warning message to display
-   */
-  warningMessage?: string;
-  
-  /**
-   * Icon to display on the left side
-   */
-  leftIcon?: IconProp;
-  
-  /**
-   * Icon to display on the right side
-   */
-  rightIcon?: IconProp;
-  
-  /**
-   * Size of the icons
-   * @default 'sm'
-   */
-  iconSize?: InputSize;
+  error?: boolean;
   
   /**
    * Whether the input takes full width
@@ -74,35 +25,22 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
   fullWidth?: boolean;
   
   /**
-   * Whether to show a clear button (X) when input has value
-   * @default false
+   * Icon to display on the left side (typically for search)
    */
-  clearable?: boolean;
+  leftIcon?: ReactNode;
   
   /**
-   * Callback when clear button is clicked
-   */
-  onClear?: () => void;
-  
-  /**
-   * Callback for search functionality (for search variant)
+   * Callback for search functionality (triggered on Enter key or search icon click)
    */
   onSearch?: (value: string) => void;
   
   /**
-   * Whether to show password toggle (for password variant)
-   * @default true
+   * Callback when input value changes
    */
-  showPasswordToggle?: boolean;
+  onValueChange?: (value: string) => void;
   
   /**
    * Custom className for styling
    */
   className?: string;
-  
-  /**
-   * Loading state
-   * @default false
-   */
-  loading?: boolean;
 } 

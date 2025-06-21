@@ -1,5 +1,5 @@
 import React from 'react';
-import { Stack } from '../../atoms/Layout/Stack';
+import { Stack } from '../../atoms/Stack';
 import { Typography } from '../../atoms/Typography/Text/Typography';
 import { Button } from '../../atoms/Button/Button';
 import { Icon } from '../../atoms/Icon/Icon';
@@ -10,7 +10,9 @@ import {
   faExpand,
   faList,
   faGripHorizontal,
+  faSearch,
 } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ButtonSize, ButtonVariant } from '../../atoms/Button';
 import {
   SidebarContainer,
@@ -87,10 +89,10 @@ export const Sidebar: React.FC = () => {
       {/* Search */}
       <SearchWrapper>
         <Input
-          variant="search"
+          type="search"
           placeholder="Search in Your Library"
-          size="sm"
-          clearable
+          leftIcon={<FontAwesomeIcon icon={faSearch} />}
+          onSearch={(value) => console.log('Searching library for:', value)}
         />
       </SearchWrapper>
 
@@ -100,7 +102,7 @@ export const Sidebar: React.FC = () => {
           <Typography variant="body2" color="secondary">
             Recents
           </Typography>
-          <Stack direction="row" spacing="xs">
+          <Stack direction="row" spacing="sm">
             <Icon icon={faList} size="small" />
             <Icon icon={faGripHorizontal} size="small" />
           </Stack>

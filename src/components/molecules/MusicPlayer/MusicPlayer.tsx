@@ -1,5 +1,5 @@
 import React, { forwardRef } from 'react';
-import { Stack } from '../../atoms/Layout/Stack';
+import { Stack } from '../../atoms/Stack';
 import { PlayerControls } from './PlayerControls';
 import { ProgressBar } from './ProgressBar';
 import { VolumeControl } from './VolumeControl';

@@ -6,7 +6,7 @@ import { PlayerControls } from './PlayerControls';
 import { ProgressBar } from './ProgressBar';
 import { VolumeControl } from './VolumeControl';
 import { NowPlaying } from './NowPlaying';
-import { Stack } from '../../atoms/Layout/Stack';
+import { Stack } from '../../atoms/Stack';
 
 const meta: Meta<typeof MusicPlayer> = {
   title: 'Molecules/MusicPlayer',
@@ -16,7 +16,7 @@ const meta: Meta<typeof MusicPlayer> = {
     docs: {
       description: {
         component:
-          'MusicPlayer is a comprehensive audio player component that displays current track information, playback controls, progress bar, and volume control. It follows Spotify\'s design patterns.',
+          "MusicPlayer is a comprehensive audio player component that displays current track information, playback controls, progress bar, and volume control. It follows Spotify's design patterns.",
       },
     },
   },
@@ -74,19 +74,22 @@ const sampleTracks: Track[] = [
     title: 'Blinding Lights',
     artist: 'The Weeknd',
     album: 'After Hours',
-    coverUrl: 'https://i.scdn.co/image/ab67616d00001e028863bc11d2aa12b54f5aeb36',
+    coverUrl:
+      'https://i.scdn.co/image/ab67616d00001e028863bc11d2aa12b54f5aeb36',
   },
   {
     title: 'Anti-Hero',
     artist: 'Taylor Swift',
     album: 'Midnights',
-    coverUrl: 'https://i.scdn.co/image/ab67616d0000b273bb54dde68cd23e2a268ae0f5',
+    coverUrl:
+      'https://i.scdn.co/image/ab67616d0000b273bb54dde68cd23e2a268ae0f5',
   },
   {
     title: 'As It Was',
     artist: 'Harry Styles',
-    album: 'Harry\'s House',
-    coverUrl: 'https://i.scdn.co/image/ab67616d0000b273daaa68c8a5b6b0e8c9b91f7e',
+    album: "Harry's House",
+    coverUrl:
+      'https://i.scdn.co/image/ab67616d0000b273daaa68c8a5b6b0e8c9b91f7e',
   },
 ];
 
@@ -114,7 +117,9 @@ const InteractiveTemplate = (args: MusicPlayerProps) => {
           setIsPlaying(true);
         }}
         onPrevious={() => {
-          setCurrentTrackIndex((prev) => (prev - 1 + sampleTracks.length) % sampleTracks.length);
+          setCurrentTrackIndex(
+            (prev) => (prev - 1 + sampleTracks.length) % sampleTracks.length
+          );
           setCurrentTime(0);
           setIsPlaying(true);
         }}
@@ -200,10 +205,18 @@ export const NoTrack: Story = {
 // Sub-component stories
 export const ComponentShowcase: Story = {
   render: () => (
-    <div style={{ padding: '2rem', backgroundColor: '#121212', minHeight: '100vh' }}>
-      <Stack direction="column" spacing="xl" align="start">
+    <div
+      style={{
+        padding: '2rem',
+        backgroundColor: '#121212',
+        minHeight: '100vh',
+      }}
+    >
+      <Stack direction="column" spacing="lg" align="start">
         <div>
-          <h3 style={{ color: 'white', marginBottom: '1rem' }}>Player Controls</h3>
+          <h3 style={{ color: 'white', marginBottom: '1rem' }}>
+            Player Controls
+          </h3>
           <PlayerControls
             isPlaying={true}
             onPlayPause={() => {}}
@@ -211,27 +224,22 @@ export const ComponentShowcase: Story = {
             onPrevious={() => {}}
           />
         </div>
-        
+
         <div>
           <h3 style={{ color: 'white', marginBottom: '1rem' }}>Now Playing</h3>
           <NowPlaying {...sampleTracks[0]} />
         </div>
-        
+
         <div>
           <h3 style={{ color: 'white', marginBottom: '1rem' }}>Progress Bar</h3>
-          <ProgressBar
-            currentTime={75}
-            duration={180}
-            onSeek={() => {}}
-          />
+          <ProgressBar currentTime={75} duration={180} onSeek={() => {}} />
         </div>
-        
+
         <div>
-          <h3 style={{ color: 'white', marginBottom: '1rem' }}>Volume Control</h3>
-          <VolumeControl
-            volume={65}
-            onVolumeChange={() => {}}
-          />
+          <h3 style={{ color: 'white', marginBottom: '1rem' }}>
+            Volume Control
+          </h3>
+          <VolumeControl volume={65} onVolumeChange={() => {}} />
         </div>
       </Stack>
     </div>
@@ -258,7 +266,8 @@ export const Playground: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Interactive playground to test different MusicPlayer configurations.',
+        story:
+          'Interactive playground to test different MusicPlayer configurations.',
       },
     },
   },

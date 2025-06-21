@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getImageGradient, getBannerTypeLabel } from './utils';
 import { BannerProps, BannerType } from './Banner.types';
-import { Stack } from '../../atoms/Layout/Stack';
+import { Stack } from '../../atoms/Stack';
 import { Image } from '../../atoms/Image/Image';
 import { Typography } from '../../atoms/Typography/Text/Typography';
 
@@ -29,7 +29,7 @@ export const Banner: React.FC<BannerProps> = ({
 
     const loadGradient = async () => {
       try {
-        setGradientState(prev => ({ ...prev, isLoading: true, error: null }));
+        setGradientState((prev) => ({ ...prev, isLoading: true, error: null }));
         const gradient = await getImageGradient(image);
         if (isMounted) {
           setGradientState({
@@ -43,7 +43,10 @@ export const Banner: React.FC<BannerProps> = ({
           setGradientState({
             background: '#121212',
             isLoading: false,
-            error: error instanceof Error ? error : new Error('Failed to load gradient'),
+            error:
+              error instanceof Error
+                ? error
+                : new Error('Failed to load gradient'),
           });
         }
       }
@@ -74,12 +77,12 @@ export const Banner: React.FC<BannerProps> = ({
   }
 
   return (
-    <Stack 
-      direction="row" 
-      spacing="lg" 
-      align="end" 
+    <Stack
+      direction="row"
+      spacing="lg"
+      align="end"
       padding="lg"
-      style={{ 
+      style={{
         background: gradientState.background,
         height: '300px',
         borderRadius: '8px',
@@ -96,29 +99,17 @@ export const Banner: React.FC<BannerProps> = ({
         shape="rounded"
         style={{ boxShadow: '0 16px 24px rgba(0,0,0,0.5)' }}
       />
-      
+
       <Stack direction="column" spacing="sm" align="start">
-        <Typography
-          variant="body2"
-          weight="bold"
-          color="secondary"
-        >
+        <Typography variant="body2" weight="bold" color="secondary">
           {getBannerTypeLabel(type)}
         </Typography>
-        
-        <Typography
-          variant="h1"
-          weight="bold"
-          color="primary"
-          component="h1"
-        >
+
+        <Typography variant="h1" weight="bold" color="primary" component="h1">
           {title}
         </Typography>
-        
-        <Typography
-          variant="body1"
-          color="secondary"
-        >
+
+        <Typography variant="body1" color="secondary">
           {type === 'artist' ? description : subtitle}
         </Typography>
       </Stack>

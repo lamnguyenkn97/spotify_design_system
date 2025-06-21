@@ -1,6 +1,6 @@
 import React, { forwardRef, useState } from 'react';
 import { CardProps } from './Card.types';
-import { Stack } from '../../atoms/Layout/Stack';
+import { Stack } from '../../atoms/Stack';
 import { Image } from '../../atoms/Image/Image';
 import { Typography } from '../../atoms/Typography/Text/Typography';
 import { Icon } from '../../atoms/Icon';
@@ -81,7 +81,9 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
               shape={isArtist ? 'circle' : 'rounded'}
               style={{
                 transition: transitions.transform,
-                transform: isHovered ? `scale(${scale.small})` : `scale(${scale.none})`,
+                transform: isHovered
+                  ? `scale(${scale.small})`
+                  : `scale(${scale.none})`,
               }}
             />
           )}
@@ -118,7 +120,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
         {/* Content */}
         <Stack
           direction="column"
-          spacing="xs"
+          spacing="sm"
           style={{ marginTop: spacing.xs }}
         >
           <div

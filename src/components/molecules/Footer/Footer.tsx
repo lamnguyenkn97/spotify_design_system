@@ -5,7 +5,7 @@ import {
   faFacebook,
 } from '@fortawesome/free-brands-svg-icons';
 import { FooterLinkItem, SocialLinkItem, FooterProps } from './Footer.types';
-import { Stack } from '../../atoms/Layout/Stack';
+import { Stack } from '../../atoms/Stack';
 import { Typography } from '../../atoms/Typography/Text/Typography';
 import { Icon } from '../../atoms/Icon/Icon';
 import { colors, spacing } from '../../../styles';
@@ -107,7 +107,7 @@ export const Footer = forwardRef<HTMLDivElement, FooterProps>(
         ref={ref}
         as="footer"
         direction="column"
-        spacing="xl"
+        spacing="lg"
         padding="xl"
         backgroundColor={colors.primary.black}
         className={className}
@@ -119,7 +119,7 @@ export const Footer = forwardRef<HTMLDivElement, FooterProps>(
         {/* Main Footer Content */}
         <Stack
           direction="row"
-          spacing="xl"
+          spacing="lg"
           align="start"
           justify="space-between"
           style={{
@@ -137,7 +137,7 @@ export const Footer = forwardRef<HTMLDivElement, FooterProps>(
               >
                 {column.title}
               </Typography>
-              <Stack direction="column" spacing="xs">
+              <Stack direction="column" spacing="sm">
                 {column.links.map((link, linkIndex) => (
                   <FooterLink key={linkIndex} name={link.name} url={link.url} />
                 ))}

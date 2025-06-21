@@ -1,5 +1,5 @@
 import React from 'react';
-import { Stack } from '../../atoms/Layout/Stack';
+import { Stack } from '../../atoms/Stack';
 import { Typography } from '../../atoms/Typography/Text/Typography';
 import { Image } from '../../atoms/Image/Image';
 import { NowPlayingProps } from './MusicPlayer.types';
@@ -10,7 +10,12 @@ export const NowPlaying: React.FC<NowPlayingProps> = ({
   coverUrl = 'https://via.placeholder.com/56',
 }) => {
   return (
-    <Stack direction="row" spacing="md" align="center" style={{ minWidth: 180 }}>
+    <Stack
+      direction="row"
+      spacing="md"
+      align="center"
+      style={{ minWidth: 180 }}
+    >
       <Image
         src={coverUrl}
         alt={`${title} album cover`}
@@ -18,7 +23,7 @@ export const NowPlaying: React.FC<NowPlayingProps> = ({
         height={56}
         shape="rounded"
       />
-      <Stack direction="column" spacing="xs" style={{ minWidth: 0 }}>
+      <Stack direction="column" spacing="sm" style={{ minWidth: 0 }}>
         <Stack
           style={{
             overflow: 'hidden',
@@ -27,11 +32,7 @@ export const NowPlaying: React.FC<NowPlayingProps> = ({
             width: '100%',
           }}
         >
-          <Typography
-            variant="body1"
-            weight="medium"
-            color="primary"
-          >
+          <Typography variant="body1" weight="medium" color="primary">
             {title}
           </Typography>
         </Stack>
@@ -43,15 +44,11 @@ export const NowPlaying: React.FC<NowPlayingProps> = ({
             width: '100%',
           }}
         >
-          <Typography
-            variant="body2"
-            weight="regular"
-            color="secondary"
-          >
+          <Typography variant="body2" weight="regular" color="secondary">
             {artist}
           </Typography>
         </Stack>
       </Stack>
     </Stack>
   );
-}; 
+};

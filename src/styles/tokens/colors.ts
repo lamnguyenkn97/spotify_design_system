@@ -24,4 +24,14 @@ export const colors = {
     pinkMoon: '#E57BA1',
     yellowSubmarine: '#F4E357',
   },
+  // Component-specific semantic colors
+  image: {
+    placeholder: {
+      album: '#57B660',      // Spotify green for music content
+      avatar: 'rgba(255, 255, 255, 0.3)',        // Neutral for user content
+      playlist: '#57B660',   // Spotify green for music content
+      default: 'rgba(255, 255, 255, 0.3)',       // Neutral for generic content
+    },
+    background: 'rgba(255, 255, 255, 0.08)',      // Consistent placeholder background
+  },
 };

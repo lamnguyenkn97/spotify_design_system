@@ -104,6 +104,30 @@ export const animations = {
     pulse: 'pulse 2s infinite',
     bounce: 'bounce 1s infinite',
   },
+
+  // Skeleton loading animations
+  skeleton: {
+    pulse: {
+      duration: '1.5s',
+      easing: 'ease-in-out',
+      iteration: 'infinite',
+      opacity: {
+        start: '1',
+        middle: '0.4',
+        end: '1',
+      },
+    },
+    wave: {
+      duration: '2s',
+      easing: 'linear',
+      iteration: 'infinite',
+      transform: {
+        start: 'translateX(-100%)',
+        middle: 'translateX(100%)',
+        end: 'translateX(-100%)',
+      },
+    },
+  },
 } as const;
 
 // Properly defined keyframes using styled-components
@@ -129,6 +153,17 @@ export const keyframes = {
   slideUp: styledKeyframes`
     from { transform: translateY(10px); opacity: 0; }
     to { transform: translateY(0); opacity: 1; }
+  `,
+  // Skeleton animations
+  skeletonPulse: styledKeyframes`
+    0% { opacity: 1; }
+    50% { opacity: 0.4; }
+    100% { opacity: 1; }
+  `,
+  skeletonWave: styledKeyframes`
+    0% { transform: translateX(-100%); }
+    50% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
   `,
 };
 

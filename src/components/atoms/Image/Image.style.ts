@@ -1,135 +1,55 @@
-import styled, { css, keyframes } from 'styled-components';
-import { borderRadius, spacing, colors } from '../../../styles';
-import { ImageSize, ImageShape, ImageFit, ImagePlaceholder } from './Image.types';
+import styled, { css } from 'styled-components';
+import { borderRadius, spacing, colors, opacity, transitions } from '../../../styles';
+import { ImageSize, ImageShape, ImageVariant } from './Image.types';
 
-// Size tokens mapping
-const sizeTokens = {
-  xs: '2rem',    // 32px
-  sm: '3rem',    // 48px
-  md: '4rem',    // 64px
-  lg: '6rem',    // 96px
-  xl: '8rem',    // 128px
-  full: '100%',
-} as const;
-
-// Shape variants with their border radius
-const shapeTokens = {
-  rectangle: borderRadius.md,
-  rounded: borderRadius.lg,
-  square: borderRadius.md,
-  circle: '50%',
-} as const;
-
-// Placeholder icon configuration
-const placeholderConfig = {
-  iconSize: '3x' as const,
-  colors: {
-    default: colors.grey.grey4,
-    error: colors.decorative.redRedWine,
-    spotify: colors.primary.brand,
-  },
-} as const;
-
-// Default design tokens for image
+// Component defaults
 const imageDefaults = {
-  width: 'auto',
-  height: 'auto',
-  shape: 'rectangle' as ImageShape,
-  objectFit: 'cover' as ImageFit,
-  placeholder: 'blur' as ImagePlaceholder,
-  loading: false,
+  size: 'md' as ImageSize,
+  shape: 'rounded' as ImageShape,
+  variant: 'default' as ImageVariant,
   lazy: true,
-  fallbackSrc: undefined,
 };
 
-// Animations
-const pulse = keyframes`
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-`;
-
-const shimmer = keyframes`
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-`;
-
-const getSizeValue = (size: ImageSize | string | number): string => {
-  if (typeof size === 'number') return `${size}px`;
-  if (typeof size === 'string' && size in sizeTokens) {
-    return sizeTokens[size as ImageSize];
-  }
-  return size as string;
+const getSizeValue = (size: ImageSize): string => {
+  return spacing.image[size];
 };
 
-const getShapeStyles = (shape: ImageShape, aspectRatio?: string | number) => {
-  const borderRadiusValue = shapeTokens[shape] || shapeTokens.rectangle;
+const getShapeStyles = (shape: ImageShape) => {
+  const shapeConfig = {
+    square: {
+      borderRadius: borderRadius.md,
+      aspectRatio: '1',
+    },
+    rounded: {
+      borderRadius: borderRadius.lg,
+      aspectRatio: undefined,
+    },
+    circle: {
+      borderRadius: borderRadius.round,
+      aspectRatio: '1',
+    },
+  };
   
-  // Special handling for square and circle shapes
-  if (shape === 'square' && !aspectRatio) {
-    return css`
-      aspect-ratio: 1;
-      border-radius: ${borderRadiusValue};
-    `;
-  }
-  
-  if (shape === 'circle') {
-    return css`
-      aspect-ratio: 1;
-      border-radius: 50%;
-    `;
-  }
+  const config = shapeConfig[shape];
   
   return css`
-    border-radius: ${borderRadiusValue};
-    ${aspectRatio ? `aspect-ratio: ${aspectRatio};` : ''}
+    border-radius: ${config.borderRadius};
+    ${config.aspectRatio ? `aspect-ratio: ${config.aspectRatio};` : ''}
   `;
 };
 
-const getPlaceholderStyles = (placeholder: ImagePlaceholder) => {
-  switch (placeholder) {
-    case 'blur':
-      return css`
-        background: linear-gradient(90deg, ${colors.grey.grey2} 25%, ${colors.grey.grey3} 50%, ${colors.grey.grey2} 75%);
-        background-size: 200% 100%;
-        animation: ${shimmer} 2s infinite;
-      `;
-    case 'skeleton':
-      return css`
-        background-color: ${colors.grey.grey2};
-        animation: ${pulse} 1.5s ease-in-out infinite;
-      `;
-    case 'empty':
-      return css`
-        background-color: ${colors.grey.grey1};
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: ${colors.grey.grey4};
-        font-size: 0.875rem;
-        
-        &::after {
-          content: '🖼️';
-          font-size: 1.5rem;
-        }
-      `;
-    case 'custom':
-    default:
-      return css`
-        background-color: ${colors.grey.grey1};
-      `;
-  }
+const getPlaceholderColor = (variant: ImageVariant): string => {
+  return colors.image.placeholder[variant];
 };
 
 export const ImageWrapper = styled.div.withConfig({
   shouldForwardProp: (prop) =>
-    !['width', 'height', 'aspectRatio', 'shape', 'loading', 'placeholder'].includes(prop),
+    !['size', 'shape', 'variant', 'isLoading'].includes(prop),
 })<{
-  width: ImageSize | string | number;
-  height: ImageSize | string | number;
-  aspectRatio?: string | number;
+  size: ImageSize;
   shape: ImageShape;
-  loading: boolean;
-  placeholder: ImagePlaceholder;
+  variant: ImageVariant;
+  isLoading: boolean;
 }>`
   display: flex;
   justify-content: center;
@@ -139,27 +59,28 @@ export const ImageWrapper = styled.div.withConfig({
   flex-shrink: 0;
   
   /* Size styles */
-  width: ${({ width }) => getSizeValue(width)};
-  height: ${({ height }) => getSizeValue(height)};
+  width: ${({ size }) => getSizeValue(size)};
+  height: ${({ size }) => getSizeValue(size)};
   
-  /* Shape and aspect ratio styles */
-  ${({ shape, aspectRatio }) => getShapeStyles(shape, aspectRatio)};
+  /* Shape styles */
+  ${({ shape }) => getShapeStyles(shape)};
   
-  /* Loading placeholder styles */
-  ${({ loading, placeholder }) => loading && getPlaceholderStyles(placeholder)};
+  /* Simple loading state - just opacity fade instead of shimmer */
+  ${({ isLoading }) => isLoading && css`
+    background-color: ${colors.image.background};
+    opacity: ${opacity.loading};
+  `};
 `;
 
 export const StyledImage = styled.img.withConfig({
-  shouldForwardProp: (prop) =>
-    !['objectFit', 'isLoading'].includes(prop),
+  shouldForwardProp: (prop) => !['isLoading'].includes(prop),
 })<{
-  objectFit: ImageFit;
   isLoading: boolean;
 }>`
   width: 100%;
   height: 100%;
-  object-fit: ${({ objectFit }) => objectFit};
-  transition: opacity 0.3s ease;
+  object-fit: cover;
+  transition: ${transitions.opacity};
   
   /* Hide image while loading */
   ${({ isLoading }) => isLoading && css`
@@ -168,7 +89,9 @@ export const StyledImage = styled.img.withConfig({
   `};
 `;
 
-export const PlaceholderContent = styled.div`
+export const PlaceholderContent = styled.div<{
+  variant: ImageVariant;
+}>`
   position: absolute;
   top: 0;
   left: 0;
@@ -177,9 +100,9 @@ export const PlaceholderContent = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: ${colors.grey.grey4};
-  font-size: 0.875rem;
+  color: ${({ variant }) => getPlaceholderColor(variant)};
+  background-color: ${colors.image.background};
 `;
 
-// Export tokens and defaults for reuse
-export { imageDefaults, sizeTokens, shapeTokens, placeholderConfig };
+// Export defaults for reuse
+export { imageDefaults };

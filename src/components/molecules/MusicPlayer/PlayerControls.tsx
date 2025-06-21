@@ -1,10 +1,15 @@
 import React from 'react';
-import { Stack } from '../../atoms/Layout/Stack';
+import { Stack } from '../../atoms/Stack';
 import { Button } from '../../atoms/Button/Button';
 import { ButtonSize, ButtonVariant } from '../../atoms/Button/Button.types';
 import { Icon } from '../../atoms/Icon/Icon';
 import { PlayerControlsProps } from './MusicPlayer.types';
-import { faStepBackward, faStepForward, faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
+import {
+  faStepBackward,
+  faStepForward,
+  faPlay,
+  faPause,
+} from '@fortawesome/free-solid-svg-icons';
 
 export const PlayerControls: React.FC<PlayerControlsProps> = ({
   isPlaying,
@@ -40,4 +45,4 @@ export const PlayerControls: React.FC<PlayerControlsProps> = ({
       />
     </Stack>
   );
-}; 
+};

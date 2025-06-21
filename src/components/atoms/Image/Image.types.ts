@@ -1,14 +1,13 @@
 import React, { ImgHTMLAttributes } from 'react';
 
-export type ImageSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'full';
+// Simplified variants for Spotify use cases
+export type ImageVariant = 'album' | 'avatar' | 'playlist' | 'default';
 
-export type ImageShape = 'square' | 'circle' | 'rounded' | 'rectangle';
+export type ImageSize = 'sm' | 'md' | 'lg';
 
-export type ImageFit = 'cover' | 'contain' | 'fill' | 'scale-down' | 'none';
+export type ImageShape = 'square' | 'circle' | 'rounded';
 
-export type ImagePlaceholder = 'blur' | 'empty' | 'skeleton' | 'custom';
-
-export interface ImageProps extends Omit<ImgHTMLAttributes<HTMLImageElement>, 'width' | 'height' | 'loading'> {
+export interface ImageProps extends Omit<ImgHTMLAttributes<HTMLImageElement>, 'width' | 'height'> {
   /**
    * Image source URL
    */
@@ -20,32 +19,22 @@ export interface ImageProps extends Omit<ImgHTMLAttributes<HTMLImageElement>, 'w
   alt: string;
   
   /**
-   * Width of the image - can be preset size or custom value
+   * Size of the image using design tokens
+   * @default 'md'
    */
-  width?: ImageSize | string | number;
+  size?: ImageSize;
   
   /**
-   * Height of the image - can be preset size or custom value
-   */
-  height?: ImageSize | string | number;
-  
-  /**
-   * Predefined shape of the image
-   * @default 'rectangle'
+   * Shape of the image
+   * @default 'rounded'
    */
   shape?: ImageShape;
   
   /**
-   * Aspect ratio of the image (e.g., "16/9", "1/1", 1.5)
-   * @default undefined
+   * Variant determines the placeholder icon and styling
+   * @default 'default'
    */
-  aspectRatio?: string | number;
-  
-  /**
-   * How the image should fit within its container
-   * @default 'cover'
-   */
-  objectFit?: ImageFit;
+  variant?: ImageVariant;
   
   /**
    * Fallback image URL if primary src fails
@@ -53,49 +42,10 @@ export interface ImageProps extends Omit<ImgHTMLAttributes<HTMLImageElement>, 'w
   fallbackSrc?: string;
   
   /**
-   * Type of placeholder to show while loading
-   * @default 'blur'
-   */
-  placeholder?: ImagePlaceholder;
-  
-  /**
-   * Custom placeholder content (for 'custom' placeholder type)
-   */
-  placeholderContent?: React.ReactNode;
-  
-  /**
-   * Type of default placeholder to use for errors/missing images
-   * @default 'image'
-   */
-  placeholderType?: 'avatar' | 'album' | 'playlist' | 'image' | 'broken' | 'spotify';
-  
-  /**
-   * Size of placeholder icon (FontAwesome size)
-   * @default '3x'
-   */
-  placeholderIconSize?: 'xs' | 'sm' | 'lg' | '1x' | '2x' | '3x' | '4x' | '5x' | '6x' | '7x' | '8x' | '9x' | '10x';
-  
-  /**
-   * Whether to show a loading state
-   * @default false
-   */
-  loading?: boolean;
-  
-  /**
    * Whether the image should be lazy loaded
    * @default true
    */
   lazy?: boolean;
-  
-  /**
-   * Error callback when image fails to load
-   */
-  onError?: (event: React.SyntheticEvent<HTMLImageElement, Event>) => void;
-  
-  /**
-   * Load callback when image loads successfully
-   */
-  onLoad?: (event: React.SyntheticEvent<HTMLImageElement, Event>) => void;
   
   /**
    * Custom className for styling

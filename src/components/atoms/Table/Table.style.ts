@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Theme } from '../../../styles/theme';
+import { fontWeights, borders } from '../../../styles/tokens';
 
 export const TableWrapper = styled.table<{ theme: Theme }>`
   width: 100%;
@@ -29,7 +30,7 @@ export const TableHeader = styled.th<{ theme: Theme }>`
   color: ${({ theme }) => theme.colors.text.primary};
   font-size: ${({ theme }) => theme.typography.fontSizes.sm}rem;
   font-family: ${({ theme }) => theme.typography.fontFamily.secondary};
-  font-weight: 600;
+  font-weight: ${fontWeights.medium};
 `;
 
 export const TableCell = styled.td<{ theme: Theme }>`
@@ -37,5 +38,5 @@ export const TableCell = styled.td<{ theme: Theme }>`
   color: ${({ theme }) => theme.colors.text.primary};
   font-size: ${({ theme }) => theme.typography.fontSizes.sm}rem;
   font-family: ${({ theme }) => theme.typography.fontFamily.primary};
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+  border-bottom: ${borders.thin} ${({ theme }) => theme.colors.border};
 `;
