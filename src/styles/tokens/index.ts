@@ -6,3 +6,5 @@ export * from './fonts';
 export * from './animations';
 export * from './opacity';
 export * from './borders';
+export * from './shadows';
+export * from './sizes';

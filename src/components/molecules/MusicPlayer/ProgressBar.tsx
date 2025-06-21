@@ -1,5 +1,5 @@
 import React from 'react';
-import { Stack } from '../../atoms/Layout/Stack';
+import { Stack } from '../../atoms/Stack';
 import { Slider } from '../../atoms/Slider/Slider';
 import { Typography } from '../../atoms/Typography/Text/Typography';
 import { ProgressBarProps } from './MusicPlayer.types';
@@ -16,7 +16,11 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   };
 
   return (
-    <Stack direction="column" spacing="xs" style={{ width: '100%', maxWidth: 500 }}>
+    <Stack
+      direction="column"
+      spacing="sm"
+      style={{ width: '100%', maxWidth: 500 }}
+    >
       <Slider
         value={currentTime}
         min={0}
@@ -35,4 +39,4 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
       </Stack>
     </Stack>
   );
-}; 
+};

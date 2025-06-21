@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Button } from './Button';
 import { ButtonSize, ButtonVariant } from './Button.types';
 import { Icon } from '../Icon';
+import { Stack } from '../Stack';
 import {
   faPlay,
   faPause,
@@ -91,7 +92,7 @@ export const Text: Story = {
 export const WithIcon: Story = {
   args: {
     text: 'Play',
-    icon: <Icon icon={faPlay} size="small" />,
+    icon: <Icon icon={faPlay} size="sm" />,
     variant: ButtonVariant.Primary,
     size: ButtonSize.Medium,
   },
@@ -100,7 +101,7 @@ export const WithIcon: Story = {
 export const IconRight: Story = {
   args: {
     text: 'Download',
-    icon: <Icon icon={faDownload} size="small" />,
+    icon: <Icon icon={faDownload} size="sm" />,
     iconPosition: 'right',
     variant: ButtonVariant.Secondary,
     size: ButtonSize.Medium,
@@ -109,7 +110,7 @@ export const IconRight: Story = {
 
 export const IconOnly: Story = {
   args: {
-    icon: <Icon icon={faHeart} size="small" />,
+    icon: <Icon icon={faHeart} size="sm" />,
     variant: ButtonVariant.Text,
     size: ButtonSize.Small,
     'aria-label': 'Like',
@@ -119,11 +120,11 @@ export const IconOnly: Story = {
 // Sizes
 export const Sizes: Story = {
   render: () => (
-    <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+    <Stack direction="row" spacing="md" align="center">
       <Button text="Small" size={ButtonSize.Small} />
       <Button text="Medium" size={ButtonSize.Medium} />
       <Button text="Large" size={ButtonSize.Large} />
-    </div>
+    </Stack>
   ),
 };
 
@@ -156,64 +157,64 @@ export const FullWidth: Story = {
 };
 
 // Interactive examples
-export const PlayPause: Story = {
-  render: () => {
-    const [isPlaying, setIsPlaying] = React.useState(false);
+const PlayPauseComponent = () => {
+  const [isPlaying, setIsPlaying] = React.useState(false);
 
-    return (
-      <Button
-        text={isPlaying ? 'Pause' : 'Play'}
-        icon={<Icon icon={isPlaying ? faPause : faPlay} size="small" />}
-        onClick={() => setIsPlaying(!isPlaying)}
-        variant={ButtonVariant.Primary}
-      />
-    );
-  },
+  return (
+    <Button
+      text={isPlaying ? 'Pause' : 'Play'}
+      icon={<Icon icon={isPlaying ? faPause : faPlay} size="sm" />}
+      onClick={() => setIsPlaying(!isPlaying)}
+      variant={ButtonVariant.Primary}
+    />
+  );
+};
+
+export const PlayPause: Story = {
+  render: () => <PlayPauseComponent />,
 };
 
 export const AllVariants: Story = {
   render: () => (
-    <div
+    <Stack
+      spacing="lg"
       style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '16px',
         padding: '20px',
         backgroundColor: '#121212',
       }}
     >
-      <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+      <Stack direction="row" spacing="md" style={{ flexWrap: 'wrap' }}>
         <Button text="Primary" variant={ButtonVariant.Primary} />
         <Button text="Secondary" variant={ButtonVariant.Secondary} />
         <Button text="White" variant={ButtonVariant.White} />
         <Button text="Flat White" variant={ButtonVariant.FlatWhite} />
         <Button text="Text" variant={ButtonVariant.Text} />
-      </div>
+      </Stack>
 
-      <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+      <Stack direction="row" spacing="md" style={{ flexWrap: 'wrap' }}>
         <Button
           text="With Icon"
-          icon={<Icon icon={faPlus} size="small" />}
+          icon={<Icon icon={faPlus} size="sm" />}
           variant={ButtonVariant.Primary}
         />
         <Button
           text="Icon Right"
-          icon={<Icon icon={faDownload} size="small" />}
+          icon={<Icon icon={faDownload} size="sm" />}
           iconPosition="right"
           variant={ButtonVariant.Secondary}
         />
         <Button
-          icon={<Icon icon={faHeart} size="small" />}
+          icon={<Icon icon={faHeart} size="sm" />}
           variant={ButtonVariant.Text}
           aria-label="Like"
         />
-      </div>
+      </Stack>
 
-      <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+      <Stack direction="row" spacing="md" style={{ flexWrap: 'wrap' }}>
         <Button text="Loading..." loading variant={ButtonVariant.Primary} />
         <Button text="Disabled" disabled variant={ButtonVariant.Secondary} />
-      </div>
-    </div>
+      </Stack>
+    </Stack>
   ),
   parameters: {
     layout: 'fullscreen',

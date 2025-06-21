@@ -2,8 +2,7 @@ import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { StoryFn } from '@storybook/react';
 import { Pill } from './Pill';
-import { PillProps } from './Pill.types';
-import { Stack } from '../Layout';
+import { Stack } from '../Stack';
 
 export default {
   title: 'Atoms/Pill',
@@ -90,7 +89,6 @@ export const Filter: Story = {
     label: 'Hip-Hop',
     variant: 'filter',
     dismissible: true,
-    onDismiss: () => console.log('Filter removed'),
   },
 };
 
@@ -159,7 +157,7 @@ export const AllVariants: StoryFn = () => (
       </h4>
       <Stack direction="row" spacing="md" align="center">
         <Pill label="Active Selection" variant="default" selected />
-        <Pill label="Dismissible Filter" variant="filter" dismissible onDismiss={() => console.log('Dismissed')} />
+        <Pill label="Dismissible Filter" variant="filter" dismissible />
         <Pill label="Disabled State" disabled />
       </Stack>
     </div>
@@ -168,12 +166,12 @@ export const AllVariants: StoryFn = () => (
 
 // Real Spotify Use Cases
 export const SpotifyExamples: StoryFn = () => (
-  <Stack direction="column" spacing="xl">
+  <Stack direction="column" spacing="lg">
     <div>
       <h3 style={{ color: '#fff', marginBottom: '16px', fontSize: '16px', fontWeight: 'bold' }}>
         🎵 Genre Selection
       </h3>
-             <Stack direction="row" spacing="sm" align="center" wrap="wrap">
+      <Stack direction="row" spacing="sm" align="center" style={{ flexWrap: 'wrap' }}>
         <Pill label="Pop" />
         <Pill label="Rock" />
         <Pill label="Hip-Hop" selected />
@@ -188,70 +186,67 @@ export const SpotifyExamples: StoryFn = () => (
       <h3 style={{ color: '#fff', marginBottom: '16px', fontSize: '16px', fontWeight: 'bold' }}>
         🔍 Active Search Filters
       </h3>
-      <Stack direction="row" spacing="sm" align="center" wrap="wrap">
+      <Stack direction="row" spacing="sm" align="center" style={{ flexWrap: 'wrap' }}>
         <Pill 
           label="2020s" 
           variant="filter" 
           dismissible 
-          onDismiss={() => console.log('Year filter removed')} 
         />
         <Pill 
           label="Upbeat" 
           variant="filter" 
           dismissible 
-          onDismiss={() => console.log('Mood filter removed')} 
         />
         <Pill 
-          label="< 4 min" 
+          label="Under 4 min" 
           variant="filter" 
           dismissible 
-          onDismiss={() => console.log('Duration filter removed')} 
         />
         <Pill 
           label="Explicit" 
           variant="filter" 
           dismissible 
-          onDismiss={() => console.log('Explicit filter removed')} 
         />
       </Stack>
     </div>
     
     <div>
       <h3 style={{ color: '#fff', marginBottom: '16px', fontSize: '16px', fontWeight: 'bold' }}>
-        📚 Playlist Categories
+        🏷️ Playlist Categories
       </h3>
-      <Stack direction="row" spacing="sm" align="center" wrap="wrap">
-        <Pill label="Made For You" size="sm" />
-        <Pill label="Recently Played" size="sm" />
-        <Pill label="Your Top Songs" size="sm" selected />
-        <Pill label="Discover Weekly" size="sm" />
-        <Pill label="Release Radar" size="sm" />
-        <Pill label="Daily Mix" size="sm" />
+      <Stack direction="row" spacing="sm" align="center" style={{ flexWrap: 'wrap' }}>
+        <Pill label="Workout" size="sm" />
+        <Pill label="Chill" size="sm" />
+        <Pill label="Focus" size="sm" />
+        <Pill label="Party" size="sm" />
+        <Pill label="Sleep" size="sm" />
+        <Pill label="Commute" size="sm" />
       </Stack>
     </div>
     
     <div>
       <h3 style={{ color: '#fff', marginBottom: '16px', fontSize: '16px', fontWeight: 'bold' }}>
-        🎧 Podcast Topics
+        🎨 Mood Tags
       </h3>
-      <Stack direction="row" spacing="sm" align="center" wrap="wrap">
-        <Pill label="Technology" size="lg" />
-        <Pill label="Comedy" size="lg" selected />
-        <Pill label="True Crime" size="lg" />
-        <Pill label="Business" size="lg" />
+      <Stack direction="row" spacing="sm" align="center" style={{ flexWrap: 'wrap' }}>
+        <Pill label="Happy" variant="default" />
+        <Pill label="Energetic" variant="default" />
+        <Pill label="Relaxed" variant="default" selected />
+        <Pill label="Melancholic" variant="default" />
+        <Pill label="Romantic" variant="default" />
       </Stack>
     </div>
   </Stack>
 );
 
-// Interactive Demo
-export const InteractiveDemo: StoryFn = () => {
-  const [selectedGenres, setSelectedGenres] = React.useState<string[]>(['Pop', 'Electronic']);
+// Interactive Demo Component
+const InteractiveDemoComponent = () => {
+  const [selectedGenres, setSelectedGenres] = React.useState<string[]>(['Hip-Hop']);
   const [activeFilters, setActiveFilters] = React.useState<string[]>(['2020s', 'Upbeat']);
   
-  const availableGenres = ['Pop', 'Rock', 'Hip-Hop', 'Jazz', 'Electronic', 'Country', 'R&B', 'Classical'];
-  const availableFilters = ['2020s', '2010s', '90s', 'Upbeat', 'Chill', 'Acoustic', 'Live', 'Remix'];
-  
+  const genres = ['Pop', 'Rock', 'Hip-Hop', 'Jazz', 'Electronic', 'R&B', 'Country', 'Classical'];
+  const availableFilters = ['2020s', '2010s', '90s', 'Upbeat', 'Chill', 'Explicit', 'Under 4 min'];
+
   const toggleGenre = (genre: string) => {
     setSelectedGenres(prev => 
       prev.includes(genre) 
@@ -259,28 +254,25 @@ export const InteractiveDemo: StoryFn = () => {
         : [...prev, genre]
     );
   };
-  
+
   const addFilter = (filter: string) => {
     if (!activeFilters.includes(filter)) {
       setActiveFilters(prev => [...prev, filter]);
     }
   };
-  
+
   const removeFilter = (filter: string) => {
     setActiveFilters(prev => prev.filter(f => f !== filter));
   };
-  
+
   return (
-    <Stack direction="column" spacing="xl">
+    <Stack direction="column" spacing="lg">
       <div>
-        <h3 style={{ color: '#fff', marginBottom: '8px', fontSize: '16px', fontWeight: 'bold' }}>
-          🎵 Select Your Favorite Genres
+        <h3 style={{ color: '#fff', marginBottom: '16px', fontSize: '16px', fontWeight: 'bold' }}>
+          🎵 Interactive Genre Selection
         </h3>
-        <p style={{ color: '#b3b3b3', marginBottom: '16px', fontSize: '14px' }}>
-          Click to toggle selection ({selectedGenres.length} selected)
-        </p>
-        <Stack direction="row" spacing="sm" align="center" wrap="wrap">
-          {availableGenres.map(genre => (
+        <Stack direction="row" spacing="sm" align="center" style={{ flexWrap: 'wrap' }}>
+          {genres.map(genre => (
             <Pill
               key={genre}
               label={genre}
@@ -289,117 +281,94 @@ export const InteractiveDemo: StoryFn = () => {
             />
           ))}
         </Stack>
+        <p style={{ color: '#b3b3b3', fontSize: '12px', marginTop: '8px' }}>
+          Selected: {selectedGenres.join(', ') || 'None'}
+        </p>
       </div>
       
       <div>
-        <h3 style={{ color: '#fff', marginBottom: '8px', fontSize: '16px', fontWeight: 'bold' }}>
-          🔍 Available Filters
+        <h3 style={{ color: '#fff', marginBottom: '16px', fontSize: '16px', fontWeight: 'bold' }}>
+          🔍 Active Filters
         </h3>
-        <p style={{ color: '#b3b3b3', marginBottom: '16px', fontSize: '14px' }}>
-          Click to add filter
+        <Stack direction="row" spacing="sm" align="center" style={{ flexWrap: 'wrap' }}>
+          {activeFilters.map(filter => (
+            <Pill
+              key={filter}
+              label={filter}
+              variant="filter"
+              dismissible
+              onDismiss={() => removeFilter(filter)}
+            />
+          ))}
+        </Stack>
+        <p style={{ color: '#b3b3b3', fontSize: '12px', marginTop: '8px' }}>
+          Active filters: {activeFilters.length}
         </p>
-        <Stack direction="row" spacing="sm" align="center" wrap="wrap">
+      </div>
+      
+      <div>
+        <h3 style={{ color: '#fff', marginBottom: '16px', fontSize: '16px', fontWeight: 'bold' }}>
+          ➕ Available Filters
+        </h3>
+        <Stack direction="row" spacing="sm" align="center" style={{ flexWrap: 'wrap' }}>
           {availableFilters
             .filter(filter => !activeFilters.includes(filter))
             .map(filter => (
               <Pill
                 key={filter}
                 label={filter}
-                variant="filter"
+                variant="default"
                 onClick={() => addFilter(filter)}
               />
-            ))}
+            ))
+          }
         </Stack>
-      </div>
-      
-      {activeFilters.length > 0 && (
-        <div>
-          <h3 style={{ color: '#fff', marginBottom: '8px', fontSize: '16px', fontWeight: 'bold' }}>
-            ✅ Active Filters
-          </h3>
-          <p style={{ color: '#b3b3b3', marginBottom: '16px', fontSize: '14px' }}>
-            Click × to remove filter ({activeFilters.length} active)
-          </p>
-          <Stack direction="row" spacing="sm" align="center" wrap="wrap">
-            {activeFilters.map(filter => (
-              <Pill
-                key={filter}
-                label={filter}
-                variant="filter"
-                dismissible
-                onDismiss={() => removeFilter(filter)}
-              />
-            ))}
-          </Stack>
-        </div>
-      )}
-      
-      <div style={{ 
-        padding: '16px', 
-        backgroundColor: 'rgba(255, 255, 255, 0.05)', 
-        borderRadius: '8px',
-        marginTop: '16px'
-      }}>
-        <h4 style={{ color: '#1db954', marginBottom: '8px', fontSize: '14px', fontWeight: 'bold' }}>
-          Current Selection Summary
-        </h4>
-        <p style={{ color: '#fff', fontSize: '14px', marginBottom: '4px' }}>
-          <strong>Genres:</strong> {selectedGenres.length > 0 ? selectedGenres.join(', ') : 'None selected'}
-        </p>
-        <p style={{ color: '#fff', fontSize: '14px' }}>
-          <strong>Filters:</strong> {activeFilters.length > 0 ? activeFilters.join(', ') : 'None active'}
+        <p style={{ color: '#b3b3b3', fontSize: '12px', marginTop: '8px' }}>
+          Click to add filters
         </p>
       </div>
     </Stack>
   );
 };
 
+export const InteractiveDemo: StoryFn = () => <InteractiveDemoComponent />;
+
 // Accessibility Demo
 export const AccessibilityDemo: StoryFn = () => (
   <Stack direction="column" spacing="lg">
     <div>
       <h3 style={{ color: '#fff', marginBottom: '16px', fontSize: '16px', fontWeight: 'bold' }}>
-        ♿ Accessibility Features
+        ♿ Keyboard Navigation
       </h3>
-      <p style={{ color: '#b3b3b3', marginBottom: '16px', fontSize: '14px' }}>
-        All pills support keyboard navigation (Tab, Enter, Space) and screen readers
+      <Stack direction="row" spacing="md" align="center">
+        <Pill label="Tab to focus" />
+        <Pill label="Enter to activate" selected />
+        <Pill label="Space works too" variant="filter" />
+      </Stack>
+      <p style={{ color: '#b3b3b3', fontSize: '12px', marginTop: '8px' }}>
+        Use Tab to navigate, Enter or Space to activate
       </p>
     </div>
     
     <div>
-      <h4 style={{ color: '#fff', marginBottom: '12px', fontSize: '14px' }}>
-        Focus Management
-      </h4>
-      <Stack direction="row" spacing="sm" align="center">
-        <Pill label="Tab to focus" onClick={() => console.log('Clicked via keyboard')} />
-        <Pill label="Enter to activate" selected onClick={() => console.log('Activated')} />
-        <Pill label="Space works too" variant="filter" onClick={() => console.log('Spaced')} />
-      </Stack>
-    </div>
-    
-    <div>
-      <h4 style={{ color: '#fff', marginBottom: '12px', fontSize: '14px' }}>
-        Screen Reader Support
-      </h4>
-      <Stack direction="row" spacing="sm" align="center">
+      <h3 style={{ color: '#fff', marginBottom: '16px', fontSize: '16px', fontWeight: 'bold' }}>
+        🔊 Screen Reader Support
+      </h3>
+      <Stack direction="row" spacing="md" align="center">
         <Pill 
-          label="Accessible pill" 
-          aria-label="Pop music genre, not selected"
-          onClick={() => console.log('Accessible click')} 
+          label="Accessible pill"
+          aria-label="Genre: Pop music"
         />
         <Pill 
-          label="Selected genre" 
-          selected
-          aria-label="Rock music genre, currently selected"
-        />
-        <Pill 
-          label="Remove filter" 
+          label="With description"
           variant="filter"
           dismissible
-          aria-label="Year 2020s filter, click to remove"
-          onDismiss={() => console.log('Filter removed via screen reader')}
+          aria-label="Active filter: Released in 2020s. Press to remove filter"
         />
       </Stack>
+      <p style={{ color: '#b3b3b3', fontSize: '12px', marginTop: '8px' }}>
+        Includes proper ARIA labels and descriptions
+      </p>
     </div>
   </Stack>
 );

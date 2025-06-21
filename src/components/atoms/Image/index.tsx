@@ -3,9 +3,8 @@ export type {
   ImageProps, 
   ImageSize, 
   ImageShape, 
-  ImageFit, 
-  ImagePlaceholder 
+  ImageVariant
 } from './Image.types';
-export { imageDefaults, sizeTokens, shapeTokens, placeholderConfig } from './Image.style';
-export { getPlaceholderIcon, getPlaceholderSrc, PLACEHOLDER_ICONS } from './Image.utils';
+export { imageDefaults } from './Image.style';
+export { getPlaceholderIcon, PLACEHOLDER_ICONS } from './Image.utils';
 export type { PlaceholderType } from './Image.utils';

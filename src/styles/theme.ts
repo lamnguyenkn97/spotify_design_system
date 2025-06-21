@@ -30,31 +30,7 @@ export interface Theme extends DefaultTheme {
   borderRadius: typeof borderRadius;
 }
 
-export const lightTheme: Theme = {
-  colors: {
-    ...colors,
-    background: {
-      primary: colors.primary.white,
-      secondary: colors.grey.grey0,
-    },
-    text: {
-      primary: colors.primary.black,
-      secondary: colors.grey.grey6,
-    },
-    border: colors.grey.grey2,
-  },
-  typography: {
-    fontSizes,
-    fontFamily: {
-      primary: 'Circular-Book, sans-serif',
-      secondary: 'Circular-Bold, sans-serif',
-    },
-  },
-  spacing,
-  borderRadius,
-};
-
-export const darkTheme: Theme = {
+export const theme: Theme = {
   colors: {
     ...colors,
     background: {

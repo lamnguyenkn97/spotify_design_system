@@ -3,9 +3,8 @@ import { Table, TableProps } from './';
 import React from 'react';
 import { Typography } from '../Typography/Text';
 import { Image } from '../Image';
-import { Stack } from '../Layout';
+import { Stack } from '../Stack';
 import { ThemeProvider } from '../../../styles/ThemeProvider';
-import { useTheme } from '../../../styles/ThemeProvider';
 
 type SpotifyTrack = {
   id: string;
@@ -117,14 +116,12 @@ const columns: TableProps<SpotifyTrack>['columns'] = [
         <Image
           src={item.albumCover}
           alt={`${item.album} cover`}
-          width="40px"
-          height="40px"
+          size="md"
           shape="rounded"
-          placeholderType="album"
-          placeholderIconSize="lg"
+          variant="album"
         />
-        <Stack direction="column" spacing="xs">
-          <Typography variant="body2" weight="medium">
+        <Stack direction="column" spacing="sm">
+          <Typography variant="body" weight="medium">
             {item.title}
           </Typography>
           <Typography variant="caption" color="muted">
@@ -139,7 +136,7 @@ const columns: TableProps<SpotifyTrack>['columns'] = [
     label: 'Album',
     width: '25%',
     renderCell: (item: SpotifyTrack) => (
-      <Typography variant="body2" color="muted">
+      <Typography variant="body" color="muted">
         {item.album}
       </Typography>
     ),
@@ -149,7 +146,7 @@ const columns: TableProps<SpotifyTrack>['columns'] = [
     label: 'Date added',
     width: '15%',
     renderCell: (item: SpotifyTrack) => (
-      <Typography variant="body2" color="muted">
+      <Typography variant="body" color="muted">
         {item.dateAdded}
       </Typography>
     ),
@@ -159,7 +156,7 @@ const columns: TableProps<SpotifyTrack>['columns'] = [
     label: 'Plays',
     width: '10%',
     renderCell: (item: SpotifyTrack) => (
-      <Typography variant="body2" color="muted">
+      <Typography variant="body" color="muted">
         {formatPlays(item.plays)}
       </Typography>
     ),
@@ -169,7 +166,7 @@ const columns: TableProps<SpotifyTrack>['columns'] = [
     label: 'Duration',
     width: '10%',
     renderCell: (item: SpotifyTrack) => (
-      <Typography variant="body2" color="muted">
+      <Typography variant="body" color="muted">
         {item.duration}
       </Typography>
     ),
@@ -190,45 +187,7 @@ export const SpotifyPlaylist: Story = {
   },
 };
 
-const ThemeWrapper = ({ children, forceDarkMode }: { children: React.ReactNode; forceDarkMode: boolean }) => {
-  const { isDarkMode, toggleTheme } = useTheme();
 
-  React.useEffect(() => {
-    if (forceDarkMode !== isDarkMode) {
-      toggleTheme();
-    }
-  }, [forceDarkMode, isDarkMode, toggleTheme]);
-
-  return <>{children}</>;
-};
-
-export const LightMode: Story = {
-  args: {
-    data: spotifyData,
-    columns,
-  },
-  decorators: [
-    (Story) => (
-      <ThemeWrapper forceDarkMode={false}>
-        <Story />
-      </ThemeWrapper>
-    ),
-  ],
-};
-
-export const DarkMode: Story = {
-  args: {
-    data: spotifyData,
-    columns,
-  },
-  decorators: [
-    (Story) => (
-      <ThemeWrapper forceDarkMode={true}>
-        <Story />
-      </ThemeWrapper>
-    ),
-  ],
-};
 
 // Compact version without plays column
 const compactColumns: TableProps<SpotifyTrack>['columns'] = [
@@ -241,14 +200,12 @@ const compactColumns: TableProps<SpotifyTrack>['columns'] = [
         <Image
           src={item.albumCover}
           alt={`${item.album} cover`}
-          width="32px"
-          height="32px"
+          size="sm"
           shape="rounded"
-          placeholderType="album"
-          placeholderIconSize="sm"
+          variant="album"
         />
-        <Stack direction="column" spacing="xs">
-          <Typography variant="body2" weight="medium">
+        <Stack direction="column" spacing="sm">
+          <Typography variant="body" weight="medium">
             {item.title}
           </Typography>
           <Typography variant="caption" color="muted">
@@ -263,7 +220,7 @@ const compactColumns: TableProps<SpotifyTrack>['columns'] = [
     label: 'Album',
     width: '30%',
     renderCell: (item: SpotifyTrack) => (
-      <Typography variant="body2" color="muted">
+      <Typography variant="body" color="muted">
         {item.album}
       </Typography>
     ),
@@ -273,7 +230,7 @@ const compactColumns: TableProps<SpotifyTrack>['columns'] = [
     label: 'Date added',
     width: '20%',
     renderCell: (item: SpotifyTrack) => (
-      <Typography variant="body2" color="muted">
+      <Typography variant="body" color="muted">
         {item.dateAdded}
       </Typography>
     ),

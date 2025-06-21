@@ -86,3 +86,46 @@ export const fontSizes = {
   xxl: '3',
   '2xl': '4',
 };
+
+// Font family design tokens
+export const fontFamilies = {
+  primary: 'Circular, -apple-system, BlinkMacSystemFont, sans-serif',
+  fallback: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+  mono: 'Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace',
+} as const;
+
+// Font weight design tokens (matching Circular font weights)
+export const fontWeights = {
+  light: 300,    // Circular Light
+  regular: 400,  // Circular Book
+  medium: 500,   // Circular Medium
+  bold: 700,     // Circular Bold
+  black: 900,    // Circular Black
+} as const;
+
+// Line height design tokens for optimal readability
+export const lineHeights = {
+  tight: 1.2,    // Headings and titles
+  snug: 1.375,   // Subheadings
+  normal: 1.5,   // Body text
+  relaxed: 1.625, // Large text blocks
+  loose: 2,      // Spaced content
+} as const;
+
+// Letter spacing design tokens for typography hierarchy
+export const letterSpacing = {
+  tighter: '-0.02em', // Large titles
+  tight: '-0.01em',   // Headings
+  normal: '0',        // Body text
+  wide: '0.01em',     // Captions and small text
+  wider: '0.025em',   // All caps text
+  widest: '0.1em',    // Tracked text
+} as const;
+
+// Text transform tokens
+export const textTransforms = {
+  none: 'none',
+  uppercase: 'uppercase',
+  lowercase: 'lowercase',
+  capitalize: 'capitalize',
+} as const;

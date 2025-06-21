@@ -1,301 +1,176 @@
-import styled, { css } from 'styled-components';
-import { borderRadius, fontSizes, spacing, colors } from '../../../styles';
-import { InputSize, InputVariant, InputState } from './Input.types';
+import styled from 'styled-components';
+import { 
+  borderRadius, 
+  fontSizes, 
+  spacing, 
+  colors, 
+  borders,
+  transitions,
+  opacity 
+} from '../../../styles';
 
-// Size tokens mapping
-const sizeTokens = {
-  xs: {
-    padding: `${spacing.xs} ${spacing.sm}`,
-    fontSize: fontSizes.sm,
-    height: '2rem',
-    iconSize: 'xs' as const,
+// Input-specific design tokens
+// These tokens follow the design system pattern and can be extended for other form components
+const inputTokens = {
+  // Component sizing (using existing spacing tokens)
+  size: {
+    height: spacing.image.sm, // 48px (3rem) - consistent with other components
+    minWidth: '200px', // Minimum usable width
   },
-  sm: {
-    padding: `${spacing.sm} ${spacing.md}`,
-    fontSize: fontSizes.sm,
-    height: '2.5rem',
-    iconSize: 'sm' as const,
+  
+  // Icon system
+  icon: {
+    size: '1.5rem', // 24px - standard icon size (could be moved to global icon tokens)
+    spacing: spacing.sm, // 8px - gap between icon and text
+    position: spacing.md, // 16px - distance from input edge
   },
-  md: {
-    padding: `${spacing.sm} ${spacing.md}`,
-    fontSize: fontSizes.md,
-    height: '3rem',
-    iconSize: 'sm' as const,
+  
+  // Typography scale
+  typography: {
+    label: {
+      size: fontSizes.sm, // 0.875rem
+      weight: 500, // Medium weight for labels
+    },
+    input: {
+      size: fontSizes.md, // 1rem
+      weight: 400, // Regular weight for input text
+    },
   },
-  lg: {
-    padding: `${spacing.md} ${spacing.lg}`,
-    fontSize: fontSizes.lg,
-    height: '3.5rem',
-    iconSize: 'lg' as const,
+  
+  // Interactive states
+  states: {
+    focus: {
+      ringWidth: borders.width.medium, // 2px
+      ringOpacity: '25', // 25% opacity for focus ring
+    },
+    disabled: {
+      opacity: opacity.disabled, // 0.5
+    },
   },
-  xl: {
-    padding: `${spacing.lg} ${spacing.xl}`,
-    fontSize: fontSizes.xl,
-    height: '4rem',
-    iconSize: 'lg' as const,
+  
+  // Layout and positioning
+  layout: {
+    padding: {
+      vertical: spacing.sm, // 8px
+      horizontal: spacing.md, // 16px
+    },
+    iconOffset: `calc(${spacing.md} + 1.5rem + ${spacing.sm})`, // Dynamic calculation for icon padding
+  },
+  
+  // Animation and transitions
+  animation: {
+    transition: transitions.input, // 'border-color 200ms ease-in-out, box-shadow 200ms ease-in-out'
+  },
+  
+  // Z-index layering
+  zIndex: {
+    icon: 1,
+    input: 0,
+  },
+  
+  // Color mappings (semantic color usage)
+  colors: {
+    background: {
+      default: colors.grey.grey0,
+      disabled: colors.grey.grey1,
+    },
+    border: {
+      default: colors.grey.grey2,
+      hover: colors.grey.grey4,
+      focus: colors.primary.brand,
+      error: colors.decorative.redRedWine,
+    },
+    text: {
+      default: colors.primary.white,
+      placeholder: colors.grey.grey6,
+      disabled: colors.grey.grey4,
+      label: colors.primary.white,
+      icon: colors.grey.grey5,
+    },
   },
 } as const;
-
-// State color tokens
-const stateTokens = {
-  default: {
-    border: colors.grey.grey2,
-    background: colors.grey.grey0,
-    text: colors.primary.white,
-    placeholder: colors.grey.grey6,
-    icon: colors.grey.grey5,
-    focus: colors.primary.brand,
-  },
-  error: {
-    border: colors.decorative.redRedWine,
-    background: colors.grey.grey0,
-    text: colors.primary.white,
-    placeholder: colors.grey.grey6,
-    icon: colors.decorative.redRedWine,
-    focus: colors.decorative.redRedWine,
-  },
-  success: {
-    border: colors.decorative.evergreen,
-    background: colors.grey.grey0,
-    text: colors.primary.white,
-    placeholder: colors.grey.grey6,
-    icon: colors.decorative.evergreen,
-    focus: colors.decorative.evergreen,
-  },
-  warning: {
-    border: colors.decorative.mellowYellow,
-    background: colors.grey.grey0,
-    text: colors.primary.white,
-    placeholder: colors.grey.grey6,
-    icon: colors.decorative.mellowYellow,
-    focus: colors.decorative.mellowYellow,
-  },
-  disabled: {
-    border: colors.grey.grey1,
-    background: colors.grey.grey0,
-    text: colors.grey.grey4,
-    placeholder: colors.grey.grey3,
-    icon: colors.grey.grey3,
-    focus: colors.grey.grey1,
-  },
-} as const;
-
-// Input configuration
-const inputConfig = {
-  borderWidth: '1px',
-  borderStyle: 'solid',
-  borderRadius: borderRadius.md,
-  transition: 'all 0.2s ease-in-out',
-  iconSpacing: spacing.sm,
-} as const;
-
-// Default values
-const inputDefaults = {
-  size: 'md' as InputSize,
-  variant: 'default' as InputVariant,
-  state: 'default' as InputState,
-  iconSize: 'sm' as InputSize,
-  fullWidth: false,
-  clearable: false,
-  showPasswordToggle: true,
-  loading: false,
-} as const;
-
-// Helper functions
-const getSizeStyles = (size: InputSize) => {
-  const sizeConfig = sizeTokens[size];
-  return css`
-    padding: ${sizeConfig.padding};
-    font-size: ${sizeConfig.fontSize}rem;
-    min-height: ${sizeConfig.height};
-  `;
-};
-
-const getStateStyles = (state: InputState) => {
-  const stateConfig = stateTokens[state];
-  return css`
-    border-color: ${stateConfig.border};
-    background-color: ${stateConfig.background};
-    color: ${stateConfig.text};
-
-    &::placeholder {
-      color: ${stateConfig.placeholder};
-    }
-
-    &:focus {
-      border-color: ${stateConfig.focus};
-      box-shadow: 0 0 0 2px ${stateConfig.focus}25;
-      outline: none;
-    }
-
-    ${state === 'disabled' &&
-    css`
-      cursor: not-allowed;
-      pointer-events: none;
-    `}
-  `;
-};
 
 export const InputContainer = styled.div.withConfig({
   shouldForwardProp: (prop) => !['fullWidth'].includes(prop),
-})<{
-  fullWidth: boolean;
-}>`
+})<{ fullWidth?: boolean }>`
   display: flex;
   flex-direction: column;
   gap: ${spacing.xs};
-  width: ${({ fullWidth }) => (fullWidth ? '100%' : 'auto')};
-  max-width: ${({ fullWidth }) => (fullWidth ? '100%' : '320px')};
+  width: ${({ fullWidth }) => fullWidth ? '100%' : 'auto'};
 `;
 
 export const InputLabel = styled.label`
-  font-size: ${fontSizes.sm}rem;
-  font-weight: 500;
-  color: ${colors.primary.white};
-  margin-bottom: ${spacing.xs};
+  font-size: ${inputTokens.typography.label.size}rem;
+  font-weight: ${inputTokens.typography.label.weight};
+  color: ${inputTokens.colors.text.label};
 `;
 
 export const InputWrapper = styled.div.withConfig({
-  shouldForwardProp: (prop) =>
-    !['size', 'state', 'hasLeftIcon', 'hasRightIcon'].includes(prop),
-})<{
-  size: InputSize;
-  state: InputState;
-  hasLeftIcon: boolean;
-  hasRightIcon: boolean;
-}>`
+  shouldForwardProp: (prop) => !['hasLeftIcon'].includes(prop),
+})<{ hasLeftIcon?: boolean }>`
   position: relative;
   display: flex;
   align-items: center;
-  border: ${inputConfig.borderWidth} ${inputConfig.borderStyle};
-  border-radius: ${inputConfig.borderRadius};
-  transition: ${inputConfig.transition};
-
-  ${({ state }) => getStateStyles(state)};
-
-  ${({ hasLeftIcon, size }) =>
-    hasLeftIcon &&
-    css`
-      padding-left: calc(
-        ${sizeTokens[size].iconSize === 'lg' ? '1.5rem' : '1.25rem'} +
-          ${inputConfig.iconSpacing}
-      );
-    `}
-
-  ${({ hasRightIcon, size }) =>
-    hasRightIcon &&
-    css`
-      padding-right: calc(
-        ${sizeTokens[size].iconSize === 'lg' ? '1.5rem' : '1.25rem'} +
-          ${inputConfig.iconSpacing}
-      );
-    `}
-  
-  &:hover:not(:focus-within) {
-    border-color: ${({ state }) => stateTokens[state].focus}66;
-  }
-`;
-
-export const StyledInput = styled.input.withConfig({
-  shouldForwardProp: (prop) => !['size', 'state'].includes(prop),
-})<{
-  size: InputSize;
-  state: InputState;
-}>`
-  background: transparent;
-  border: none;
-  outline: none;
   width: 100%;
-
-  ${({ size }) => getSizeStyles(size)};
-  ${({ state }) => css`
-    color: ${stateTokens[state].text};
-
-    &::placeholder {
-      color: ${stateTokens[state].placeholder};
-    }
-  `}
-
-  &:disabled {
-    cursor: not-allowed;
-  }
 `;
 
-export const IconWrapper = styled.div.withConfig({
-  shouldForwardProp: (prop) =>
-    !['position', 'size', 'clickable'].includes(prop),
-})<{
-  position: 'left' | 'right';
-  size: InputSize;
-  clickable?: boolean;
-}>`
+export const LeftIconWrapper = styled.div`
   position: absolute;
-  ${({ position }) => position}: ${inputConfig.iconSpacing};
+  left: ${inputTokens.icon.position};
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1;
-
-  ${({ clickable }) =>
-    clickable &&
-    css`
-      cursor: pointer;
-      transition: ${inputConfig.transition};
-
-      &:hover {
-        opacity: 0.8;
-      }
-    `}
+  color: ${inputTokens.colors.text.icon};
+  z-index: ${inputTokens.zIndex.icon};
+  pointer-events: none;
+  font-size: ${inputTokens.icon.size};
 `;
 
-export const MessageText = styled.div.withConfig({
-  shouldForwardProp: (prop) => !['messageType'].includes(prop),
-})<{
-  messageType: 'helper' | 'error' | 'success' | 'warning';
-}>`
-  font-size: ${fontSizes.sm}rem;
-  margin-top: ${spacing.xs};
+export const StyledInput = styled.input.withConfig({
+  shouldForwardProp: (prop) => !['hasError', 'hasLeftIcon'].includes(prop),
+})<{ hasError?: boolean; hasLeftIcon?: boolean }>`
+  background-color: ${inputTokens.colors.background.default};
+  border: ${borders.thin} ${({ hasError }) => hasError ? inputTokens.colors.border.error : inputTokens.colors.border.default};
+  border-radius: ${borderRadius.sm};
+  color: ${inputTokens.colors.text.default};
+  font-size: ${inputTokens.typography.input.size}rem;
+  font-weight: ${inputTokens.typography.input.weight};
+  padding: ${inputTokens.layout.padding.vertical} ${inputTokens.layout.padding.horizontal};
+  padding-left: ${({ hasLeftIcon }) => 
+    hasLeftIcon 
+      ? inputTokens.layout.iconOffset
+      : inputTokens.layout.padding.horizontal
+  };
+  height: ${inputTokens.size.height};
+  width: 100%;
+  transition: ${inputTokens.animation.transition};
 
-  ${({ messageType }) => {
-    switch (messageType) {
-      case 'error':
-        return css`
-          color: ${colors.decorative.redRedWine};
-        `;
-      case 'success':
-        return css`
-          color: ${colors.decorative.evergreen};
-        `;
-      case 'warning':
-        return css`
-          color: ${colors.decorative.mellowYellow};
-        `;
-      case 'helper':
-      default:
-        return css`
-          color: ${colors.grey.grey6};
-        `;
-    }
-  }}
-`;
+  &::placeholder {
+    color: ${inputTokens.colors.text.placeholder};
+  }
 
-export const LoadingSpinner = styled.div`
-  width: 1rem;
-  height: 1rem;
-  border: 2px solid ${colors.grey.grey3};
-  border-top: 2px solid ${colors.primary.brand};
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
+  &:hover:not(:focus) {
+    border-color: ${({ hasError }) => hasError ? inputTokens.colors.border.error : inputTokens.colors.border.hover};
+  }
 
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
+  &:focus {
+    border-color: ${({ hasError }) => hasError ? inputTokens.colors.border.error : inputTokens.colors.border.focus};
+    box-shadow: 0 0 0 ${inputTokens.states.focus.ringWidth} ${({ hasError }) => 
+      hasError 
+        ? `${inputTokens.colors.border.error}${inputTokens.states.focus.ringOpacity}` 
+        : `${inputTokens.colors.border.focus}${inputTokens.states.focus.ringOpacity}`
+    };
+    outline: none;
+  }
+
+  &:disabled {
+    background-color: ${inputTokens.colors.background.disabled};
+    color: ${inputTokens.colors.text.disabled};
+    cursor: not-allowed;
+    border-color: ${inputTokens.colors.border.default};
+    opacity: ${inputTokens.states.disabled.opacity};
   }
 `;
 
-// Export tokens and defaults for reuse
-export { sizeTokens, stateTokens, inputConfig, inputDefaults };
+// Export tokens for potential reuse in other input-related components
+export { inputTokens }; 

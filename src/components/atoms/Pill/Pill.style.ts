@@ -141,3 +141,12 @@ export const PillDismissButton = styled.button`
 // Export with better names (keeping old exports for backward compatibility)
 export const StyledPill = PillButton;
 export const DismissButton = PillDismissButton;
+
+// Default values for the Pill component
+export const pillDefaults = {
+  size: 'md' as PillSize,
+  variant: 'default' as PillVariant,
+  selected: false,
+  disabled: false,
+  dismissible: false,
+} as const;

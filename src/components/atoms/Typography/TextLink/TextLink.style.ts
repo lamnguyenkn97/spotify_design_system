@@ -2,7 +2,9 @@ import styled, { css } from 'styled-components';
 import { colors } from '../../../../styles';
 import { TextLinkProps } from './TextLink.types';
 
-export const StyledTextLink = styled.a<TextLinkProps>`
+export const StyledTextLink = styled.a.withConfig({
+  shouldForwardProp: (prop) => !['variant', 'weight', 'underline'].includes(prop),
+})<TextLinkProps>`
   text-decoration: ${({ underline }) => (underline ? 'underline' : 'none')};
   cursor: pointer;
 

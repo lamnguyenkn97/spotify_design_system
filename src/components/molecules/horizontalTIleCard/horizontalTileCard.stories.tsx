@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { HorizontalTileCard } from './HorizontalTileCard';
-import { Stack } from '../../atoms/Layout/Stack';
+import { Stack } from '../../atoms/Stack';
 
 const meta: Meta<typeof HorizontalTileCard> = {
   title: 'Molecules/HorizontalTileCard',
@@ -117,7 +117,8 @@ export const AllSizes: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'HorizontalTileCard supports two sizes: small (40px image) and large (60px image).',
+        story:
+          'HorizontalTileCard supports two sizes: small (40px image) and large (60px image).',
       },
     },
   },
@@ -174,7 +175,8 @@ export const Playground: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Interactive playground to test different HorizontalTileCard configurations.',
+        story:
+          'Interactive playground to test different HorizontalTileCard configurations.',
       },
     },
   },

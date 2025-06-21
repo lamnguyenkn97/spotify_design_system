@@ -1,6 +1,6 @@
 import React, { forwardRef, useState } from 'react';
 import { HorizontalTileCardProps } from './HorizontalTileCard.types';
-import { Stack } from '../../atoms/Layout/Stack';
+import { Stack } from '../../atoms/Stack';
 import { Image } from '../../atoms/Image/Image';
 import { Typography } from '../../atoms/Typography/Text/Typography';
 import { Slider } from '../../atoms/Slider/Slider';

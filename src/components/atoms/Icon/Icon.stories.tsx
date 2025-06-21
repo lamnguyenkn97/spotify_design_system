@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 import { Icon } from './Icon';
+import { Stack } from '../Stack';
 import { colors, spacing } from '../../../styles';
 import {
   faPlay,
@@ -24,7 +25,8 @@ const meta: Meta<typeof Icon> = {
     layout: 'padded',
     docs: {
       description: {
-        component: 'A simple icon component for Spotify interfaces with essential sizes and interactions.',
+        component:
+          'A simple icon component for Spotify interfaces with essential sizes and interactions.',
       },
     },
   },
@@ -51,11 +53,13 @@ const meta: Meta<typeof Icon> = {
   },
   decorators: [
     (Story) => (
-      <div style={{ 
-        backgroundColor: colors.primary.black, 
-        color: colors.primary.white,
-        padding: spacing.lg 
-      }}>
+      <div
+        style={{
+          backgroundColor: colors.primary.black,
+          color: colors.primary.white,
+          padding: spacing.lg,
+        }}
+      >
         <Story />
       </div>
     ),
@@ -84,130 +88,195 @@ export const Clickable: Story = {
 // Size variations
 export const Sizes: Story = {
   render: () => (
-    <div style={{ display: 'flex', alignItems: 'center', gap: spacing.lg }}>
+    <Stack direction="row" align="center" spacing="lg">
       <div style={{ textAlign: 'center' }}>
-        <div style={{ marginBottom: spacing.sm, fontSize: '12px', color: colors.grey.grey6 }}>
+        <div
+          style={{
+            marginBottom: spacing.sm,
+            fontSize: '12px',
+            color: colors.grey.grey6,
+          }}
+        >
           Small (16px)
         </div>
         <Icon icon={faMusic} size="sm" />
       </div>
       <div style={{ textAlign: 'center' }}>
-        <div style={{ marginBottom: spacing.sm, fontSize: '12px', color: colors.grey.grey6 }}>
+        <div
+          style={{
+            marginBottom: spacing.sm,
+            fontSize: '12px',
+            color: colors.grey.grey6,
+          }}
+        >
           Medium (20px)
         </div>
         <Icon icon={faMusic} size="md" />
       </div>
       <div style={{ textAlign: 'center' }}>
-        <div style={{ marginBottom: spacing.sm, fontSize: '12px', color: colors.grey.grey6 }}>
+        <div
+          style={{
+            marginBottom: spacing.sm,
+            fontSize: '12px',
+            color: colors.grey.grey6,
+          }}
+        >
           Large (24px)
         </div>
         <Icon icon={faMusic} size="lg" />
       </div>
-    </div>
+    </Stack>
   ),
 };
 
 // Color variations
 export const Colors: Story = {
   render: () => (
-    <div style={{ display: 'flex', alignItems: 'center', gap: spacing.lg }}>
+    <Stack direction="row" align="center" spacing="lg">
       <div style={{ textAlign: 'center' }}>
-        <div style={{ marginBottom: spacing.sm, fontSize: '12px', color: colors.grey.grey6 }}>
+        <div
+          style={{
+            marginBottom: spacing.sm,
+            fontSize: '12px',
+            color: colors.grey.grey6,
+          }}
+        >
           Primary (White)
         </div>
         <Icon icon={faHeart} color="primary" size="lg" />
       </div>
       <div style={{ textAlign: 'center' }}>
-        <div style={{ marginBottom: spacing.sm, fontSize: '12px', color: colors.grey.grey6 }}>
+        <div
+          style={{
+            marginBottom: spacing.sm,
+            fontSize: '12px',
+            color: colors.grey.grey6,
+          }}
+        >
           Muted (Grey)
         </div>
         <Icon icon={faHeart} color="muted" size="lg" />
       </div>
       <div style={{ textAlign: 'center' }}>
-        <div style={{ marginBottom: spacing.sm, fontSize: '12px', color: colors.grey.grey6 }}>
+        <div
+          style={{
+            marginBottom: spacing.sm,
+            fontSize: '12px',
+            color: colors.grey.grey6,
+          }}
+        >
           Brand (Green)
         </div>
         <Icon icon={faHeart} color="brand" size="lg" />
       </div>
       <div style={{ textAlign: 'center' }}>
-        <div style={{ marginBottom: spacing.sm, fontSize: '12px', color: colors.grey.grey6 }}>
+        <div
+          style={{
+            marginBottom: spacing.sm,
+            fontSize: '12px',
+            color: colors.grey.grey6,
+          }}
+        >
           Custom
         </div>
         <Icon icon={faHeart} color="#ff6b6b" size="lg" />
       </div>
-    </div>
+    </Stack>
   ),
 };
 
 // Real Spotify use cases
 export const SpotifyPlaybackControls: Story = {
   render: () => (
-    <div style={{ display: 'flex', alignItems: 'center', gap: spacing.md }}>
+    <Stack direction="row" align="center" spacing="md">
       <Icon icon={faPlay} clickable color="primary" aria-label="Play" />
       <Icon icon={faPause} clickable color="primary" aria-label="Pause" />
       <Icon icon={faHeart} clickable color="muted" aria-label="Like song" />
       <Icon icon={faDownload} clickable color="muted" aria-label="Download" />
-    </div>
+    </Stack>
   ),
 };
 
 export const SpotifyNavigation: Story = {
   render: () => (
-    <div style={{ 
-      display: 'flex', 
-      flexDirection: 'column', 
-      gap: spacing.md,
-      backgroundColor: colors.grey.grey1,
-      padding: spacing.lg,
-      borderRadius: '8px'
-    }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: spacing.md }}>
+    <Stack
+      spacing="md"
+      style={{
+        backgroundColor: colors.grey.grey1,
+        padding: spacing.lg,
+        borderRadius: '8px',
+      }}
+    >
+      <Stack direction="row" align="center" spacing="md">
         <Icon icon={faHome} color="primary" />
         <span>Home</span>
-      </div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: spacing.md }}>
+      </Stack>
+      <Stack direction="row" align="center" spacing="md">
         <Icon icon={faSearch} color="muted" />
         <span style={{ color: colors.grey.grey6 }}>Search</span>
-      </div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: spacing.md }}>
+      </Stack>
+      <Stack direction="row" align="center" spacing="md">
         <Icon icon={faMusic} color="muted" />
         <span style={{ color: colors.grey.grey6 }}>Your Library</span>
-      </div>
-    </div>
+      </Stack>
+    </Stack>
   ),
 };
 
 export const SpotifyContextMenu: Story = {
   render: () => (
-    <div style={{ display: 'flex', alignItems: 'center', gap: spacing.lg }}>
-      <Icon icon={faEllipsis} clickable color="muted" aria-label="More options" />
+    <Stack direction="row" align="center" spacing="lg">
+      <Icon
+        icon={faEllipsis}
+        clickable
+        color="muted"
+        aria-label="More options"
+      />
       <Icon icon={faShare} clickable color="muted" aria-label="Share" />
       <Icon icon={faUser} clickable color="muted" aria-label="Artist profile" />
-    </div>
+    </Stack>
   ),
 };
 
 export const InteractiveStates: Story = {
   render: () => (
-    <div style={{ display: 'flex', alignItems: 'center', gap: spacing.lg }}>
+    <Stack direction="row" align="center" spacing="lg">
       <div style={{ textAlign: 'center' }}>
-        <div style={{ marginBottom: spacing.sm, fontSize: '12px', color: colors.grey.grey6 }}>
+        <div
+          style={{
+            marginBottom: spacing.sm,
+            fontSize: '12px',
+            color: colors.grey.grey6,
+          }}
+        >
           Normal
         </div>
         <Icon icon={faCheck} color="primary" />
       </div>
       <div style={{ textAlign: 'center' }}>
-        <div style={{ marginBottom: spacing.sm, fontSize: '12px', color: colors.grey.grey6 }}>
+        <div
+          style={{
+            marginBottom: spacing.sm,
+            fontSize: '12px',
+            color: colors.grey.grey6,
+          }}
+        >
           Clickable (hover me)
         </div>
         <Icon icon={faCheck} clickable color="primary" />
       </div>
       <div style={{ textAlign: 'center' }}>
-        <div style={{ marginBottom: spacing.sm, fontSize: '12px', color: colors.grey.grey6 }}>
+        <div
+          style={{
+            marginBottom: spacing.sm,
+            fontSize: '12px',
+            color: colors.grey.grey6,
+          }}
+        >
           Disabled
         </div>
         <Icon icon={faCheck} disabled color="primary" />
       </div>
-    </div>
+    </Stack>
   ),
 };

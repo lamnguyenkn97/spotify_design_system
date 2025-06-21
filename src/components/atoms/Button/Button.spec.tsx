@@ -3,10 +3,10 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { ThemeProvider } from 'styled-components';
 import { Button } from './Button';
 import { ButtonVariant } from './Button.types';
-import { lightTheme } from '../../../styles/theme';
+import { theme } from '../../../styles/theme';
 
 const TestWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <ThemeProvider theme={lightTheme}>{children}</ThemeProvider>
+  <ThemeProvider theme={theme}>{children}</ThemeProvider>
 );
 
 describe('Button Component', () => {
