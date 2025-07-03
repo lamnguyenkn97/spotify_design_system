@@ -21,8 +21,8 @@ const getShapeStyles = (shape: ImageShape) => {
       aspectRatio: '1',
     },
     rounded: {
-      borderRadius: borderRadius.lg,
-      aspectRatio: undefined,
+      borderRadius: borderRadius.sm,
+      aspectRatio: undefined, // Let parent container control aspect ratio
     },
     circle: {
       borderRadius: borderRadius.round,
@@ -58,7 +58,7 @@ export const ImageWrapper = styled.div.withConfig({
   overflow: hidden;
   flex-shrink: 0;
   
-  /* Size styles */
+  /* Size styles - allow parent to override for flexible layouts */
   width: ${({ size }) => getSizeValue(size)};
   height: ${({ size }) => getSizeValue(size)};
   

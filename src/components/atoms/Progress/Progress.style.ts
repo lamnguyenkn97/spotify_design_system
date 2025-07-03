@@ -52,14 +52,7 @@ const indeterminateLinearAnimation = keyframes`
   }
 `;
 
-const indeterminateCircularAnimation = keyframes`
-  ${PROGRESS_CONSTANTS.indeterminate.keyframes.start} { 
-    transform: rotate(0deg); 
-  }
-  ${PROGRESS_CONSTANTS.indeterminate.keyframes.end} { 
-    transform: rotate(360deg); 
-  }
-`;
+// Circular animation removed - now using FontAwesome spinner with spin prop
 
 // ===== COLOR STYLES =====
 const getProgressColor = (color: ProgressColor) => {
@@ -88,18 +81,7 @@ const getLinearSize = (size: ProgressSize) => {
   `;
 };
 
-const getCircularSize = (size: ProgressSize) => {
-  const sizeMap = {
-    sm: sizes.height.sm,
-    md: sizes.height.xl,
-    lg: sizes.height['2xl'],
-  };
-  
-  return css`
-    width: ${sizeMap[size]};
-    height: ${sizeMap[size]};
-  `;
-};
+// Circular size styles removed - now handled by Icon component
 
 // ===== VARIANT STYLES =====
 const getLinearTrackStyles = (size: ProgressSize) => css`
@@ -108,10 +90,7 @@ const getLinearTrackStyles = (size: ProgressSize) => css`
   ${getLinearSize(size)}
 `;
 
-const getCircularTrackStyles = (size: ProgressSize) => css`
-  border-radius: ${borderRadius.round};
-  ${getCircularSize(size)}
-`;
+// Circular track styles removed - now using FontAwesome spinner
 
 const getLinearFillStyles = (progress: number, indeterminate: boolean) => css`
   height: 100%;
@@ -126,14 +105,7 @@ const getLinearFillStyles = (progress: number, indeterminate: boolean) => css`
   `}
 `;
 
-const getCircularFillStyles = () => css`
-  position: absolute;
-  inset: ${spacing.xs};
-  border-radius: ${borderRadius.round};
-  border: ${spacing.xs} solid var(--progress-color);
-  border-right-color: transparent;
-  animation: ${indeterminateCircularAnimation} 1s infinite linear;
-`;
+// Circular fill styles removed - now using FontAwesome spinner
 
 // ===== STYLED COMPONENTS =====
 interface ProgressContainerProps {
@@ -165,9 +137,7 @@ export const ProgressTrack = styled.div<ProgressTrackProps>`
   ${({ $color }) => getProgressColor($color)}
   
   ${({ $variant, $size }) => 
-    $variant === 'linear' 
-      ? getLinearTrackStyles($size)
-      : getCircularTrackStyles($size)
+    $variant === 'linear' && getLinearTrackStyles($size)
   }
 `;
 
@@ -179,9 +149,7 @@ interface ProgressFillProps {
 
 export const ProgressFill = styled.div<ProgressFillProps>`
   ${({ $variant, $progress, $indeterminate }) =>
-    $variant === 'linear'
-      ? getLinearFillStyles($progress, $indeterminate)
-      : getCircularFillStyles()
+    $variant === 'linear' && getLinearFillStyles($progress, $indeterminate)
   }
 `;
 

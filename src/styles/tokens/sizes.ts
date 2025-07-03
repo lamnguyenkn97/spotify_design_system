@@ -12,7 +12,36 @@ export const sizes = {
     xl: '40px',
     '2xl': '48px',
   },
-  
+
+  // Container heights for molecules
+  container: {
+    banner: '240px',
+    card: '320px',
+    header: '64px',
+    footer: 'auto',
+  },
+
+  // Card-specific sizes
+  card: {
+    width: {
+      sm: '160px',
+      md: '200px',
+    },
+    image: {
+      borderRadius: '8px',
+    },
+  },
+
+  // Transform values for interactive effects
+  transform: {
+    lift: {
+      xs: 'translateY(-2px)',
+      sm: 'translateY(-4px)',
+      md: 'translateY(-8px)',
+      lg: 'translateY(-12px)',
+    },
+  },
+
   // Icon and thumb sizes
   icon: {
     xs: '8px',
@@ -22,7 +51,7 @@ export const sizes = {
     xl: '20px',
     '2xl': '24px',
   },
-  
+
   // Slider-specific sizes
   slider: {
     track: {
@@ -37,7 +66,7 @@ export const sizes = {
       height: '24px',
     },
   },
-  
+
   // Avatar component sizes
   avatar: {
     xs: '24px',
@@ -46,7 +75,7 @@ export const sizes = {
     lg: '56px',
     xl: '80px',
   },
-  
+
   // Text sizes for various components
   text: {
     xs: '10px',
@@ -55,17 +84,17 @@ export const sizes = {
     lg: '18px',
     xl: '24px',
   },
-  
+
   // Interactive area minimum (for accessibility)
   interactive: {
     minimum: '44px', // WCAG recommended minimum touch target
   },
-  
+
   // Positioning values
   position: {
     center: '50%',
   },
-  
+
   // Z-index layering system
   zIndex: {
     base: 0,
@@ -76,11 +105,11 @@ export const sizes = {
     popover: 1100,
     overlay: 1200,
   },
-  
+
   // Max width constraints
   maxWidth: {
     tooltip: '320px',
     popover: '400px',
     modal: '600px',
   },
-} as const; 
+} as const;

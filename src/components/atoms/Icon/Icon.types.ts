@@ -24,6 +24,18 @@ export interface IconProps extends Omit<HTMLAttributes<HTMLSpanElement>, 'color'
   color?: IconColor;
   
   /**
+   * Background color of the icon container
+   * @default 'transparent'
+   */
+  backgroundColor?: string;
+  
+  /**
+   * Whether the icon should have a circular background
+   * @default false
+   */
+  circular?: boolean;
+  
+  /**
    * Whether the icon is clickable (adds hover effects)
    * @default false
    */
@@ -34,6 +46,12 @@ export interface IconProps extends Omit<HTMLAttributes<HTMLSpanElement>, 'color'
    * @default false
    */
   disabled?: boolean;
+  
+  /**
+   * Whether the icon should spin (for loading states)
+   * @default false
+   */
+  spin?: boolean;
   
   /**
    * ARIA label for accessibility

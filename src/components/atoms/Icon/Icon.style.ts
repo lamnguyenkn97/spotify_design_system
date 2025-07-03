@@ -1,12 +1,18 @@
 import styled, { css } from 'styled-components';
-import { colors, spacing, opacity, animations, borderRadius } from '../../../styles';
+import {
+  colors,
+  spacing,
+  opacity,
+  animations,
+  borderRadius,
+} from '../../../styles';
 import { IconSize, IconColor } from './Icon.types';
 
 // Simplified size tokens - only 3 sizes that Spotify actually uses
 const sizeTokens = {
-  sm: spacing.md,   // 16px
-  md: spacing.lg,   // 20px  
-  lg: spacing.xl,   // 24px
+  sm: spacing.md, // 16px
+  md: spacing.lg, // 20px
+  lg: spacing.xl, // 24px
 } as const;
 
 // Simplified color tokens - only what Spotify actually uses
@@ -21,6 +27,8 @@ const colorTokens = {
 const iconDefaults = {
   size: 'md' as IconSize,
   color: 'inherit' as IconColor,
+  backgroundColor: 'transparent',
+  circular: false,
   clickable: false,
   disabled: false,
 };
@@ -70,10 +78,19 @@ const getInteractiveStyles = (clickable: boolean, disabled: boolean) => {
 
 export const StyledIcon = styled.span.withConfig({
   shouldForwardProp: (prop) =>
-    !['size', 'color', 'clickable', 'disabled'].includes(prop),
+    ![
+      'size',
+      'color',
+      'backgroundColor',
+      'circular',
+      'clickable',
+      'disabled',
+    ].includes(prop),
 })<{
   size: IconSize;
   color: IconColor;
+  backgroundColor: string;
+  circular: boolean;
   clickable: boolean;
   disabled: boolean;
 }>`
@@ -87,17 +104,25 @@ export const StyledIcon = styled.span.withConfig({
   width: ${({ size }) => getSizeValue(size)};
   height: ${({ size }) => getSizeValue(size)};
   font-size: ${({ size }) => getSizeValue(size)};
+  padding: ${({ size, backgroundColor }) => {
+    // If background color is set, add padding to create space around the icon
+    return backgroundColor ? `${getSizeValue(size)}` : '0';
+  }};
 
   /* Color styles */
   color: ${({ color }) => getColorValue(color)};
+
+  /* Background styles */
+  background-color: ${({ backgroundColor }) => backgroundColor};
+  border-radius: ${({ circular }) => (circular ? '50%' : '0')};
 
   /* Interactive styles */
   ${({ clickable, disabled }) => getInteractiveStyles(clickable, disabled)};
 
   /* FontAwesome icon styling - 1em scales with container's font-size */
   svg {
-    width: 1em;   /* Scales with the icon container's font-size (design token) */
-    height: 1em;  /* Scales with the icon container's font-size (design token) */
+    width: 1em; /* Scales with the icon container's font-size (design token) */
+    height: 1em; /* Scales with the icon container's font-size (design token) */
   }
 `;
 

@@ -20,7 +20,6 @@ export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
   text?: string;
   variant?: ButtonVariant;
   icon?: React.ReactNode;
-  iconPosition?: 'left' | 'right';
   fullWidth?: boolean;
   loading?: boolean;
   as?: keyof React.JSX.IntrinsicElements | React.ComponentType<any>;

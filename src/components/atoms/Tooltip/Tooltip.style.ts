@@ -75,7 +75,7 @@ export const TooltipContent = styled.div<TooltipContentProps>`
   white-space: nowrap;
   box-shadow: ${shadows.large};
   pointer-events: none;
-  border: ${borders.thin} ${colors.grey.grey3};
+  border: ${borders.width.thin} ${borders.style.solid} ${colors.grey.grey3};
   
   ${({ $position }) => positionStyles[$position]}
   

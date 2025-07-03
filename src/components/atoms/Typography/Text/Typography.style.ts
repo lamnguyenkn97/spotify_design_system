@@ -110,7 +110,6 @@ export const StyledTypography = styled.span.withConfig({
         return `
           line-height: ${typographyTokens.lineHeight.normal};
           letter-spacing: ${typographyTokens.letterSpacing.wide};
-          text-transform: ${typographyTokens.textTransform.uppercase};
           font-weight: ${typographyTokens.weight.medium};
         `;
       default:

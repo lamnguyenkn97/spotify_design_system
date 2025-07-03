@@ -3,6 +3,8 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { ThemeProvider } from 'styled-components';
 import { Button } from './Button';
 import { ButtonVariant } from './Button.types';
+import { Icon } from '../Icon';
+import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import { theme } from '../../../styles/theme';
 
 const TestWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
@@ -82,5 +84,44 @@ describe('Button Component', () => {
     const button = screen.getByRole('button');
     expect(button).toHaveClass('custom-class');
     expect(screen.getByText('Styled Button')).toBeInTheDocument();
+  });
+
+  it('should render with icon positioned on the left', () => {
+    render(
+      <TestWrapper>
+        <Button 
+          text="Play" 
+          icon={<Icon icon={faPlay} size="sm" data-testid="play-icon" />}
+        />
+      </TestWrapper>
+    );
+    
+    const button = screen.getByRole('button');
+    const icon = screen.getByTestId('play-icon');
+    
+    expect(button).toHaveTextContent('Play');
+    expect(icon).toBeInTheDocument();
+    
+    // Verify both icon and text are present
+    expect(screen.getByText('Play')).toBeInTheDocument();
+    expect(screen.getByTestId('play-icon')).toBeInTheDocument();
+  });
+
+  it('should render icon without text when only icon provided', () => {
+    render(
+      <TestWrapper>
+        <Button 
+          icon={<Icon icon={faPlay} size="sm" data-testid="play-icon" />}
+          aria-label="Play"
+        />
+      </TestWrapper>
+    );
+    
+    const button = screen.getByRole('button');
+    const icon = screen.getByTestId('play-icon');
+    
+    expect(button).toHaveAttribute('aria-label', 'Play');
+    expect(icon).toBeInTheDocument();
+    expect(button.textContent).toBe('');
   });
 });

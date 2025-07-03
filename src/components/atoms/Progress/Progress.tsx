@@ -1,4 +1,5 @@
 import React from 'react';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import {
   ProgressContainer,
   ProgressTrack,
@@ -7,6 +8,7 @@ import {
   ProgressLabel,
 } from './Progress.style';
 import { ProgressProps, progressDefaults } from './Progress.types';
+import { Icon } from '../Icon';
 
 export const Progress: React.FC<ProgressProps> = ({
   value = 0,
@@ -31,6 +33,29 @@ export const Progress: React.FC<ProgressProps> = ({
     return `${Math.round(progress)}%`;
   };
 
+  // For circular indeterminate - use FontAwesome spinner
+  if (variant === 'circular' && indeterminate) {
+    return (
+      <ProgressContainer
+        $variant={variant}
+        $size={size}
+        className={className}
+        role="progressbar"
+        aria-label={ariaLabel || 'Loading...'}
+        aria-busy="true"
+      >
+        <Icon 
+          icon={faSpinner} 
+          spin 
+          size={size}
+          color={color}
+          aria-hidden="true"
+        />
+      </ProgressContainer>
+    );
+  }
+
+  // For linear progress (both determinate and indeterminate)
   return (
     <ProgressContainer
       $variant={variant}

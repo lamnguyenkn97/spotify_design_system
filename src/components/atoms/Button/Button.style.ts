@@ -162,7 +162,7 @@ const getVariantStyles = (variant: ButtonVariant) => {
     color: ${config.color};
     ${config.customBorder
       ? `border: ${config.customBorder};`
-      : `border: ${borders.default.width} ${borders.default.style} ${config.borderColor};`}
+      : `border: ${borders.width.thin} ${borders.style.solid} ${config.borderColor};`}
     ${config.customPadding ? `padding: ${config.customPadding};` : ''}
     
     &:hover:not(:disabled) {
@@ -188,13 +188,12 @@ const getVariantStyles = (variant: ButtonVariant) => {
 
 export const StyledButton = styled.button.withConfig({
   shouldForwardProp: (prop) =>
-    !['size', 'variant', 'fullWidth', 'loading', 'iconPosition'].includes(prop),
+    !['size', 'variant', 'fullWidth', 'loading'].includes(prop),
 })<{
   size: ButtonSize;
   variant: ButtonVariant;
   fullWidth?: boolean;
   loading?: boolean;
-  iconPosition?: 'left' | 'right';
 }>`
   ${(props) => getSizeStyles(props.size)};
   ${(props) => getVariantStyles(props.variant)};
@@ -220,12 +219,7 @@ export const StyledButton = styled.button.withConfig({
       width: 100%;
     `}
 
-  /* Icon positioning */
-  ${(props) =>
-    props.iconPosition === 'right' &&
-    css`
-      flex-direction: row-reverse;
-    `}
+  /* Icon positioning is handled in Button.tsx via conditional rendering */
   
   /* Loading state - Font Awesome spinner will be rendered in Button.tsx */
   ${(props) =>

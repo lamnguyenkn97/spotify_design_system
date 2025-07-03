@@ -125,7 +125,6 @@ describe('Typography', () => {
     );
     element = screen.getByText('Caption styling');
     expect(element).toHaveStyle({
-      'text-transform': 'uppercase',
       'font-weight': '500',
       'letter-spacing': '0.01em'
     });

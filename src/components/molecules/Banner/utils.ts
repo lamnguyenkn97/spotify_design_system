@@ -1,16 +1,26 @@
-import { Vibrant } from 'node-vibrant/browser';
+import { fitGradient } from 'dont-crop';
 import { BannerType } from './Banner.types';
 
 export const getImageGradient = async (imageUrl: string): Promise<string> => {
   try {
-    const palette = await Vibrant.from(imageUrl).getPalette();
-    const color1 = palette.Vibrant?.rgb || [32, 32, 32];
-    const color2 = palette.Muted?.rgb || [16, 16, 16];
-
-    return `linear-gradient(to bottom right, rgb(${color1.join(',')}), rgb(${color2.join(',')}))`;
+    // Create an image element to load the image
+    const img = new Image();
+    img.crossOrigin = 'anonymous'; // Handle CORS for external images
+    
+    // Wait for the image to load
+    await new Promise((resolve, reject) => {
+      img.onload = resolve;
+      img.onerror = reject;
+      img.src = imageUrl;
+    });
+    
+    // Use dont-crop library to fit a gradient to the image
+    const gradient = fitGradient(img);
+    
+    return gradient;
   } catch (error) {
-    console.error('Failed to generate gradient:', error);
-    return '#121212';
+    // Silent failure with graceful fallback for production resilience
+    return 'linear-gradient(135deg, rgb(35, 35, 35), rgb(15, 15, 15))';
   }
 };
 

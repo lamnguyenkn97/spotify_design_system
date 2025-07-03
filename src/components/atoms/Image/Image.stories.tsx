@@ -2,7 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 import { Image } from './Image';
 import { Stack } from '../Stack';
-import { colors, spacing } from '../../../styles';
+import { colors, spacing, borderRadius } from '../../../styles';
+import { Typography } from '../Typography';
 
 // Sample images for Spotify use cases
 const sampleImages = {
@@ -79,34 +80,22 @@ export const Variants: Story = {
         color: colors.primary.white,
       }}
     >
-      <div style={{ textAlign: 'center' }}>
-        <div
-          style={{
-            marginBottom: spacing.sm,
-            fontSize: '14px',
-            color: colors.grey.grey6,
-          }}
-        >
+      <Stack align="center" spacing="sm">
+        <Typography variant="caption" color="muted">
           Album
-        </div>
+        </Typography>
         <Image
           src={sampleImages.album}
           alt="Album cover"
           variant="album"
           size="lg"
         />
-      </div>
+      </Stack>
 
-      <div style={{ textAlign: 'center' }}>
-        <div
-          style={{
-            marginBottom: spacing.sm,
-            fontSize: '14px',
-            color: colors.grey.grey6,
-          }}
-        >
+      <Stack align="center" spacing="sm">
+        <Typography variant="caption" color="muted">
           Avatar
-        </div>
+        </Typography>
         <Image
           src={sampleImages.avatar}
           alt="User avatar"
@@ -114,27 +103,251 @@ export const Variants: Story = {
           shape="circle"
           size="lg"
         />
-      </div>
+      </Stack>
 
-      <div style={{ textAlign: 'center' }}>
-        <div
-          style={{
-            marginBottom: spacing.sm,
-            fontSize: '14px',
-            color: colors.grey.grey6,
-          }}
-        >
+      <Stack align="center" spacing="sm">
+        <Typography variant="caption" color="muted">
           Playlist
-        </div>
+        </Typography>
         <Image
           src={sampleImages.playlist}
           alt="Playlist cover"
           variant="playlist"
           size="lg"
         />
-      </div>
+      </Stack>
     </Stack>
   ),
+};
+
+// Loading states demonstration
+export const LoadingStates: Story = {
+  render: () => {
+    // Create slow-loading image URLs to demonstrate loading states
+    const slowImages = {
+      // Add cache-busting params to force reload and show loading
+      slow1: `${sampleImages.album}?slow=1&t=${Date.now()}`,
+      slow2: `${sampleImages.avatar}?slow=2&t=${Date.now()}`,
+      slow3: `${sampleImages.playlist}?slow=3&t=${Date.now()}`,
+    };
+
+    return (
+      <Stack
+        direction="row"
+        spacing="lg"
+        style={{
+          padding: spacing.lg,
+          backgroundColor: colors.primary.black,
+          color: colors.primary.white,
+        }}
+      >
+        <Stack align="center" spacing="sm">
+          <Typography variant="caption" color="muted">
+            Loading Album
+          </Typography>
+          <Image
+            src={slowImages.slow1}
+            alt="Loading album cover"
+            variant="album"
+            size="lg"
+          />
+        </Stack>
+
+        <Stack align="center" spacing="sm">
+          <Typography variant="caption" color="muted">
+            Loading Avatar
+          </Typography>
+          <Image
+            src={slowImages.slow2}
+            alt="Loading user avatar"
+            variant="avatar"
+            shape="circle"
+            size="lg"
+          />
+        </Stack>
+
+        <Stack align="center" spacing="sm">
+          <Typography variant="caption" color="muted">
+            Loading Playlist
+          </Typography>
+          <Image
+            src={slowImages.slow3}
+            alt="Loading playlist cover"
+            variant="playlist"
+            size="lg"
+          />
+        </Stack>
+
+        <Stack align="center" spacing="sm">
+          <Typography variant="caption" color="muted">
+            No Src (Immediate Placeholder)
+          </Typography>
+          <Image
+            src=""
+            alt="No image provided"
+            variant="default"
+            size="lg"
+          />
+        </Stack>
+      </Stack>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Demonstrates loading states, transitions, and immediate placeholder display. Images show opacity fade-in transitions when loaded.',
+      },
+    },
+  },
+};
+
+// Lazy loading demonstration
+export const LazyLoading: Story = {
+  render: () => (
+    <div
+      style={{
+        padding: spacing.lg,
+        backgroundColor: colors.primary.black,
+        color: colors.primary.white,
+        height: '150vh', // Make container tall to demonstrate lazy loading
+      }}
+    >
+      <Typography variant="heading" size="xl" style={{ marginBottom: spacing.md }}>
+        Scroll down to see lazy loading in action
+      </Typography>
+      
+      <div style={{ marginBottom: '100vh' }}>
+        <Typography variant="body" color="muted">
+          Images below are set to lazy load - they won't start loading until they come into view
+        </Typography>
+      </div>
+
+      <Stack direction="row" spacing="lg">
+        <Stack align="center" spacing="sm">
+          <Typography variant="caption" color="muted">
+            Lazy: true (default)
+          </Typography>
+          <Image
+            src={sampleImages.album}
+            alt="Lazy loaded album"
+            variant="album"
+            size="lg"
+            lazy={true}
+          />
+        </Stack>
+
+        <Stack align="center" spacing="sm">
+          <Typography variant="caption" color="muted">
+            Lazy: false (eager)
+          </Typography>
+          <Image
+            src={sampleImages.avatar}
+            alt="Eagerly loaded avatar"
+            variant="avatar"
+            shape="circle"
+            size="lg"
+            lazy={false}
+          />
+        </Stack>
+      </Stack>
+    </div>
+  ),
+  parameters: {
+    layout: 'fullscreen',
+    docs: {
+      description: {
+        story: 'Demonstrates lazy loading behavior. Scroll down to see images load when they enter the viewport.',
+      },
+    },
+  },
+};
+
+// Loading with fallback chain
+export const LoadingWithFallback: Story = {
+  render: () => {
+    const [triggerReload, setTriggerReload] = React.useState(0);
+    
+    // Force reload to show loading states
+    const reloadImages = () => setTriggerReload(prev => prev + 1);
+    
+    return (
+      <div
+        style={{
+          padding: spacing.lg,
+          backgroundColor: colors.primary.black,
+          color: colors.primary.white,
+        }}
+      >
+        <div style={{ marginBottom: spacing.lg }}>
+          <button
+            onClick={reloadImages}
+            style={{
+              padding: `${spacing.sm} ${spacing.md}`,
+              backgroundColor: colors.primary.brand,
+              color: colors.primary.white,
+              border: 'none',
+              borderRadius: borderRadius.md,
+              cursor: 'pointer',
+            }}
+          >
+            Reload Images (See Loading States)
+          </button>
+        </div>
+
+        <Stack direction="row" spacing="lg">
+          <Stack align="center" spacing="sm">
+            <Typography variant="caption" color="muted">
+              Primary → Fallback → Placeholder
+            </Typography>
+            <Image
+              key={`broken-${triggerReload}`}
+              src={`https://broken-url-${triggerReload}.jpg`}
+              fallbackSrc={sampleImages.fallback}
+              alt="Loading with fallback"
+              variant="album"
+              size="lg"
+            />
+          </Stack>
+
+          <Stack align="center" spacing="sm">
+            <Typography variant="caption" color="muted">
+              Success on Primary
+            </Typography>
+            <Image
+              key={`success-${triggerReload}`}
+              src={`${sampleImages.album}?reload=${triggerReload}`}
+              fallbackSrc={sampleImages.fallback}
+              alt="Successful loading"
+              variant="album"
+              size="lg"
+            />
+          </Stack>
+
+          <Stack align="center" spacing="sm">
+            <Typography variant="caption" color="muted">
+              Both URLs Fail → Placeholder
+            </Typography>
+            <Image
+              key={`double-fail-${triggerReload}`}
+              src={`https://broken-primary-${triggerReload}.jpg`}
+              fallbackSrc={`https://broken-fallback-${triggerReload}.jpg`}
+              alt="Double failure"
+              variant="avatar"
+              shape="circle"
+              size="lg"
+            />
+          </Stack>
+        </Stack>
+      </div>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Shows the complete loading sequence: Primary URL → Fallback URL → Placeholder. Click reload to see loading transitions.',
+      },
+    },
+  },
 };
 
 // Error handling - the most important story
@@ -149,29 +362,17 @@ export const ErrorHandling: Story = {
         color: colors.primary.white,
       }}
     >
-      <div style={{ textAlign: 'center' }}>
-        <div
-          style={{
-            marginBottom: spacing.sm,
-            fontSize: '14px',
-            color: colors.grey.grey6,
-          }}
-        >
+      <Stack align="center" spacing="sm">
+        <Typography variant="caption" color="muted">
           No Image (Placeholder)
-        </div>
+        </Typography>
         <Image src="" alt="No album" variant="album" size="md" />
-      </div>
+      </Stack>
 
-      <div style={{ textAlign: 'center' }}>
-        <div
-          style={{
-            marginBottom: spacing.sm,
-            fontSize: '14px',
-            color: colors.grey.grey6,
-          }}
-        >
+      <Stack align="center" spacing="sm">
+        <Typography variant="caption" color="muted">
           Broken URL
-        </div>
+        </Typography>
         <Image
           src={sampleImages.broken}
           alt="Broken image"
@@ -179,18 +380,12 @@ export const ErrorHandling: Story = {
           shape="circle"
           size="md"
         />
-      </div>
+      </Stack>
 
-      <div style={{ textAlign: 'center' }}>
-        <div
-          style={{
-            marginBottom: spacing.sm,
-            fontSize: '14px',
-            color: colors.grey.grey6,
-          }}
-        >
+      <Stack align="center" spacing="sm">
+        <Typography variant="caption" color="muted">
           With Fallback
-        </div>
+        </Typography>
         <Image
           src={sampleImages.broken}
           alt="Image with fallback"
@@ -198,7 +393,7 @@ export const ErrorHandling: Story = {
           variant="album"
           size="md"
         />
-      </div>
+      </Stack>
     </Stack>
   ),
 };
@@ -213,146 +408,69 @@ export const SpotifyExample: Story = {
         color: colors.primary.white,
       }}
     >
-      <h3 style={{ marginBottom: spacing.md, color: colors.primary.white }}>
-        Albums
-      </h3>
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(4, 1fr)',
-          gap: spacing.lg,
-          marginBottom: spacing.xl,
-          alignItems: 'start',
-        }}
+      <Typography
+        variant="heading"
+        size="xl"
+        style={{ marginBottom: spacing.md }}
       >
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: spacing.sm,
-          }}
-        >
+        Albums
+      </Typography>
+      <Stack direction="row" spacing="lg" style={{ marginBottom: spacing.xl }}>
+        <Stack align="center" spacing="sm">
           <Image
             src={sampleImages.album}
             alt="Lover - Taylor Swift"
             variant="album"
             size="md"
           />
-          <div
-            style={{
-              fontSize: '12px',
-              color: colors.grey.grey4,
-              textAlign: 'center',
-              lineHeight: '1.3',
-              minHeight: '32px',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
+          <Typography variant="caption" color="secondary">
             Lover - Taylor Swift
-          </div>
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: spacing.sm,
-          }}
-        >
+          </Typography>
+        </Stack>
+        <Stack align="center" spacing="sm">
           <Image src="" alt="No Cover" variant="album" size="md" />
-          <div
-            style={{
-              fontSize: '12px',
-              color: colors.grey.grey4,
-              textAlign: 'center',
-              lineHeight: '1.3',
-              minHeight: '32px',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
+          <Typography variant="caption" color="muted">
             No Cover
-          </div>
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: spacing.sm,
-          }}
-        >
+          </Typography>
+        </Stack>
+        <Stack align="center" spacing="sm">
           <Image
             src={sampleImages.album}
             alt="Lover (Deluxe)"
             variant="album"
             size="md"
           />
-          <div
-            style={{
-              fontSize: '12px',
-              color: colors.grey.grey4,
-              textAlign: 'center',
-              lineHeight: '1.3',
-              minHeight: '32px',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
+          <Typography variant="caption" color="muted">
             Lover (Deluxe)
-          </div>
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: spacing.sm,
-          }}
-        >
+          </Typography>
+        </Stack>
+        <Stack align="center" spacing="sm">
           <Image
             src={sampleImages.broken}
             alt="Failed Load"
             variant="album"
             size="md"
           />
-          <div
-            style={{
-              fontSize: '12px',
-              color: colors.grey.grey4,
-              textAlign: 'center',
-              lineHeight: '1.3',
-              minHeight: '32px',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
+          <Typography variant="caption" color="muted">
             Failed Load
-          </div>
-        </div>
-      </div>
+          </Typography>
+        </Stack>
+      </Stack>
 
-      <h3 style={{ marginBottom: spacing.md, color: colors.primary.white }}>
-        Users
-      </h3>
-      <div
-        style={{
-          display: 'flex',
-          gap: spacing.xl,
-          marginBottom: spacing.xl,
-          alignItems: 'end',
-        }}
+      <Typography
+        variant="heading"
+        size="xl"
+        style={{ marginBottom: spacing.md }}
       >
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: spacing.sm,
-          }}
-        >
+        Users
+      </Typography>
+      <Stack
+        direction="row"
+        spacing="lg"
+        align="end"
+        style={{ marginBottom: spacing.xl }}
+      >
+        <Stack align="center" spacing="sm">
           <Image
             src={sampleImages.avatar}
             alt="Active User"
@@ -360,28 +478,11 @@ export const SpotifyExample: Story = {
             shape="circle"
             size="lg"
           />
-          <div
-            style={{
-              fontSize: '12px',
-              color: colors.grey.grey4,
-              textAlign: 'center',
-              lineHeight: '1.3',
-              minHeight: '32px',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
+          <Typography variant="caption" color="muted">
             Active User
-          </div>
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: spacing.sm,
-          }}
-        >
+          </Typography>
+        </Stack>
+        <Stack align="center" spacing="sm">
           <Image
             src=""
             alt="New User"
@@ -389,161 +490,53 @@ export const SpotifyExample: Story = {
             shape="circle"
             size="md"
           />
-          <div
-            style={{
-              fontSize: '12px',
-              color: colors.grey.grey4,
-              textAlign: 'center',
-              lineHeight: '1.3',
-              minHeight: '32px',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
+          <Typography variant="caption" color="muted">
             New User
-          </div>
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: spacing.sm,
-          }}
-        >
-          <Image
-            src={sampleImages.broken}
-            alt="Offline User"
-            variant="avatar"
-            shape="circle"
-            size="sm"
-          />
-          <div
-            style={{
-              fontSize: '12px',
-              color: colors.grey.grey4,
-              textAlign: 'center',
-              lineHeight: '1.3',
-              minHeight: '32px',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
-            Offline User
-          </div>
-        </div>
-      </div>
+          </Typography>
+        </Stack>
+      </Stack>
 
-      <h3 style={{ marginBottom: spacing.md, color: colors.primary.white }}>
-        Playlists
-      </h3>
-      <div
-        style={{
-          display: 'flex',
-          gap: spacing.xl,
-          marginBottom: spacing.xl,
-          alignItems: 'end',
-        }}
+      <Typography
+        variant="heading"
+        size="xl"
+        style={{ marginBottom: spacing.md }}
       >
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: spacing.sm,
-          }}
-        >
+        Playlists
+      </Typography>
+      <Stack
+        direction="row"
+        spacing="lg"
+        align="end"
+        style={{ marginBottom: spacing.xl }}
+      >
+        <Stack align="center" spacing="sm">
           <Image
             src={sampleImages.playlist}
             alt="My Playlist"
             variant="playlist"
             size="lg"
           />
-          <div
-            style={{
-              fontSize: '12px',
-              color: colors.grey.grey4,
-              textAlign: 'center',
-              lineHeight: '1.3',
-              minHeight: '32px',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
+          <Typography variant="caption" color="muted">
             My Playlist
-          </div>
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: spacing.sm,
-          }}
-        >
+          </Typography>
+        </Stack>
+        <Stack align="center" spacing="sm">
           <Image src="" alt="Empty Playlist" variant="playlist" size="md" />
-          <div
-            style={{
-              fontSize: '12px',
-              color: colors.grey.grey4,
-              textAlign: 'center',
-              lineHeight: '1.3',
-              minHeight: '32px',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
+          <Typography variant="caption" color="muted">
             Empty Playlist
-          </div>
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: spacing.sm,
-          }}
-        >
-          <Image
-            src={sampleImages.broken}
-            alt="Shared Playlist"
-            variant="playlist"
-            size="sm"
-          />
-          <div
-            style={{
-              fontSize: '12px',
-              color: colors.grey.grey4,
-              textAlign: 'center',
-              lineHeight: '1.3',
-              minHeight: '32px',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
-            Shared Playlist
-          </div>
-        </div>
-      </div>
+          </Typography>
+        </Stack>
+      </Stack>
 
-      <h3 style={{ marginBottom: spacing.md, color: colors.primary.white }}>
-        Artists
-      </h3>
-      <div
-        style={{
-          display: 'flex',
-          gap: spacing.xl,
-          alignItems: 'end',
-        }}
+      <Typography
+        variant="heading"
+        size="xl"
+        style={{ marginBottom: spacing.md }}
       >
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: spacing.sm,
-          }}
-        >
+        Artists
+      </Typography>
+      <Stack direction="row" spacing="lg" align="end">
+        <Stack align="center" spacing="sm">
           <Image
             src={sampleImages.artist}
             alt="Taylor Swift"
@@ -551,28 +544,11 @@ export const SpotifyExample: Story = {
             shape="circle"
             size="lg"
           />
-          <div
-            style={{
-              fontSize: '12px',
-              color: colors.grey.grey4,
-              textAlign: 'center',
-              lineHeight: '1.3',
-              minHeight: '32px',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
+          <Typography variant="caption" color="muted">
             Taylor Swift
-          </div>
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: spacing.sm,
-          }}
-        >
+          </Typography>
+        </Stack>
+        <Stack align="center" spacing="sm">
           <Image
             src=""
             alt="New Artist"
@@ -580,50 +556,11 @@ export const SpotifyExample: Story = {
             shape="circle"
             size="md"
           />
-          <div
-            style={{
-              fontSize: '12px',
-              color: colors.grey.grey4,
-              textAlign: 'center',
-              lineHeight: '1.3',
-              minHeight: '32px',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
+          <Typography variant="caption" color="muted">
             New Artist
-          </div>
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: spacing.sm,
-          }}
-        >
-          <Image
-            src={sampleImages.broken}
-            alt="Popular Artist"
-            variant="avatar"
-            shape="circle"
-            size="sm"
-          />
-          <div
-            style={{
-              fontSize: '12px',
-              color: colors.grey.grey4,
-              textAlign: 'center',
-              lineHeight: '1.3',
-              minHeight: '32px',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
-            Popular Artist
-          </div>
-        </div>
-      </div>
+          </Typography>
+        </Stack>
+      </Stack>
     </div>
   ),
   parameters: {

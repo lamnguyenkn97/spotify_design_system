@@ -4,14 +4,6 @@ import { Slider } from './Slider';
 import { SliderProps } from './Slider.types';
 import { Stack } from '../Stack';
 import { Typography } from '../Typography/Text/Typography';
-import { 
-  faVolumeUp, 
-  faCircle, 
-  faGripVertical, 
-  faCog,
-  faAdjust,
-  faMusic
-} from '@fortawesome/free-solid-svg-icons';
 
 export default {
   title: 'Atoms/Slider',
@@ -43,20 +35,6 @@ export default {
     disabled: {
       control: { type: 'boolean' },
       description: 'Whether the slider is disabled',
-    },
-    thumbIcon: {
-      control: { type: 'select' },
-      options: ['none', 'circle', 'volume', 'grip', 'cog', 'adjust', 'music'],
-      mapping: {
-        none: undefined,
-        circle: faCircle,
-        volume: faVolumeUp,
-        grip: faGripVertical,
-        cog: faCog,
-        adjust: faAdjust,
-        music: faMusic,
-      },
-      description: 'Icon to use as the slider thumb',
     },
   },
 } as Meta<typeof Slider>;
@@ -93,7 +71,6 @@ export const VolumeControl: StoryFn = () => {
         max={100}
         step={1}
         onChange={setVolume}
-        thumbIcon={faVolumeUp}
         aria-label={`Volume: ${volume}%`}
       />
     </Stack>
@@ -198,7 +175,7 @@ export const InteractiveMarker: StoryFn = () => {
   );
 };
 
-export const IconThumbs: StoryFn = () => {
+export const VariousControls: StoryFn = () => {
   const [volume, setVolume] = useState(75);
   const [brightness, setBrightness] = useState(60);
   const [bass, setBass] = useState(40);
@@ -213,14 +190,14 @@ export const IconThumbs: StoryFn = () => {
     }}>
       <Stack direction="column" spacing="lg">
         <Typography variant="heading" size="lg">
-          Icon Thumb Examples
+          Various Control Examples
         </Typography>
         <Typography variant="body" size="sm" color="secondary">
-          Different icons can be used as slider thumbs for better context
+          Different slider controls for various use cases
         </Typography>
         
         <Stack direction="column" spacing="md">
-          {/* Volume with Volume Icon */}
+          {/* Volume Control */}
           <Stack direction="column" spacing="sm">
             <Typography variant="body" size="sm">Volume: {volume}%</Typography>
             <Slider
@@ -229,13 +206,12 @@ export const IconThumbs: StoryFn = () => {
               max={100}
               step={1}
               onChange={setVolume}
-              thumbIcon={faVolumeUp}
               aria-label={`Volume: ${volume}%`}
               style={{ width: 300 }}
             />
           </Stack>
           
-          {/* Brightness with Adjust Icon */}
+          {/* Brightness Control */}
           <Stack direction="column" spacing="sm">
             <Typography variant="body" size="sm">Brightness: {brightness}%</Typography>
             <Slider
@@ -244,13 +220,12 @@ export const IconThumbs: StoryFn = () => {
               max={100}
               step={1}
               onChange={setBrightness}
-              thumbIcon={faAdjust}
               aria-label={`Brightness: ${brightness}%`}
               style={{ width: 300 }}
             />
           </Stack>
           
-          {/* Bass with Music Icon */}
+          {/* Bass Control */}
           <Stack direction="column" spacing="sm">
             <Typography variant="body" size="sm">Bass: {bass}%</Typography>
             <Slider
@@ -259,13 +234,12 @@ export const IconThumbs: StoryFn = () => {
               max={100}
               step={1}
               onChange={setBass}
-              thumbIcon={faMusic}
               aria-label={`Bass: ${bass}%`}
               style={{ width: 300 }}
             />
           </Stack>
           
-          {/* Settings with Cog Icon */}
+          {/* Settings Control */}
           <Stack direction="column" spacing="sm">
             <Typography variant="body" size="sm">Settings: {settings}%</Typography>
             <Slider
@@ -274,22 +248,7 @@ export const IconThumbs: StoryFn = () => {
               max={100}
               step={1}
               onChange={setSettings}
-              thumbIcon={faCog}
               aria-label={`Settings: ${settings}%`}
-              style={{ width: 300 }}
-            />
-          </Stack>
-          
-          {/* Default (no icon) */}
-          <Stack direction="column" spacing="sm">
-            <Typography variant="body" size="sm">Default (no icon): 50%</Typography>
-            <Slider
-              value={50}
-              min={0}
-              max={100}
-              step={1}
-              onChange={() => {}}
-              aria-label="Default slider"
               style={{ width: 300 }}
             />
           </Stack>

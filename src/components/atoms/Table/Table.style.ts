@@ -38,5 +38,5 @@ export const TableCell = styled.td<{ theme: Theme }>`
   color: ${({ theme }) => theme.colors.text.primary};
   font-size: ${({ theme }) => theme.typography.fontSizes.sm}rem;
   font-family: ${({ theme }) => theme.typography.fontFamily.primary};
-  border-bottom: ${borders.thin} ${({ theme }) => theme.colors.border};
+  border-bottom: ${borders.width.thin} ${borders.style.solid} ${({ theme }) => theme.colors.border};
 `;
