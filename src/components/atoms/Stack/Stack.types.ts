@@ -3,7 +3,7 @@ import React, { HTMLAttributes } from 'react';
 // Simplified types for essential Spotify use cases
 export type StackDirection = 'row' | 'column';
 
-export type StackSpacing = 'sm' | 'md' | 'lg';
+export type StackSpacing = 'xs' | 'sm' | 'md' | 'lg';
 
 export type StackAlign = 'start' | 'center' | 'end' | 'stretch';
 

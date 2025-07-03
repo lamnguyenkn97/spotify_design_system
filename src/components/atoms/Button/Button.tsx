@@ -10,7 +10,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
   text,
   variant = ButtonVariant.Primary,
   icon,
-  iconPosition = 'left',
   fullWidth = false,
   loading = false,
   disabled = false,
@@ -39,14 +38,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
       variant={variant}
       fullWidth={fullWidth}
       loading={loading}
-      iconPosition={iconPosition}
       disabled={disabled || loading}
       as={as}
       {...props}
     >
-      {iconPosition === 'left' && iconElement}
+      {iconElement}
       {!loading && content}
-      {iconPosition === 'right' && iconElement}
     </StyledButton>
   );
 });

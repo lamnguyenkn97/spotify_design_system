@@ -3,7 +3,6 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { ThemeProvider } from '../../../styles';
 import { Slider } from './Slider';
 import { SliderProps } from './Slider.types';
-import { faVolumeUp } from '@fortawesome/free-solid-svg-icons';
 
 const renderSlider = (props: Partial<SliderProps> = {}) => {
   const defaultProps = {
@@ -65,22 +64,11 @@ describe('Slider', () => {
     expect(thumb).toBeInTheDocument();
   });
 
-  it('renders icon thumb when thumbIcon prop is provided', () => {
-    const { container } = renderSlider({ 
-      thumbIcon: faVolumeUp,
-      'aria-label': 'Volume slider'
-    });
-    
-    // Check that an SVG icon is rendered inside the thumb
-    const icon = container.querySelector('svg');
-    expect(icon).toBeInTheDocument();
-  });
-
-  it('renders default circular marker when no thumbIcon is provided', () => {
+  it('renders default circular marker', () => {
     const { container } = renderSlider({ 'aria-label': 'Default slider' });
     
-    // Check that no SVG icon is rendered (should use CSS ::before for circle)
-    const icon = container.querySelector('svg');
-    expect(icon).not.toBeInTheDocument();
+    // Check that the thumb element is rendered
+    const thumb = container.querySelector('[style*="left:"]');
+    expect(thumb).toBeInTheDocument();
   });
 }); 

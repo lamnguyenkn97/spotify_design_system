@@ -9,6 +9,7 @@ import {
 
 // Simplified spacing tokens for Spotify use cases
 const spacingTokens = {
+  xs: spacing.xs,
   sm: spacing.sm,
   md: spacing.md,
   lg: spacing.lg,

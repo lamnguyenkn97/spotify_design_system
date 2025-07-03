@@ -12,5 +12,14 @@ export const spacing = {
     sm: '48px',   // 3rem - Small thumbnails, icons
     md: '96px',   // 6rem - Medium album covers, avatars
     lg: '128px',  // 8rem - Large album covers, profile pictures
+    xl: '160px',  // 10rem - Banner covers, featured images
+  },
+  
+  // Card-specific positioning
+  card: {
+    playButton: {
+      bottom: '12px',
+      right: '8px',
+    },
   },
 };

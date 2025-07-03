@@ -15,8 +15,11 @@ export const Icon: React.FC<IconProps> = ({
   icon,
   size = iconDefaults.size,
   color = iconDefaults.color,
+  backgroundColor = iconDefaults.backgroundColor,
+  circular = iconDefaults.circular,
   clickable = iconDefaults.clickable,
   disabled = iconDefaults.disabled,
+  spin = false,
   onClick,
   'aria-label': ariaLabel,
   ...props
@@ -43,6 +46,8 @@ export const Icon: React.FC<IconProps> = ({
     <StyledIcon
       size={size}
       color={color}
+      backgroundColor={backgroundColor}
+      circular={circular}
       clickable={clickable}
       disabled={disabled}
       onClick={clickable && !disabled ? onClick : undefined}
@@ -53,6 +58,7 @@ export const Icon: React.FC<IconProps> = ({
       <FontAwesomeIcon
         icon={icon}
         size={fontAwesomeSize}
+        spin={spin}
       />
     </StyledIcon>
   );

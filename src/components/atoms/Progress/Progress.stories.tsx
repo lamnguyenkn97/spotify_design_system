@@ -239,4 +239,20 @@ export const Interactive: Story = {
     showValue: true,
     bufferValue: 70,
   },
+};
+
+export const CircularIndeterminate = {
+  args: {
+    indeterminate: true,
+    variant: 'circular',
+    size: 'md',
+    color: 'primary',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Circular indeterminate progress using FontAwesome spinner with built-in spin animation. Much simpler than custom CSS animations.',
+      },
+    },
+  },
 }; 

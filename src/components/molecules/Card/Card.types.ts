@@ -1,16 +1,18 @@
 import React from 'react';
-
-export type CardSize = 'sm' | 'md' | 'lg';
+import { ImageSize } from '../../atoms/Image/Image.types';
 
 export type CardVariant = 'default' | 'artist';
+export type CardSize = 'sm' | 'md' | 'lg';
 
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   title: string;
   subtitle?: string;
   imageUrl?: string;
-  size?: CardSize;
   variant?: CardVariant;
+  size?: CardSize;
+  imageSize?: ImageSize;
   onPlayClick?: () => void;
   showPlayButton?: boolean;
-  loading?: boolean;
-} 
+  className?: string;
+  'aria-label'?: string;
+}

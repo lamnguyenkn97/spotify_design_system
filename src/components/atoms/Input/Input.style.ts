@@ -130,7 +130,7 @@ export const StyledInput = styled.input.withConfig({
   shouldForwardProp: (prop) => !['hasError', 'hasLeftIcon'].includes(prop),
 })<{ hasError?: boolean; hasLeftIcon?: boolean }>`
   background-color: ${inputTokens.colors.background.default};
-  border: ${borders.thin} ${({ hasError }) => hasError ? inputTokens.colors.border.error : inputTokens.colors.border.default};
+  border: ${borders.width.thin} ${borders.style.solid} ${({ hasError }) => hasError ? inputTokens.colors.border.error : inputTokens.colors.border.default};
   border-radius: ${borderRadius.sm};
   color: ${inputTokens.colors.text.default};
   font-size: ${inputTokens.typography.input.size}rem;

@@ -1,23 +1,96 @@
-import React, { forwardRef, useState } from 'react';
-import { CardProps } from './Card.types';
+import React, { forwardRef, useState, useCallback, useMemo } from 'react';
+import { CardProps, CardSize } from './Card.types';
 import { Stack } from '../../atoms/Stack';
 import { Image } from '../../atoms/Image/Image';
 import { Typography } from '../../atoms/Typography/Text/Typography';
+import { Button, ButtonVariant, ButtonSize } from '../../atoms/Button';
 import { Icon } from '../../atoms/Icon';
-import { faPlay, faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { colors, spacing, scale, transitions } from '../../../styles';
+import {
+  colors,
+  spacing,
+  sizes,
+  animations,
+  borderRadius,
+} from '../../../styles';
+import { faPlay } from '@fortawesome/free-solid-svg-icons';
 
-// Utility function for card width calculation
-const getCardWidth = (size: string): string => {
-  switch (size) {
-    case 'sm':
-      return '160px';
-    case 'lg':
-      return '240px';
-    case 'md':
-    default:
-      return '200px';
-  }
+// Card size configuration using design tokens
+const getCardDimensions = (size: CardSize) => {
+  const sizeMap = {
+    sm: { width: '140px', imageSize: 'md' as const },
+    md: { width: '160px', imageSize: 'lg' as const },
+    lg: { width: '180px', imageSize: 'lg' as const },
+  };
+  return sizeMap[size];
+};
+
+// Play button positioning using design tokens
+const getPlayButtonPosition = () => ({
+  top: '30%',
+  right: '20%',
+});
+
+// Style configuration using design tokens - Spotify playlist card style
+const getCardStyles = (isHovered: boolean, size: CardSize) => {
+  const dimensions = getCardDimensions(size);
+  const playButtonPos = getPlayButtonPosition();
+  
+  return {
+    container: {
+      cursor: 'pointer',
+      transition: animations.transitions.card,
+      backgroundColor: isHovered ? colors.grey.grey2 : 'transparent',
+      transform: isHovered ? sizes.transform.lift.xs : 'translateY(0)',
+      padding: spacing.sm,
+      borderRadius: borderRadius.md,
+      width: dimensions.width,
+      height: 'auto',
+      display: 'flex' as const,
+      flexDirection: 'column' as const,
+      alignItems: 'center' as const,
+    },
+
+    image: {
+      transition: animations.transitions.transform,
+      transform: isHovered
+        ? `scale(${animations.scale.small})`
+        : `scale(${animations.scale.none})`,
+      width: '100%',
+    },
+
+    playButtonContainer: {
+      position: 'absolute' as const,
+      top: playButtonPos.top,
+      right: playButtonPos.right,
+      opacity: isHovered ? 1 : 0,
+      transition: animations.transitions.all,
+      transform: isHovered
+        ? 'translateY(0) scale(1)'
+        : 'translateY(8px) scale(0.8)',
+      zIndex: sizes.zIndex.dropdown,
+    },
+
+    contentContainer: {
+      gap: spacing.xs,
+      width: '100%',
+    },
+
+    titleText: {
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap' as const,
+      width: '100%',
+      textAlign: 'center' as const,
+    },
+
+    subtitleText: {
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap' as const,
+      width: '100%',
+      textAlign: 'center' as const,
+    },
+  };
 };
 
 export const Card = forwardRef<HTMLDivElement, CardProps>(
@@ -26,148 +99,127 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
       title,
       subtitle,
       imageUrl,
-      size = 'md',
       variant = 'default',
+      size = 'md',
+      imageSize,
       onPlayClick,
       showPlayButton = true,
-      loading = false,
       className,
+      'aria-label': ariaLabel,
       ...props
     },
     ref
   ) => {
     const [isHovered, setIsHovered] = useState(false);
     const isArtist = variant === 'artist';
+    const dimensions = getCardDimensions(size);
+    const finalImageSize = imageSize || dimensions.imageSize;
+
+    // Memoized values for performance
+    const styles = useMemo(() => getCardStyles(isHovered, size), [isHovered, size]);
+    const cardAriaLabel = useMemo(
+      () =>
+        ariaLabel ||
+        `${title}${subtitle ? ` by ${subtitle}` : ''}${isArtist ? ' artist' : ''}`,
+      [ariaLabel, title, subtitle, isArtist]
+    );
+
+    // Event handlers
+    const handleMouseEnter = useCallback(() => setIsHovered(true), []);
+    const handleMouseLeave = useCallback(() => setIsHovered(false), []);
+
+    const handleKeyDown = useCallback(
+      (event: React.KeyboardEvent) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          onPlayClick?.();
+        }
+      },
+      [onPlayClick]
+    );
 
     return (
       <Stack
         ref={ref}
         direction="column"
-        spacing="sm"
-        padding="md"
-        borderRadius="sm"
-        backgroundColor={isHovered ? colors.grey.grey3 : colors.grey.grey1}
-        width={getCardWidth(size)}
+        spacing="xs"
+        align={'center'}
         className={className}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        style={{
-          transition: transitions.card,
-          cursor: 'pointer',
-          textAlign: variant === 'artist' ? 'center' : 'left',
-          transform: isHovered ? 'translateY(-4px)' : 'translateY(0)',
-          boxShadow: isHovered
-            ? '0 8px 24px rgba(0, 0, 0, 0.3)'
-            : '0 2px 8px rgba(0, 0, 0, 0.1)',
-        }}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        onKeyDown={handleKeyDown}
+        style={styles.container}
+        role="article"
+        aria-label={cardAriaLabel}
+        tabIndex={0}
         {...props}
       >
         {/* Image Container */}
         <Stack
-          direction="column"
           style={{
-            position: 'relative',
             width: '100%',
-            overflow: 'hidden',
-            borderRadius: '8px',
+            position: 'relative',
+            aspectRatio: '1',
           }}
+          align={'center'}
         >
           {imageUrl && (
             <Image
               src={imageUrl}
-              alt={title}
-              width="100%"
-              aspectRatio={1}
+              alt={`${title} cover`}
+              size={finalImageSize}
               shape={isArtist ? 'circle' : 'rounded'}
               style={{
-                transition: transitions.transform,
-                transform: isHovered
-                  ? `scale(${scale.small})`
-                  : `scale(${scale.none})`,
+                objectFit: 'cover',
               }}
             />
           )}
 
-          {/* Play Icon - Using Icon component directly */}
+          {/* Play Button */}
           {showPlayButton && onPlayClick && (
-            <Icon
-              icon={loading ? faSpinner : faPlay}
-              size="medium"
-              variant="rounded"
-              backgroundColor="brand"
-              color="primary"
-              clickable
-              spin={loading}
-              disabled={loading}
-              onClick={onPlayClick}
-              aria-label="Play"
-              style={{
-                position: 'absolute',
-                bottom: spacing.lg,
-                right: spacing.sm,
-                opacity: isHovered ? 1 : 0,
-                transition: transitions.all,
-                transform: isHovered
-                  ? `translateY(-2px) scale(${scale.large})`
-                  : 'translateY(8px) scale(1)',
-                zIndex: 10,
-                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.4)',
-              }}
-            />
+            <Stack style={styles.playButtonContainer}>
+              <Icon
+                color="primary"
+                backgroundColor={colors.primary.brand}
+                circular
+                clickable
+                icon={faPlay}
+                size="md"
+                onClick={onPlayClick}
+                aria-label={`Play ${title}`}
+                style={{ cursor: 'pointer' }}
+              />
+            </Stack>
           )}
         </Stack>
 
         {/* Content */}
         <Stack
           direction="column"
-          spacing="sm"
-          style={{ marginTop: spacing.xs }}
+          spacing="xs"
+          align="center"
+          style={styles.contentContainer}
         >
-          <div
-            style={{
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-              margin: 0,
-            }}
+          <Typography
+            variant="body"
+            weight="bold"
+            color="primary"
+            component="p"
+            style={styles.titleText}
           >
-            <Typography
-              variant="body1"
-              weight="bold"
-              color="primary"
-              component="h3"
-            >
-              {title}
-            </Typography>
-          </div>
+            {title}
+          </Typography>
 
-          {isArtist ? (
-            <div
-              style={{
-                margin: 0,
-                opacity: 0.7,
-              }}
-            >
-              <Typography variant="body2" color="muted" component="p">
-                Artist
-              </Typography>
-            </div>
-          ) : (
-            subtitle && (
-              <div
-                style={{
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
-                  margin: 0,
-                  opacity: 0.7,
-                }}
-              >
-                <Typography variant="body2" color="muted" component="p">
-                  {subtitle}
-                </Typography>
-              </div>
-            )
+          {!isArtist && subtitle && (
+            <Typography variant="caption" color="muted" component="p" style={styles.subtitleText}>
+              {subtitle}
+            </Typography>
+          )}
+
+          {isArtist && (
+            <Typography variant="caption" color="muted" component="p" style={styles.subtitleText}>
+              Artist
+            </Typography>
           )}
         </Stack>
       </Stack>

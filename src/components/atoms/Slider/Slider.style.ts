@@ -46,8 +46,8 @@ export const SliderTrack = styled.div<{ $progress: number }>`
 export const SliderThumb = styled.div`
   position: absolute;
   top: ${sizes.position.center};
-  width: ${sizes.slider.thumb.medium};
-  height: ${sizes.slider.thumb.medium};
+  width: ${sizes.slider.thumb.small};
+  height: ${sizes.slider.thumb.small};
   background: ${colors.primary.brand};
   border: none;
   border-radius: ${borderRadius.round};
@@ -57,30 +57,6 @@ export const SliderThumb = styled.div`
   pointer-events: none;
   z-index: 10; /* Higher z-index to ensure it's above everything */
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  /* Default circular marker (when no icon) - solid green circle */
-  &:empty {
-    background: ${colors.primary.brand};
-    width: ${sizes.slider.thumb.small};
-    height: ${sizes.slider.thumb.small};
-  }
-
-  /* Icon mode - keep green background, white icon */
-  &:not(:empty) {
-    background: ${colors.primary.brand};
-    width: ${sizes.slider.thumb.medium};
-    height: ${sizes.slider.thumb.medium};
-  }
-
-  /* Icon styling - white icon on green background */
-  svg {
-    width: ${sizes.icon.sm};
-    height: ${sizes.icon.sm};
-    color: ${colors.primary.white};
-  }
 `;
 
 export const SliderInput = styled.input`

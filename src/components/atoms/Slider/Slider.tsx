@@ -1,7 +1,6 @@
 import React, { forwardRef } from 'react';
 import { SliderContainer, SliderInput, SliderTrack, SliderThumb } from './Slider.style';
 import { SliderProps } from './Slider.types';
-import { Icon } from '../Icon/Icon';
 
 export const Slider = forwardRef<HTMLInputElement, SliderProps>(
   (
@@ -13,7 +12,6 @@ export const Slider = forwardRef<HTMLInputElement, SliderProps>(
       disabled = false,
       onChange,
       className,
-      thumbIcon,
       'aria-label': ariaLabel,
       ...props
     },
@@ -29,9 +27,7 @@ export const Slider = forwardRef<HTMLInputElement, SliderProps>(
     return (
       <SliderContainer className={className} disabled={disabled}>
         <SliderTrack $progress={percentage}>
-          <SliderThumb style={{ left: `${percentage}%` }}>
-            {thumbIcon && <Icon icon={thumbIcon} />}
-          </SliderThumb>
+          <SliderThumb style={{ left: `${percentage}%` }} />
         </SliderTrack>
         <SliderInput
           ref={ref}

@@ -28,10 +28,6 @@ const meta: Meta<typeof Button> = {
       control: 'select',
       options: Object.values(ButtonSize),
     },
-    iconPosition: {
-      control: 'select',
-      options: ['left', 'right'],
-    },
     fullWidth: {
       control: 'boolean',
     },
@@ -88,7 +84,7 @@ export const Text: Story = {
   },
 };
 
-// With icons
+// With icons (always positioned left)
 export const WithIcon: Story = {
   args: {
     text: 'Play',
@@ -98,24 +94,7 @@ export const WithIcon: Story = {
   },
 };
 
-export const IconRight: Story = {
-  args: {
-    text: 'Download',
-    icon: <Icon icon={faDownload} size="sm" />,
-    iconPosition: 'right',
-    variant: ButtonVariant.Secondary,
-    size: ButtonSize.Medium,
-  },
-};
 
-export const IconOnly: Story = {
-  args: {
-    icon: <Icon icon={faHeart} size="sm" />,
-    variant: ButtonVariant.Text,
-    size: ButtonSize.Small,
-    'aria-label': 'Like',
-  },
-};
 
 // Sizes
 export const Sizes: Story = {
@@ -174,6 +153,8 @@ export const PlayPause: Story = {
   render: () => <PlayPauseComponent />,
 };
 
+
+
 export const AllVariants: Story = {
   render: () => (
     <Stack
@@ -194,19 +175,13 @@ export const AllVariants: Story = {
       <Stack direction="row" spacing="md" style={{ flexWrap: 'wrap' }}>
         <Button
           text="With Icon"
-          icon={<Icon icon={faPlus} size="sm" />}
+          icon={<Icon icon={faPlay} size="sm" />}
           variant={ButtonVariant.Primary}
         />
         <Button
-          text="Icon Right"
-          icon={<Icon icon={faDownload} size="sm" />}
-          iconPosition="right"
-          variant={ButtonVariant.Secondary}
-        />
-        <Button
+          text="Different Icon"
           icon={<Icon icon={faHeart} size="sm" />}
-          variant={ButtonVariant.Text}
-          aria-label="Like"
+          variant={ButtonVariant.Secondary}
         />
       </Stack>
 

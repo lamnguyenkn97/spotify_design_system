@@ -1,5 +1,4 @@
 import { InputHTMLAttributes } from 'react';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 export interface SliderProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
   /**
@@ -40,9 +39,4 @@ export interface SliderProps extends Omit<InputHTMLAttributes<HTMLInputElement>,
    * Custom className for additional styling
    */
   className?: string;
-
-  /**
-   * Optional icon to use as the slider thumb
-   */
-  thumbIcon?: IconProp;
 }
