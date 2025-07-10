@@ -424,3 +424,4 @@ The Spotify Design System is licensed under the [MIT License](LICENSE).
 
 This project is inspired by Spotify's design principles and aims to provide a reusable foundation for similar applications.
 
+# Test automatic deployment
