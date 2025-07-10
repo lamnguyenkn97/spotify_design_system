@@ -1,6 +1,7 @@
 import React from 'react';
 import { Meta, StoryFn } from '@storybook/react';
-import { AppHeader, AppHeaderProps } from './AppHeader';
+import { AppHeader } from './AppHeader';
+import { AppHeaderProps } from './AppHeader.types';
 
 export default {
   title: 'Organisms/AppHeader',
@@ -15,6 +16,36 @@ export default {
       ],
     },
   },
+  argTypes: {
+    isAuthenticated: {
+      control: 'boolean',
+      description: 'Whether the user is authenticated',
+    },
+    user: {
+      control: 'object',
+      description: 'User information when authenticated',
+    },
+    onSearch: {
+      action: 'search',
+      description: 'Search handler',
+    },
+    onLogin: {
+      action: 'login',
+      description: 'Login handler',
+    },
+    onSignUp: {
+      action: 'signup',
+      description: 'Sign up handler',
+    },
+    onInstallApp: {
+      action: 'install',
+      description: 'Install app handler',
+    },
+    onHomeClick: {
+      action: 'home',
+      description: 'Home click handler',
+    },
+  },
 } as Meta<typeof AppHeader>;
 
 const Template: StoryFn<AppHeaderProps> = (args) => <AppHeader {...args} />;
@@ -22,9 +53,11 @@ const Template: StoryFn<AppHeaderProps> = (args) => <AppHeader {...args} />;
 export const LoggedOut = Template.bind({});
 LoggedOut.args = {
   isAuthenticated: false,
+  onSearch: (value) => console.log('Searching for:', value),
   onLogin: () => alert('Log in clicked'),
   onSignUp: () => alert('Sign up clicked'),
   onInstallApp: () => alert('Install App clicked'),
+  onHomeClick: () => alert('Home clicked'),
 };
 
 export const LoggedIn = Template.bind({});
@@ -35,5 +68,18 @@ LoggedIn.args = {
     avatar: 'https://i.scdn.co/image/ab67706f00000002619c41c539a47b0b910728d0',
   },
   onSearch: (value) => console.log('Searching for:', value),
+  onLogin: () => alert('Log in clicked'),
+  onSignUp: () => alert('Sign up clicked'),
   onInstallApp: () => alert('Install App clicked'),
+  onHomeClick: () => alert('Home clicked'),
+};
+
+export const LoggedInWithoutUser = Template.bind({});
+LoggedInWithoutUser.args = {
+  isAuthenticated: true,
+  onSearch: (value) => console.log('Searching for:', value),
+  onLogin: () => alert('Log in clicked'),
+  onSignUp: () => alert('Sign up clicked'),
+  onInstallApp: () => alert('Install App clicked'),
+  onHomeClick: () => alert('Home clicked'),
 };

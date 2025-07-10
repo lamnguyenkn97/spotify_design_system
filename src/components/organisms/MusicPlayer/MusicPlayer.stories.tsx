@@ -9,10 +9,10 @@ import { NowPlaying } from './NowPlaying';
 import { Stack } from '../../atoms/Stack';
 
 const meta: Meta<typeof MusicPlayer> = {
-  title: 'Molecules/MusicPlayer',
+  title: 'Organisms/MusicPlayer',
   component: MusicPlayer,
   parameters: {
-    layout: 'fullscreen',
+    layout: 'centered',
     docs: {
       description: {
         component:
@@ -20,6 +20,33 @@ const meta: Meta<typeof MusicPlayer> = {
       },
     },
   },
+  decorators: [
+    (Story) => (
+      <div 
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          minHeight: '300px',
+          padding: '20px',
+          position: 'relative',
+          backgroundColor: '#121212', // Spotify dark background
+          width: '100%',
+          boxSizing: 'border-box',
+        }}
+      >
+        <div style={{ 
+          position: 'relative', 
+          width: '100%', 
+          maxWidth: '1200px', 
+          display: 'flex',
+          justifyContent: 'center',
+        }}>
+          <Story />
+        </div>
+      </div>
+    ),
+  ],
   argTypes: {
     currentTrack: {
       control: 'object',
@@ -93,7 +120,7 @@ const sampleTracks: Track[] = [
   },
 ];
 
-// Interactive story with full functionality
+// Interactive story with centered layout
 const InteractiveTemplate = (args: MusicPlayerProps) => {
   const [isPlaying, setIsPlaying] = useState(args.isPlaying || false);
   const [currentTime, setCurrentTime] = useState(args.currentTime || 0);
@@ -103,7 +130,14 @@ const InteractiveTemplate = (args: MusicPlayerProps) => {
   const currentTrack = args.currentTrack || sampleTracks[currentTrackIndex];
 
   return (
-    <div style={{ height: '100vh', position: 'relative' }}>
+    <div 
+      style={{ 
+        position: 'relative',
+        width: '100%',
+        maxWidth: '1000px', // Limit maximum width for better proportions
+        minWidth: '600px', // Reduced minimum width for better responsiveness
+      }}
+    >
       <MusicPlayer
         {...args}
         currentTrack={currentTrack}
@@ -125,6 +159,15 @@ const InteractiveTemplate = (args: MusicPlayerProps) => {
         }}
         onSeek={(time) => setCurrentTime(time)}
         onVolumeChange={(vol) => setVolume(vol)}
+        style={{
+          position: 'relative',
+          bottom: 'auto',
+          left: 'auto',
+          right: 'auto',
+          width: '100%',
+          borderRadius: '8px',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+        }}
       />
     </div>
   );
@@ -198,7 +241,7 @@ export const NoTrack: Story = {
     isPlaying: false,
     currentTime: 0,
     duration: 0,
-    volume: 100,
+    volume: 50,
   },
 };
 

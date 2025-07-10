@@ -1,3 +1,5 @@
+import React from 'react';
+
 export interface Track {
   title: string;
   artist: string;
@@ -5,7 +7,7 @@ export interface Track {
   coverUrl: string;
 }
 
-export interface MusicPlayerProps {
+export interface MusicPlayerProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onVolumeChange'> {
   /** Current track information */
   currentTrack?: Track;
   /** Whether the player is currently playing */
@@ -26,10 +28,6 @@ export interface MusicPlayerProps {
   onSeek?: (time: number) => void;
   /** Callback when volume is changed */
   onVolumeChange?: (volume: number) => void;
-  /** Additional className for styling */
-  className?: string;
-  /** Test ID for testing */
-  'data-testid'?: string;
 }
 
 export interface PlayerControlsProps {

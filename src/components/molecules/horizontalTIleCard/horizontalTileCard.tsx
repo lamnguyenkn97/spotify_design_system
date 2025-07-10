@@ -1,19 +1,26 @@
 import React, { forwardRef, useState } from 'react';
 import { HorizontalTileCardProps } from './HorizontalTileCard.types';
-import { Stack } from '../../atoms/Stack';
-import { Image } from '../../atoms/Image/Image';
-import { Typography } from '../../atoms/Typography/Text/Typography';
-import { Slider } from '../../atoms/Slider/Slider';
-import { colors } from '../../../styles';
+import { Stack, Image, Typography, Progress } from '../../atoms';
+import {
+  colors,
+  animations,
+  opacity,
+  shadows,
+  sizes,
+  spacing,
+  borderRadius,
+} from '../../../styles';
 
-// Utility function for card dimensions
+// Utility function for card dimensions using tokens
 const getCardDimensions = (size: string) => {
   switch (size) {
     case 'small':
       return {
-        imageSize: 40,
-        titleVariant: 'body2' as const,
+        imageSize: 'sm' as const,
+        titleVariant: 'body' as const,
+        titleSize: 'sm' as const,
         subtitleVariant: 'caption' as const,
+        subtitleSize: 'sm' as const,
         stackSpacing: 'xs' as const,
         padding: 'xs' as const,
         gap: 'sm' as const,
@@ -22,15 +29,54 @@ const getCardDimensions = (size: string) => {
     case 'large':
     default:
       return {
-        imageSize: 60,
-        titleVariant: 'body1' as const,
-        subtitleVariant: 'body2' as const,
+        imageSize: 'lg' as const,
+        titleVariant: 'body' as const,
+        titleSize: 'md' as const,
+        subtitleVariant: 'body' as const,
+        subtitleSize: 'sm' as const,
         stackSpacing: 'sm' as const,
         padding: 'sm' as const,
         gap: 'md' as const,
         borderRadius: 'md' as const,
       };
   }
+};
+
+// Semantic color functions for better maintainability
+const getSemanticColors = (
+  disabled: boolean,
+  isActive: boolean,
+  isHovered: boolean
+) => {
+  if (disabled) {
+    return {
+      background: colors.grey.grey1,
+      cursor: 'not-allowed',
+      opacity: opacity.disabled,
+    };
+  }
+
+  if (isActive) {
+    return {
+      background: colors.grey.grey2,
+      cursor: 'pointer',
+      opacity: 1,
+    };
+  }
+
+  if (isHovered) {
+    return {
+      background: colors.grey.grey2,
+      cursor: 'pointer',
+      opacity: 1,
+    };
+  }
+
+  return {
+    background: colors.grey.grey1,
+    cursor: 'pointer',
+    opacity: 1,
+  };
 };
 
 export const HorizontalTileCard = forwardRef<
@@ -57,25 +103,19 @@ export const HorizontalTileCard = forwardRef<
   ) => {
     const [isHovered, setIsHovered] = useState(false);
     const dimensions = getCardDimensions(size);
+    const semanticColors = getSemanticColors(disabled, isActive, isHovered);
 
     const handleClick = (_e: React.MouseEvent) => {
       if (disabled || !onClick) return;
       onClick();
     };
 
-    const handleKeyPress = (e: React.KeyboardEvent) => {
+    const handleKeyDown = (e: React.KeyboardEvent) => {
       if (disabled || !onClick) return;
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
         onClick();
       }
-    };
-
-    const getBackgroundColor = () => {
-      if (disabled) return colors.grey.grey1;
-      if (isActive) return colors.grey.grey2;
-      if (isHovered) return colors.grey.grey2;
-      return colors.grey.grey1;
     };
 
     return (
@@ -84,19 +124,21 @@ export const HorizontalTileCard = forwardRef<
         direction="row"
         spacing={dimensions.gap}
         align="center"
-        padding={dimensions.padding}
-        borderRadius={dimensions.borderRadius}
-        backgroundColor={getBackgroundColor()}
         className={className}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         onClick={handleClick}
-        onKeyPress={handleKeyPress}
+        onKeyDown={handleKeyDown}
         style={{
           width: typeof width === 'number' ? `${width}px` : width,
-          cursor: disabled ? 'not-allowed' : 'pointer',
-          transition: 'all 0.2s ease-in-out',
-          opacity: disabled ? 0.6 : 1,
+          cursor: semanticColors.cursor,
+          transition: animations.transitions.card,
+          opacity: semanticColors.opacity,
+          transform: isHovered && !disabled ? sizes.transform.lift.xs : 'none',
+          boxShadow: isHovered && !disabled ? shadows.hover : shadows.none,
+          padding: spacing[dimensions.padding],
+          borderRadius: borderRadius[dimensions.borderRadius],
+          backgroundColor: semanticColors.background,
         }}
         role="button"
         tabIndex={disabled ? -1 : 0}
@@ -109,8 +151,7 @@ export const HorizontalTileCard = forwardRef<
         <Image
           src={image}
           alt={title}
-          width={dimensions.imageSize}
-          height={dimensions.imageSize}
+          size={dimensions.imageSize}
           shape="rounded"
         />
 
@@ -130,7 +171,11 @@ export const HorizontalTileCard = forwardRef<
               width: '100%',
             }}
           >
-            <Typography variant={dimensions.titleVariant} weight="medium">
+            <Typography
+              variant={dimensions.titleVariant}
+              size={dimensions.titleSize}
+              weight="medium"
+            >
               {title}
             </Typography>
           </Stack>
@@ -147,6 +192,7 @@ export const HorizontalTileCard = forwardRef<
             >
               <Typography
                 variant={dimensions.subtitleVariant}
+                size={dimensions.subtitleSize}
                 color="secondary"
               >
                 {subtitle}
@@ -154,18 +200,18 @@ export const HorizontalTileCard = forwardRef<
             </Stack>
           )}
 
-          {/* Progress */}
+          {/* Progress using Progress component instead of Slider */}
           {showProgress && (
-            <Slider
-              value={progressValue}
-              min={0}
-              max={1}
-              step={0.01}
-              onChange={() => {}}
-              disabled
-              style={{ width: '100%' }}
-              aria-label={`Progress: ${Math.round(progressValue * 100)}%`}
-            />
+            <div style={{ width: '100%' }}>
+              <Progress
+                value={progressValue}
+                max={1}
+                variant="linear"
+                size="sm"
+                showValue={false}
+                aria-label={`Progress: ${Math.round(progressValue * 100)}%`}
+              />
+            </div>
           )}
         </Stack>
       </Stack>

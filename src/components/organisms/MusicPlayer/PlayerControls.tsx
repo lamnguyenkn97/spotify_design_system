@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Stack } from '../../atoms/Stack';
 import { Button } from '../../atoms/Button/Button';
 import { ButtonSize, ButtonVariant } from '../../atoms/Button/Button.types';
@@ -11,7 +11,7 @@ import {
   faPause,
 } from '@fortawesome/free-solid-svg-icons';
 
-export const PlayerControls: React.FC<PlayerControlsProps> = ({
+export const PlayerControls = memo<PlayerControlsProps>(({
   isPlaying,
   onPlayPause,
   onNext,
@@ -23,7 +23,7 @@ export const PlayerControls: React.FC<PlayerControlsProps> = ({
         onClick={onPrevious}
         size={ButtonSize.Small}
         variant={ButtonVariant.Secondary}
-        icon={<Icon icon={faStepBackward} size="small" />}
+        icon={<Icon icon={faStepBackward} size="sm" />}
         text=""
         aria-label="Previous track"
       />
@@ -31,7 +31,7 @@ export const PlayerControls: React.FC<PlayerControlsProps> = ({
         onClick={onPlayPause}
         size={ButtonSize.Medium}
         variant={ButtonVariant.White}
-        icon={<Icon icon={isPlaying ? faPause : faPlay} size="medium" />}
+        icon={<Icon icon={isPlaying ? faPause : faPlay} size="md" />}
         text=""
         aria-label={isPlaying ? 'Pause' : 'Play'}
       />
@@ -39,10 +39,12 @@ export const PlayerControls: React.FC<PlayerControlsProps> = ({
         onClick={onNext}
         size={ButtonSize.Small}
         variant={ButtonVariant.Secondary}
-        icon={<Icon icon={faStepForward} size="small" />}
+        icon={<Icon icon={faStepForward} size="sm" />}
         text=""
         aria-label="Next track"
       />
     </Stack>
   );
-};
+});
+
+PlayerControls.displayName = 'PlayerControls';
