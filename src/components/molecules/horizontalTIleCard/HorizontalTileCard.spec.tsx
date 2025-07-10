@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { ThemeProvider } from '../../../styles/ThemeProvider';
-import { HorizontalTileCard } from './HorizontalTileCard';
+import { HorizontalTileCard } from './horizontalTileCard';
 import { spacing, borderRadius } from '../../../styles';
 
 const renderWithTheme = (component: React.ReactElement) => {

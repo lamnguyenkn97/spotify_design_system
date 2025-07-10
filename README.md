@@ -1,6 +1,22 @@
 # Spotify Design System
 
+[![NPM Version](https://img.shields.io/npm/v/spotify-design-system.svg)](https://www.npmjs.com/package/spotify-design-system)
+[![NPM Downloads](https://img.shields.io/npm/dm/spotify-design-system.svg)](https://www.npmjs.com/package/spotify-design-system)
+[![License](https://img.shields.io/npm/l/spotify-design-system.svg)](https://github.com/lamnguyenkn97/spotify_design_system/blob/main/LICENSE)
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen.svg)](https://spotify-storybook.vercel.app)
+
 Spotify Design System is a robust, reusable component library built with React and TypeScript. It is designed to provide a consistent and scalable foundation for building Spotify-themed user interfaces, while also demonstrating advanced frontend development skills.
+
+## 🚀 **Live Demo & Installation**
+
+**📚 Interactive Documentation**: [https://spotify-storybook.vercel.app](https://spotify-storybook.vercel.app)  
+**📦 NPM Package**: [https://www.npmjs.com/package/spotify-design-system](https://www.npmjs.com/package/spotify-design-system)
+
+```bash
+npm install spotify-design-system
+# or
+yarn add spotify-design-system
+```
 
 ---
 
@@ -236,42 +252,180 @@ This project provided valuable insights into building production-ready design sy
 
 ---
 
-## Installation
+## 🛠️ Installation & Setup
 
-Install the Spotify Design System into your project using npm or yarn:
+### Install the Package
 
 ```bash
 npm install spotify-design-system
+# or
+yarn add spotify-design-system
+# or
+pnpm add spotify-design-system
 ```
 
-or
+### Peer Dependencies
+
+Make sure you have the required peer dependencies installed:
 
 ```bash
-yarn add spotify-design-system
+npm install react react-dom styled-components
 ```
+
+### TypeScript Support
+
+The package includes full TypeScript definitions out of the box. No additional @types packages needed!
 
 ---
 
-## Getting Started
+## 🎯 Quick Start
 
-### Importing a Component
-
-Here's how to use a Button component from the Spotify Design System:
+### Basic Usage
 
 ```tsx
-import { Button } from 'spotify-design-system';
+import React from 'react';
+import { 
+  Button, 
+  Stack, 
+  Typography, 
+  ThemeProvider 
+} from 'spotify-design-system';
 
-const App = () => (
-  <Button variant="primary">Click Me</Button>
-);
+function App() {
+  return (
+    <ThemeProvider>
+      <Stack direction="column" spacing="lg">
+        <Typography variant="heading">Welcome to Spotify Design System</Typography>
+        <Button variant="primary">Get Started</Button>
+      </Stack>
+    </ThemeProvider>
+  );
+}
+
+export default App;
 ```
 
-### Explore Components in Storybook
+### Complete Example
 
-Run the following command to launch the Storybook and explore available components:
+```tsx
+import React from 'react';
+import { 
+  ThemeProvider,
+  GlobalStyles,
+  AppHeader,
+  Sidebar,
+  Stack,
+  Button,
+  Typography,
+  Card,
+  MusicPlayer
+} from 'spotify-design-system';
 
-```bash
-npm run storybook
+function SpotifyApp() {
+  return (
+    <ThemeProvider>
+      <GlobalStyles />
+      <Stack direction="column" spacing="none">
+        <AppHeader />
+        <Stack direction="row" spacing="none">
+          <Sidebar />
+          <Stack direction="column" spacing="lg" style={{ flex: 1, padding: '24px' }}>
+            <Typography variant="heading">Your Music</Typography>
+            <Card>
+              <Typography variant="body">Recently Played</Typography>
+              <Button variant="primary">Play</Button>
+            </Card>
+            <MusicPlayer />
+          </Stack>
+        </Stack>
+      </Stack>
+    </ThemeProvider>
+  );
+}
+```
+
+### Explore Components
+
+**📚 Interactive Documentation**: [https://spotify-storybook.vercel.app](https://spotify-storybook.vercel.app)
+
+Browse all components, see live examples, and copy code snippets directly from the Storybook documentation.
+
+---
+
+## 🎨 **Component Examples**
+
+### Atoms (Building Blocks)
+
+```tsx
+// Buttons with different variants
+<Button variant="primary">Primary Button</Button>
+<Button variant="secondary">Secondary Button</Button>
+<Button variant="ghost">Ghost Button</Button>
+
+// Typography system
+<Typography variant="heading">Main Heading</Typography>
+<Typography variant="subheading">Subheading</Typography>
+<Typography variant="body">Body text</Typography>
+
+// Layout with Stack
+<Stack direction="row" spacing="md" align="center">
+  <Icon icon={faPlay} />
+  <Typography variant="body">Now Playing</Typography>
+</Stack>
+
+// Interactive components
+<Input placeholder="Search songs..." />
+<Slider value={75} max={100} />
+<Progress value={60} max={100} />
+```
+
+### Molecules (Component Groups)
+
+```tsx
+// Cards for content display
+<Card>
+  <Image src="/album.jpg" variant="album" size="md" />
+  <Typography variant="heading">Album Title</Typography>
+  <Typography variant="body" color="muted">Artist Name</Typography>
+</Card>
+
+// Notification banners
+<Banner type="success" message="Playlist saved successfully!" />
+<Banner type="error" message="Something went wrong" />
+```
+
+### Organisms (Complex Components)
+
+```tsx
+// Complete application layout
+<Stack direction="column" spacing="none">
+  <AppHeader />
+  <Stack direction="row" spacing="none">
+    <Sidebar />
+    <main>
+      {/* Your content */}
+    </main>
+  </Stack>
+  <MusicPlayer />
+</Stack>
+```
+
+### Theming
+
+```tsx
+// Custom theme
+import { ThemeProvider } from 'spotify-design-system';
+
+const customTheme = {
+  colors: {
+    primary: { brand: '#1DB954' },
+    background: { primary: '#121212' }
+  }
+};
+
+<ThemeProvider theme={customTheme}>
+  {/* Your app */}
+</ThemeProvider>
 ```
 
 ---
@@ -337,91 +491,146 @@ src/
 
 ---
 
-## Development
+## 🔧 Development
+
+Want to contribute to the Spotify Design System? Here's how to get started:
+
+### Setup for Development
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/lamnguyenkn97/spotify_design_system.git
+   cd spotify_design_system
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+3. **Start Storybook**:
+   ```bash
+   npm run storybook
+   ```
 
 ### Adding a New Component
 
-1. Create a new folder for your component under the appropriate level (Atom, Molecule, or Organism):
-
+1. **Create component structure**:
    ```bash
    mkdir src/components/atoms/MyComponent
    ```
 
-2. Add the following files:
+2. **Required files**:
+   - `MyComponent.tsx` - Component logic
+   - `MyComponent.stories.tsx` - Storybook stories
+   - `MyComponent.spec.tsx` - Unit tests
+   - `MyComponent.style.ts` - Styled components (if needed)
+   - `MyComponent.types.ts` - TypeScript definitions
+   - `index.tsx` - Export file
+   - `README.md` - Component documentation
 
-   - `MyComponent.tsx`: Component logic.
-   - `MyComponent.stories.tsx`: Storybook stories.
-   - `MyComponent.test.tsx`: Unit tests.
-   - `MyComponent.styles.ts`: Component styles (if applicable).
+3. **Update exports**:
+   ```typescript
+   // src/components/atoms/index.ts
+   export * from './MyComponent';
+   ```
 
-3. Export your component in the `index.ts` file.
-
-### Writing Stories
-
-Document your component in Storybook with variations and props using `argTypes`. Example:
-
-```tsx
-export default {
-  title: 'Atoms/Button',
-  component: Button,
-  argTypes: {
-    variant: { control: 'select', options: ['primary', 'secondary'] },
-    onClick: { action: 'clicked' },
-  },
-};
-```
-
-### Running Tests
-
-Use Jest to run unit tests:
+### Development Scripts
 
 ```bash
-npm run test
+# Development
+npm run storybook          # Launch Storybook
+npm run test               # Run tests
+npm run test:watch         # Run tests in watch mode
+npm run test:coverage      # Generate coverage report
+
+# Building
+npm run build              # Build the library
+npm run build-storybook    # Build Storybook for deployment
+
+# Code Quality
+npm run lint               # Run ESLint
+npm run lint:fix           # Fix ESLint issues
+npm run format             # Format code with Prettier
 ```
 
----
+### Component Guidelines
 
-## Deployment
-
-### Build the Design System
-
-To build the library for production:
-
-```bash
-npm run build
-```
-
-### Deploy Storybook
-
-Generate a static build of Storybook:
-
-```bash
-npm run build-storybook
-```
-
-Host the static files on GitHub Pages, Netlify, or any static hosting platform.
+- Follow atomic design principles (atoms → molecules → organisms)
+- Use TypeScript for all components
+- Write comprehensive tests
+- Document with Storybook stories
+- Include README with usage examples
+- Use design tokens for consistent styling
 
 ---
 
-## Contribution
+## 🤝 Contributing
 
-We welcome contributions! Follow these steps:
+We welcome contributions! Here's how you can help:
 
-1. Fork the repository.
-2. Create a new branch for your feature.
-3. Add your changes and write tests.
-4. Submit a pull request.
+1. **Fork the repository** on GitHub
+2. **Create a feature branch**: `git checkout -b feature/amazing-feature`
+3. **Make your changes** and add tests
+4. **Run the test suite**: `npm test`
+5. **Commit your changes**: `git commit -m 'Add amazing feature'`
+6. **Push to the branch**: `git push origin feature/amazing-feature`
+7. **Open a Pull Request**
+
+### Reporting Issues
+
+Found a bug or have a feature request? Please create an issue on GitHub with:
+- Clear description of the problem
+- Steps to reproduce (for bugs)
+- Expected vs actual behavior
+- Screenshots (if applicable)
 
 ---
 
-## License
+## 📊 Project Stats
 
-The Spotify Design System is licensed under the [MIT License](LICENSE).
+- **📦 Components**: 22 (15 Atoms, 3 Molecules, 4 Organisms)
+- **🧪 Test Coverage**: Comprehensive test suite with Jest
+- **📚 Documentation**: 100% Storybook coverage
+- **🎨 Design Tokens**: Consistent theming system
+- **♿ Accessibility**: WCAG compliant components
+- **📱 Responsive**: Mobile-first design approach
 
 ---
 
-## Acknowledgments
+## 🔗 Useful Links
 
-This project is inspired by Spotify's design principles and aims to provide a reusable foundation for similar applications.
+- **📦 NPM Package**: [https://www.npmjs.com/package/spotify-design-system](https://www.npmjs.com/package/spotify-design-system)
+- **📚 Live Documentation**: [https://spotify-storybook.vercel.app](https://spotify-storybook.vercel.app)
+- **🐛 Issues**: [https://github.com/lamnguyenkn97/spotify_design_system/issues](https://github.com/lamnguyenkn97/spotify_design_system/issues)
+- **💡 Discussions**: [https://github.com/lamnguyenkn97/spotify_design_system/discussions](https://github.com/lamnguyenkn97/spotify_design_system/discussions)
 
-# Test automatic deployment
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE) - see the LICENSE file for details.
+
+---
+
+## 🙏 Acknowledgments
+
+- **Spotify** for design inspiration and color palette
+- **React community** for amazing tools and libraries
+- **Storybook team** for excellent documentation tools
+- **FontAwesome** for comprehensive icon library
+- **Styled Components** for powerful CSS-in-JS solution
+
+---
+
+## 📈 Version History
+
+- **1.0.0** (Latest) - Initial release with 22 components
+  - Full TypeScript support
+  - Comprehensive Storybook documentation
+  - Production-ready build system
+  - NPM package publication
+
+---
+
+**Made with ❤️ by [Lam Nguyen](https://github.com/lamnguyenkn97)**

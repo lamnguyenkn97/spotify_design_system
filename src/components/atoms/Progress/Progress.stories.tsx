@@ -237,7 +237,7 @@ export const Interactive: Story = {
     color: 'primary',
     indeterminate: false,
     showValue: true,
-    bufferValue: 70,
+    // bufferValue: 70, // Not supported in current Progress component
   },
 };
 

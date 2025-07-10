@@ -1,8 +1,13 @@
 {
-  "name": "spotify_design_system",
+  "name": "spotify-design-system",
   "version": "1.0.0",
   "description": "Spotify Design System is a robust, reusable component library built with React and TypeScript. It is designed to provide a consistent and scalable foundation for building Spotify-themed user interfaces, while also demonstrating advanced frontend development skills.",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
@@ -10,32 +15,51 @@
     "test:coverage": "jest --coverage",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
+    "build": "npm run build:lib",
+    "build:lib": "tsc && npm run build:copy-assets",
+    "build:copy-assets": "cp -r src/assets dist/ 2>/dev/null || true",
+    "prepublishOnly": "npm run build",
     "lint": "eslint src/**/*.{ts,tsx}",
     "lint:fix": "eslint src/**/*.{ts,tsx} --fix",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,scss}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css,scss}\"",
     "generate:component": "node generate-component.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "react",
+    "typescript",
+    "design-system",
+    "component-library",
+    "spotify",
+    "ui-components",
+    "styled-components"
+  ],
+  "author": "Lam Nguyen",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lamnguyenkn97/spotify_design_system.git"
+  },
+  "homepage": "https://spotify-storybook.vercel.app",
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0",
+    "styled-components": ">=5.0.0"
+  },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-brands-svg-icons": "^6.7.2",
+    "@fortawesome/free-regular-svg-icons": "^6.7.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "color-thief-browser": "^2.0.2",
     "dont-crop": "^0.2.0",
     "lodash": "^4.17.21",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "react-icons": "^5.4.0",
-    "styled-components": "^6.1.14"
+    "react-icons": "^5.4.0"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^3.2.4",
     "@eslint/js": "^9.29.0",
-    "@fortawesome/fontawesome-svg-core": "^6.7.2",
-    "@fortawesome/free-regular-svg-icons": "^6.7.2",
-    "@fortawesome/free-solid-svg-icons": "^6.7.2",
-    "@fortawesome/react-fontawesome": "^0.2.2",
     "@storybook/addon-essentials": "^8.5.1",
     "@storybook/addon-interactions": "^8.5.1",
     "@storybook/addon-onboarding": "^8.5.1",
@@ -64,7 +88,10 @@
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "prettier": "^3.4.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "storybook": "^8.5.1",
+    "styled-components": "^6.1.14",
     "ts-jest": "^29.2.5",
     "typescript": "^5.7.3"
   },
