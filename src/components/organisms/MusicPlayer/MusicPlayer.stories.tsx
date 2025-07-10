@@ -9,7 +9,7 @@ import { NowPlaying } from './NowPlaying';
 import { Stack } from '../../atoms/Stack';
 
 const meta: Meta<typeof MusicPlayer> = {
-  title: 'Molecules/MusicPlayer',
+  title: 'Organisms/MusicPlayer',
   component: MusicPlayer,
   parameters: {
     layout: 'centered',
