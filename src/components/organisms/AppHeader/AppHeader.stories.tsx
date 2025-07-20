@@ -50,7 +50,7 @@ export default {
 
 const Template: StoryFn<AppHeaderProps> = (args) => <AppHeader {...args} />;
 
-export const LoggedOut = Template.bind({});
+export const LoggedOut: StoryFn<AppHeaderProps> = Template.bind({});
 LoggedOut.args = {
   isAuthenticated: false,
   onSearch: (value) => console.log('Searching for:', value),
@@ -60,7 +60,7 @@ LoggedOut.args = {
   onHomeClick: () => alert('Home clicked'),
 };
 
-export const LoggedIn = Template.bind({});
+export const LoggedIn: StoryFn<AppHeaderProps> = Template.bind({});
 LoggedIn.args = {
   isAuthenticated: true,
   user: {
@@ -74,7 +74,7 @@ LoggedIn.args = {
   onHomeClick: () => alert('Home clicked'),
 };
 
-export const LoggedInWithoutUser = Template.bind({});
+export const LoggedInWithoutUser: StoryFn<AppHeaderProps> = Template.bind({});
 LoggedInWithoutUser.args = {
   isAuthenticated: true,
   onSearch: (value) => console.log('Searching for:', value),

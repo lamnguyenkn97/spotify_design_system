@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Sidebar } from './Sidebar';
-import { SidebarProps, LibraryItem } from './Sidebar.types';
+import { LibraryItem } from './Sidebar.types';
 
 // Sample library items for stories
 const sampleLibraryItems: LibraryItem[] = [
@@ -150,19 +150,19 @@ export const Interactive: Story = {
     const handleFilterClick = (filter: string) => {
       console.log('Filter clicked:', filter);
       setActiveFilter(activeFilter === filter ? null : filter);
-      
+
       if (activeFilter === filter) {
         setFilteredItems(sampleLibraryItems);
       } else {
         const filterMap: Record<string, LibraryItem['type']> = {
-          'Playlists': 'playlist',
-          'Artists': 'artist',
-          'Albums': 'album',
+          Playlists: 'playlist',
+          Artists: 'artist',
+          Albums: 'album',
           'Podcasts & Shows': 'podcast',
         };
-        
+
         const filtered = sampleLibraryItems.filter(
-          item => item.type === filterMap[filter]
+          (item) => item.type === filterMap[filter]
         );
         setFilteredItems(filtered);
       }
@@ -174,9 +174,9 @@ export const Interactive: Story = {
         setFilteredItems(sampleLibraryItems);
         return;
       }
-      
+
       const searched = sampleLibraryItems.filter(
-        item =>
+        (item) =>
           item.title.toLowerCase().includes(query.toLowerCase()) ||
           item.subtitle.toLowerCase().includes(query.toLowerCase())
       );
@@ -209,7 +209,8 @@ export const Interactive: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Interactive sidebar with working filters, search, and view toggle.',
+        story:
+          'Interactive sidebar with working filters, search, and view toggle.',
       },
     },
   },
@@ -288,7 +289,9 @@ export const LargeLibrary: Story = {
       image: `https://picsum.photos/640/640?random=${index}`,
       title: `Library Item ${index + 1}`,
       subtitle: `${['Playlist', 'Artist', 'Album', 'Podcast'][index % 4]} • ${Math.floor(Math.random() * 200) + 1} songs`,
-      type: ['playlist', 'artist', 'album', 'podcast'][index % 4] as LibraryItem['type'],
+      type: ['playlist', 'artist', 'album', 'podcast'][
+        index % 4
+      ] as LibraryItem['type'],
       pinned: index < 5,
     })),
     showLogo: true,
@@ -297,7 +300,8 @@ export const LargeLibrary: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Sidebar with a large library to test scrolling and performance.',
+        story:
+          'Sidebar with a large library to test scrolling and performance.',
       },
     },
   },
@@ -323,4 +327,4 @@ export const CustomStyling: Story = {
       },
     },
   },
-}; 
+};

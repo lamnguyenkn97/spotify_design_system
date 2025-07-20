@@ -52,7 +52,7 @@ export const Default: Story = {
     trigger: 'hover',
   },
   render: (args) => (
-    <Tooltip {...args}>
+    <Tooltip content={args.content} position={args.position} trigger={args.trigger}>
       <Button variant={ButtonVariant.Primary}>Hover me</Button>
     </Tooltip>
   ),
@@ -267,7 +267,7 @@ export const Interactive: Story = {
     maxWidth: '200px',
   },
   render: (args) => (
-    <Tooltip {...args}>
+    <Tooltip content={args.content} position={args.position} trigger={args.trigger} delay={args.delay} maxWidth={args.maxWidth}>
       <Button variant={ButtonVariant.Primary}>Interactive Tooltip</Button>
     </Tooltip>
   ),
