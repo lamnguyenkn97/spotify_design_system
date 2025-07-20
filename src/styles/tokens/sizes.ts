@@ -17,7 +17,7 @@ export const sizes = {
   container: {
     banner: '240px',
     card: '320px',
-    header: '64px',
+    header: '90px', // Increased from 64px to give music player more height
     footer: 'auto',
   },
 

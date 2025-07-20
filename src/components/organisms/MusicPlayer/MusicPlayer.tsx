@@ -30,7 +30,7 @@ const getDefaultPlayerStyles = () => ({
   borderTop: `1px solid ${PLAYER_STYLES.container.borderColor}`,
   zIndex: PLAYER_STYLES.container.zIndex,
   width: '100%',
-  padding: spacing.lg,
+  padding: `${spacing.md} ${spacing.lg}`, // Adjusted padding: less vertical, same horizontal
   backgroundColor: colors.primary.black,
   transition: animations.transitions.all,
   boxSizing: 'border-box' as const,

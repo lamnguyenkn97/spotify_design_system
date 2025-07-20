@@ -44,7 +44,7 @@ The component extensively uses design tokens for consistency:
 ```tsx
 const PLAYER_STYLES = {
   container: {
-    height: sizes.container.header,        // 64px - consistent header height
+    height: sizes.container.header,        // 90px - increased height for better proportions
     zIndex: sizes.zIndex.overlay,          // 1200 - above other content
     borderColor: colors.grey.grey3,        // Consistent border color
   },
@@ -101,7 +101,7 @@ animations.transitions.card            // Component hover effects
 ### NowPlaying
 **Purpose**: Current track information display
 **Features**:
-- Image component with size="lg" and error handling
+- Image component with size="md" (96px) for better fit in 90px height
 - Updated Typography variants (removed deprecated body1/body2)
 - Semantic color functions for track presence/absence
 - Text overflow handling with ellipsis
@@ -176,6 +176,20 @@ const [volume, setVolume] = useState(100);
   onVolumeChange={(vol) => setVolume(vol)}
 />
 ```
+
+## Recent Improvements
+
+### Enhanced Player Height & Layout
+- **Increased height** from 64px to 90px for better visual proportions
+- **Optimized image size** from "lg" (128px) to "md" (96px) to fit the new height
+- **Improved padding** with reduced vertical padding to maximize content space
+- **Better containment** with proper overflow handling and flex constraints
+
+### Circular Play Button
+- **New Circular variant** added to Button component for perfect circle shape
+- **Fixed dimensions** (32px/40px/48px) based on button size
+- **Proper styling** with `border-radius: 50%` and zero padding
+- **Enhanced accessibility** with proper ARIA labels
 
 ## Architecture & Performance
 

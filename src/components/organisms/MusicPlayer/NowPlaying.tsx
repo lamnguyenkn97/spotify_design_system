@@ -9,8 +9,8 @@ import { sizes, spacing, colors } from '../../../styles';
 const NOW_PLAYING_DEFAULTS = {
   title: 'Not Playing',
   artist: 'Unknown Artist',
-  coverUrl: 'https://via.placeholder.com/56x56/333333/ffffff?text=♪',
-  minWidth: '180px', // Use string for CSS compatibility
+  coverUrl: 'https://via.placeholder.com/96x96/333333/ffffff?text=♪',
+  minWidth: '200px', // Increased to accommodate larger image
 } as const;
 
 // Semantic color function for track states
@@ -65,7 +65,7 @@ export const NowPlaying = memo<NowPlayingProps>(({
       <Image
         src={displayValues.coverUrl}
         alt={`${displayValues.title} album cover`}
-        size="lg"
+        size="md"
         shape="rounded"
         style={{
           flexShrink: 0, // Prevent image from shrinking

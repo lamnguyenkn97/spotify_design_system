@@ -12,7 +12,7 @@ Primary interactive elements for actions like Play, Follow, Subscribe, and navig
 
 | Feature | Description | Example |
 |---------|-------------|---------|
-| **Variants** | Primary, Secondary, White, FlatWhite, Text | Different visual importance levels |
+| **Variants** | Primary, Secondary, White, Circular, FlatWhite, Text | Different visual importance levels |
 | **Sizes** | `sm`, `md`, `lg` with responsive padding | Compact vs prominent buttons |
 | **States** | Loading, disabled, hover, focus, active | Complete interaction feedback |
 | **Icons** | Left-aligned icon support with spacing | Play icon, heart icon |
@@ -48,6 +48,14 @@ Primary interactive elements for actions like Play, Follow, Subscribe, and navig
   href="/profile" 
   text="View Profile"
   variant="text"
+/>
+
+// Circular play button
+<Button 
+  variant="circular"
+  circular={true}
+  icon={<Icon icon={faPlay} size="md" />}
+  aria-label="Play"
 />
 ```
 
