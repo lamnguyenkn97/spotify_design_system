@@ -4,6 +4,13 @@ import React from 'react';
 
 const preview: Preview = {
   parameters: {
+    docs: {
+      theme: {
+        brandTitle: 'Spotify Design System (fanmade)',
+        brandUrl: 'https://github.com/lamnguyenkn97/spotify_design_system',
+        brandImage: '/logo.svg',
+      },
+    },
     controls: {
       matchers: {
         color: /(background|color)$/i,
