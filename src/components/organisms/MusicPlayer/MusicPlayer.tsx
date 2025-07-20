@@ -33,6 +33,8 @@ const getDefaultPlayerStyles = () => ({
   padding: spacing.lg,
   backgroundColor: colors.primary.black,
   transition: animations.transitions.all,
+  boxSizing: 'border-box' as const,
+  overflow: 'hidden' as const,
 });
 
 // Semantic color function for player states
@@ -123,7 +125,11 @@ export const MusicPlayer = forwardRef<HTMLDivElement, MusicPlayerProps>(
         align="center"
         justify="space-between"
         className={className}
-        style={mergedStyles}
+        style={{
+          ...mergedStyles,
+          minHeight: 0,
+          maxHeight: '100%',
+        }}
         {...props}
       >
         <NowPlaying
@@ -136,7 +142,12 @@ export const MusicPlayer = forwardRef<HTMLDivElement, MusicPlayerProps>(
           direction="column"
           spacing="sm"
           align="center"
-          style={PLAYER_STYLES.centerSection}
+          style={{
+            ...PLAYER_STYLES.centerSection,
+            minHeight: 0,
+            maxHeight: '100%',
+            overflow: 'hidden',
+          }}
         >
           <PlayerControls
             isPlaying={isPlaying}

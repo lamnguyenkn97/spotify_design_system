@@ -54,7 +54,13 @@ export const NowPlaying = memo<NowPlayingProps>(({
       direction="row"
       spacing="md"
       align="center"
-      style={{ minWidth: NOW_PLAYING_DEFAULTS.minWidth }}
+      style={{ 
+        minWidth: NOW_PLAYING_DEFAULTS.minWidth,
+        minHeight: 0,
+        maxHeight: '100%',
+        flexShrink: 0,
+        overflow: 'hidden',
+      }}
     >
       <Image
         src={displayValues.coverUrl}

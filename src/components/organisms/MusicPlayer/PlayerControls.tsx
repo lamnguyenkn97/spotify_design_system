@@ -18,7 +18,16 @@ export const PlayerControls = memo<PlayerControlsProps>(({
   onPrevious,
 }) => {
   return (
-    <Stack direction="row" spacing="md" align="center">
+    <Stack 
+      direction="row" 
+      spacing="md" 
+      align="center"
+      style={{
+        minHeight: 0,
+        maxHeight: '100%',
+        flexShrink: 0,
+      }}
+    >
       <Button
         onClick={onPrevious}
         size={ButtonSize.Small}
@@ -30,7 +39,8 @@ export const PlayerControls = memo<PlayerControlsProps>(({
       <Button
         onClick={onPlayPause}
         size={ButtonSize.Medium}
-        variant={ButtonVariant.White}
+        variant={ButtonVariant.Circular}
+        circular={true}
         icon={<Icon icon={isPlaying ? faPause : faPlay} size="md" />}
         text=""
         aria-label={isPlaying ? 'Pause' : 'Play'}

@@ -126,6 +126,17 @@ const variantConfig: Record<ButtonVariant, VariantConfig> = {
       backgroundColor: colors.grey.grey5,
     },
   },
+  [ButtonVariant.Circular]: {
+    backgroundColor: colors.primary.white,
+    color: colors.primary.black,
+    borderColor: colors.primary.white,
+    hover: {
+      backgroundColor: colors.grey.grey6,
+    },
+    active: {
+      backgroundColor: colors.grey.grey5,
+    },
+  },
   [ButtonVariant.FlatWhite]: {
     backgroundColor: 'transparent',
     color: colors.primary.white,
@@ -188,12 +199,13 @@ const getVariantStyles = (variant: ButtonVariant) => {
 
 export const StyledButton = styled.button.withConfig({
   shouldForwardProp: (prop) =>
-    !['size', 'variant', 'fullWidth', 'loading'].includes(prop),
+    !['size', 'variant', 'fullWidth', 'loading', 'circular'].includes(prop),
 })<{
   size: ButtonSize;
   variant: ButtonVariant;
   fullWidth?: boolean;
   loading?: boolean;
+  circular?: boolean;
 }>`
   ${(props) => getSizeStyles(props.size)};
   ${(props) => getVariantStyles(props.variant)};
@@ -204,19 +216,36 @@ export const StyledButton = styled.button.withConfig({
   align-items: center;
   justify-content: center;
   gap: ${spacing.xs};
-  border-radius: ${borderRadius.xl};
+  border-radius: ${(props) => props.circular ? '50%' : borderRadius.xl};
   cursor: pointer;
   transition: ${transitions.button};
   text-decoration: none;
   outline: none;
   position: relative;
   overflow: hidden;
+  box-sizing: border-box;
+
+  /* Ensure content is properly contained */
+  min-width: 0;
+  max-width: 100%;
 
   /* Full width option */
   ${(props) =>
     props.fullWidth &&
     css`
       width: 100%;
+    `}
+
+  /* Circular button specific styles */
+  ${(props) =>
+    props.circular &&
+    css`
+      width: ${props.size === ButtonSize.Small ? '32px' : 
+              props.size === ButtonSize.Medium ? '40px' : '48px'};
+      height: ${props.size === ButtonSize.Small ? '32px' : 
+               props.size === ButtonSize.Medium ? '40px' : '48px'};
+      padding: 0;
+      flex-shrink: 0;
     `}
 
   /* Icon positioning is handled in Button.tsx via conditional rendering */

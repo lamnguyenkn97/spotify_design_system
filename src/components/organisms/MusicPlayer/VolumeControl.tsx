@@ -101,7 +101,13 @@ export const VolumeControl = memo<VolumeControlProps>(({
       direction="row"
       spacing="sm"
       align="center"
-      style={{ minWidth: VOLUME_CONTROL_CONFIG.minWidth }}
+      style={{ 
+        minWidth: VOLUME_CONTROL_CONFIG.minWidth,
+        minHeight: 0,
+        maxHeight: '100%',
+        flexShrink: 0,
+        overflow: 'hidden',
+      }}
     >
       <Button
         onClick={handleMuteToggle}

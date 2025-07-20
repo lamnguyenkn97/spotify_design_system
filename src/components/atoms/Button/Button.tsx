@@ -4,7 +4,7 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { ButtonProps, ButtonSize, ButtonVariant } from './Button.types';
 import { StyledButton } from './Button.style';
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
+export const Button = forwardRef<HTMLButtonElement, ButtonProps & { circular?: boolean }>(({
   onClick,
   size = ButtonSize.Medium,
   text,
@@ -15,6 +15,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
   disabled = false,
   children,
   as,
+  circular = false,
   ...props
 }, ref) => {
   const content = children || text;
@@ -39,6 +40,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
       fullWidth={fullWidth}
       loading={loading}
       disabled={disabled || loading}
+      circular={circular}
       as={as}
       {...props}
     >

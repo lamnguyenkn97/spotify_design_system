@@ -4,6 +4,7 @@ export enum ButtonVariant {
   Primary = 'primary',
   Secondary = 'secondary',
   White = 'white',
+  Circular = 'circular',
   FlatWhite = 'flat-white',
   Text = 'text', // For text-only buttons (previously TextButton)
 }
