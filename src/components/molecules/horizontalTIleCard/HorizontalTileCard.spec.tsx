@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { ThemeProvider } from '../../../styles/ThemeProvider';
+import { ThemeProvider } from '../../../styles';
 import { HorizontalTileCard } from './horizontalTileCard';
 import { spacing, borderRadius } from '../../../styles';
 
@@ -48,8 +48,8 @@ describe('HorizontalTileCard Component', () => {
 
     const smallButton = screen.getByRole('button');
     expect(smallButton).toHaveStyle({
-      padding: spacing.xs,        // '4px'
-      borderRadius: borderRadius.sm // '1rem'
+      padding: spacing.xs, // '4px'
+      borderRadius: borderRadius.sm, // '1rem'
     });
 
     // Test large size
@@ -61,8 +61,8 @@ describe('HorizontalTileCard Component', () => {
 
     const largeButton = screen.getByRole('button');
     expect(largeButton).toHaveStyle({
-      padding: spacing.sm,        // '8px'
-      borderRadius: borderRadius.md // '2rem'
+      padding: spacing.sm, // '8px'
+      borderRadius: borderRadius.md, // '2rem'
     });
   });
 
@@ -87,7 +87,7 @@ describe('HorizontalTileCard Component', () => {
     );
 
     const button = screen.getByRole('button');
-    
+
     // Test Enter key
     fireEvent.keyDown(button, { key: 'Enter' });
     expect(handleClick).toHaveBeenCalledTimes(1);
@@ -159,7 +159,10 @@ describe('HorizontalTileCard Component', () => {
     );
 
     const button = screen.getByRole('button');
-    expect(button).toHaveAttribute('aria-label', 'My Playlist - Custom subtitle');
+    expect(button).toHaveAttribute(
+      'aria-label',
+      'My Playlist - Custom subtitle'
+    );
     expect(button).toHaveAttribute('tabindex', '0');
     expect(button).toHaveAttribute('aria-disabled', 'false');
   });
@@ -177,4 +180,4 @@ describe('HorizontalTileCard Component', () => {
     const progressBar = screen.getByRole('progressbar');
     expect(progressBar).toHaveAttribute('aria-label', 'Progress: 67%');
   });
-}); 
+});

@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { HorizontalTileCard } from './horizontalTileCard';
-import { Stack } from '../../atoms/Stack';
+import { Stack } from '../../atoms';
 
 const meta: Meta<typeof HorizontalTileCard> = {
   title: 'Molecules/HorizontalTileCard',
