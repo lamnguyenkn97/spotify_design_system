@@ -25,32 +25,41 @@ export const Image = forwardRef<HTMLImageElement, ImageProps>(
     ref
   ) => {
     const [imageSrc, setImageSrc] = useState(src);
-    const [isLoading, setIsLoading] = useState(!!src);
+    const [isLoading, setIsLoading] = useState(false);
     const [showPlaceholder, setShowPlaceholder] = useState(!src);
+    const [imageLoaded, setImageLoaded] = useState(false);
 
     // Reset states when src changes
     useEffect(() => {
       if (src) {
         setImageSrc(src);
-        setIsLoading(true);
         setShowPlaceholder(false);
+        // Don't reset loading state here - let the image handle it
+        // This prevents flickering during hydration
       } else {
         setImageSrc('');
         setIsLoading(false);
         setShowPlaceholder(true);
+        setImageLoaded(false);
       }
     }, [src]);
 
-    const handleLoad = () => {
-      setIsLoading(false);
+    const handleLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
+      // Check if image is actually complete (handles cached/already loaded images)
+      const target = e.currentTarget;
+      if (target.complete && target.naturalHeight !== 0) {
+        setIsLoading(false);
+        setImageLoaded(true);
+      }
     };
 
     const handleError = () => {
       // Try fallback if available and not already using it
       if (fallbackSrc && imageSrc !== fallbackSrc) {
         setImageSrc(fallbackSrc);
-        setIsLoading(true);
+        setIsLoading(false);
         setShowPlaceholder(false);
+        setImageLoaded(false);
         return;
       }
 
@@ -58,6 +67,7 @@ export const Image = forwardRef<HTMLImageElement, ImageProps>(
       setImageSrc('');
       setIsLoading(false);
       setShowPlaceholder(true);
+      setImageLoaded(false);
     };
 
     return (
@@ -74,7 +84,7 @@ export const Image = forwardRef<HTMLImageElement, ImageProps>(
             ref={ref}
             src={imageSrc}
             alt={alt}
-            isLoading={isLoading}
+            isLoading={false}
             onLoad={handleLoad}
             onError={handleError}
             loading={lazy ? 'lazy' : 'eager'}
