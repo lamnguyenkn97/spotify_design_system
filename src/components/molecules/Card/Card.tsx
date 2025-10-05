@@ -171,6 +171,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
               shape={isArtist ? 'circle' : 'rounded'}
               style={{
                 objectFit: 'cover',
+                pointerEvents: 'none',
               }}
             />
           )}
