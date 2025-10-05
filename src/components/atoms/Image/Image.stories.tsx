@@ -27,7 +27,7 @@ const meta: Meta<typeof Image> = {
     docs: {
       description: {
         component:
-          'A simplified image component optimized for Spotify use cases: albums, avatars, and playlists with built-in placeholder icons.',
+          'A simplified image component optimized for Spotify use cases: albums, avatars, and playlists with built-in placeholder icons. SSR-safe with no hydration flash - images render immediately and stay visible.',
       },
     },
   },
@@ -120,15 +120,14 @@ export const Variants: Story = {
   ),
 };
 
-// Loading states demonstration
-export const LoadingStates: Story = {
+// SSR-Safe rendering demonstration
+export const SSRSafeRendering: Story = {
   render: () => {
-    // Create slow-loading image URLs to demonstrate loading states
-    const slowImages = {
-      // Add cache-busting params to force reload and show loading
-      slow1: `${sampleImages.album}?slow=1&t=${Date.now()}`,
-      slow2: `${sampleImages.avatar}?slow=2&t=${Date.now()}`,
-      slow3: `${sampleImages.playlist}?slow=3&t=${Date.now()}`,
+    // Create cache-busting URLs to demonstrate fresh vs cached images
+    const freshImages = {
+      fresh1: `${sampleImages.album}?cache=1&t=${Date.now()}`,
+      fresh2: `${sampleImages.avatar}?cache=2&t=${Date.now()}`,
+      fresh3: `${sampleImages.playlist}?cache=3&t=${Date.now()}`,
     };
 
     return (
@@ -143,11 +142,11 @@ export const LoadingStates: Story = {
       >
         <Stack align="center" spacing="sm">
           <Typography variant="caption" color="muted">
-            Loading Album
+            Fresh Image (No Flash)
           </Typography>
           <Image
-            src={slowImages.slow1}
-            alt="Loading album cover"
+            src={freshImages.fresh1}
+            alt="Fresh album cover"
             variant="album"
             size="lg"
           />
@@ -155,11 +154,11 @@ export const LoadingStates: Story = {
 
         <Stack align="center" spacing="sm">
           <Typography variant="caption" color="muted">
-            Loading Avatar
+            Cached Image (No Flash)
           </Typography>
           <Image
-            src={slowImages.slow2}
-            alt="Loading user avatar"
+            src={sampleImages.avatar}
+            alt="Cached user avatar"
             variant="avatar"
             shape="circle"
             size="lg"
@@ -168,11 +167,11 @@ export const LoadingStates: Story = {
 
         <Stack align="center" spacing="sm">
           <Typography variant="caption" color="muted">
-            Loading Playlist
+            CDN Image (No Flash)
           </Typography>
           <Image
-            src={slowImages.slow3}
-            alt="Loading playlist cover"
+            src={sampleImages.playlist}
+            alt="CDN playlist cover"
             variant="playlist"
             size="lg"
           />
@@ -195,7 +194,7 @@ export const LoadingStates: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Demonstrates loading states, transitions, and immediate placeholder display. Images show opacity fade-in transitions when loaded.',
+        story: 'Images render immediately without opacity flash. Works perfectly with SSR/Next.js hydration - no loading states that cause flickering. Cached images, fresh images, and CDN images all render instantly.',
       },
     },
   },
@@ -262,12 +261,12 @@ export const LazyLoading: Story = {
   },
 };
 
-// Loading with fallback chain
-export const LoadingWithFallback: Story = {
+// Fallback chain demonstration
+export const FallbackChain: Story = {
   render: () => {
     const [triggerReload, setTriggerReload] = React.useState(0);
     
-    // Force reload to show loading states
+    // Force reload to demonstrate fallback behavior
     const reloadImages = () => setTriggerReload(prev => prev + 1);
     
     return (
@@ -290,8 +289,11 @@ export const LoadingWithFallback: Story = {
               cursor: 'pointer',
             }}
           >
-            Reload Images (See Loading States)
+            Reload Images
           </button>
+          <Typography variant="caption" color="muted" style={{ marginLeft: spacing.md }}>
+            Images render immediately - no loading states or opacity flash
+          </Typography>
         </div>
 
         <Stack direction="row" spacing="lg">
@@ -303,7 +305,7 @@ export const LoadingWithFallback: Story = {
               key={`broken-${triggerReload}`}
               src={`https://broken-url-${triggerReload}.jpg`}
               fallbackSrc={sampleImages.fallback}
-              alt="Loading with fallback"
+              alt="Image with fallback"
               variant="album"
               size="lg"
             />
@@ -317,7 +319,7 @@ export const LoadingWithFallback: Story = {
               key={`success-${triggerReload}`}
               src={`${sampleImages.album}?reload=${triggerReload}`}
               fallbackSrc={sampleImages.fallback}
-              alt="Successful loading"
+              alt="Successful image"
               variant="album"
               size="lg"
             />
@@ -344,7 +346,7 @@ export const LoadingWithFallback: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Shows the complete loading sequence: Primary URL → Fallback URL → Placeholder. Click reload to see loading transitions.',
+        story: 'Shows the fallback chain: Primary URL → Fallback URL → Placeholder. Images render immediately without loading states, perfect for SSR/Next.js.',
       },
     },
   },

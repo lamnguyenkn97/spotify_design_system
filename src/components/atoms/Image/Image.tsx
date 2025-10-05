@@ -25,38 +25,29 @@ export const Image = forwardRef<HTMLImageElement, ImageProps>(
     ref
   ) => {
     const [imageSrc, setImageSrc] = useState(src);
-    const [isLoading, setIsLoading] = useState(!!src);
     const [showPlaceholder, setShowPlaceholder] = useState(!src);
 
     // Reset states when src changes
     useEffect(() => {
       if (src) {
         setImageSrc(src);
-        setIsLoading(true);
         setShowPlaceholder(false);
       } else {
         setImageSrc('');
-        setIsLoading(false);
         setShowPlaceholder(true);
       }
     }, [src]);
-
-    const handleLoad = () => {
-      setIsLoading(false);
-    };
 
     const handleError = () => {
       // Try fallback if available and not already using it
       if (fallbackSrc && imageSrc !== fallbackSrc) {
         setImageSrc(fallbackSrc);
-        setIsLoading(true);
         setShowPlaceholder(false);
         return;
       }
 
       // Show placeholder if no fallback or fallback fails
       setImageSrc('');
-      setIsLoading(false);
       setShowPlaceholder(true);
     };
 
@@ -65,7 +56,7 @@ export const Image = forwardRef<HTMLImageElement, ImageProps>(
         size={size}
         shape={shape}
         variant={variant}
-        isLoading={isLoading}
+        isLoading={false}
         className={className}
       >
         {/* Show image if we have a src and not showing placeholder */}
@@ -74,8 +65,7 @@ export const Image = forwardRef<HTMLImageElement, ImageProps>(
             ref={ref}
             src={imageSrc}
             alt={alt}
-            isLoading={isLoading}
-            onLoad={handleLoad}
+            isLoading={false}
             onError={handleError}
             loading={lazy ? 'lazy' : 'eager'}
             {...props}
