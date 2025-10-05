@@ -25,49 +25,30 @@ export const Image = forwardRef<HTMLImageElement, ImageProps>(
     ref
   ) => {
     const [imageSrc, setImageSrc] = useState(src);
-    const [isLoading, setIsLoading] = useState(false);
     const [showPlaceholder, setShowPlaceholder] = useState(!src);
-    const [imageLoaded, setImageLoaded] = useState(false);
 
     // Reset states when src changes
     useEffect(() => {
       if (src) {
         setImageSrc(src);
         setShowPlaceholder(false);
-        // Don't reset loading state here - let the image handle it
-        // This prevents flickering during hydration
       } else {
         setImageSrc('');
-        setIsLoading(false);
         setShowPlaceholder(true);
-        setImageLoaded(false);
       }
     }, [src]);
-
-    const handleLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
-      // Check if image is actually complete (handles cached/already loaded images)
-      const target = e.currentTarget;
-      if (target.complete && target.naturalHeight !== 0) {
-        setIsLoading(false);
-        setImageLoaded(true);
-      }
-    };
 
     const handleError = () => {
       // Try fallback if available and not already using it
       if (fallbackSrc && imageSrc !== fallbackSrc) {
         setImageSrc(fallbackSrc);
-        setIsLoading(false);
         setShowPlaceholder(false);
-        setImageLoaded(false);
         return;
       }
 
       // Show placeholder if no fallback or fallback fails
       setImageSrc('');
-      setIsLoading(false);
       setShowPlaceholder(true);
-      setImageLoaded(false);
     };
 
     return (
@@ -75,7 +56,7 @@ export const Image = forwardRef<HTMLImageElement, ImageProps>(
         size={size}
         shape={shape}
         variant={variant}
-        isLoading={isLoading}
+        isLoading={false}
         className={className}
       >
         {/* Show image if we have a src and not showing placeholder */}
@@ -85,7 +66,6 @@ export const Image = forwardRef<HTMLImageElement, ImageProps>(
             src={imageSrc}
             alt={alt}
             isLoading={false}
-            onLoad={handleLoad}
             onError={handleError}
             loading={lazy ? 'lazy' : 'eager'}
             {...props}
