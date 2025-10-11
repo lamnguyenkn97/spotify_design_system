@@ -39,6 +39,19 @@ export const animations = {
     pressed: '0.98', // For button active/pressed state
   },
 
+  // Brightness transformations for filter effects
+  brightness: {
+    none: '1',
+    subtle: '1.05',
+    small: '1.1',
+    medium: '1.15',
+    large: '1.2',
+    // Dimming effects
+    dim: '0.9',
+    dimMedium: '0.8',
+    dimLarge: '0.7',
+  },
+
   // Font size scaling for interactive elements
   fontScale: {
     none: '1',
@@ -168,4 +181,4 @@ export const keyframes = {
 };
 
 // Export individual sections for easier imports
-export const { duration, easing, scale, fontScale, transitions, hover, loading } = animations; 
+export const { duration, easing, scale, brightness, fontScale, transitions, hover, loading } = animations; 
