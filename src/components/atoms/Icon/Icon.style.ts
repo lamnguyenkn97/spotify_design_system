@@ -41,7 +41,7 @@ const getSizeValue = (size: IconSize): string => {
   return sizeTokens[size] || sizeTokens.md;
 };
 
-const getInteractiveStyles = (clickable: boolean, disabled: boolean) => {
+const getInteractiveStyles = (clickable: boolean, disabled: boolean, backgroundColor: string) => {
   if (disabled) {
     return css`
       opacity: ${opacity.disabled};
@@ -51,14 +51,23 @@ const getInteractiveStyles = (clickable: boolean, disabled: boolean) => {
   }
 
   if (clickable) {
+    // If icon has a background, use scale and brightness effects instead of color change
+    const hasBackground = backgroundColor && backgroundColor !== 'transparent';
+    
     return css`
       cursor: pointer;
       transition:
         color ${animations.duration.fast} ${animations.easing.easeInOut},
-        transform ${animations.duration.fast} ${animations.easing.easeInOut};
+        transform ${animations.duration.fast} ${animations.easing.easeInOut},
+        filter ${animations.duration.fast} ${animations.easing.easeInOut};
 
       &:hover {
-        color: ${colors.primary.brand};
+        ${hasBackground ? css`
+          transform: scale(${animations.scale.small});
+          filter: brightness(${animations.brightness.small});
+        ` : css`
+          color: ${colors.primary.brand};
+        `}
       }
 
       &:active {
@@ -117,7 +126,7 @@ export const StyledIcon = styled.span.withConfig({
   border-radius: ${({ circular }) => (circular ? '50%' : '0')};
 
   /* Interactive styles */
-  ${({ clickable, disabled }) => getInteractiveStyles(clickable, disabled)};
+  ${({ clickable, disabled, backgroundColor }) => getInteractiveStyles(clickable, disabled, backgroundColor)};
 
   /* FontAwesome icon styling - 1em scales with container's font-size */
   svg {
