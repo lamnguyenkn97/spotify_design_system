@@ -13,7 +13,7 @@ import {
   faSearch,
 } from '@fortawesome/free-solid-svg-icons';
 import { ButtonSize, ButtonVariant } from '../../atoms/Button';
-import { HorizontalTileCard } from '../../molecules/horizontalTileCard';
+import { HorizontalTileCard } from '../../molecules/horizontalTIleCard';
 import { SidebarProps, LibraryItem } from './Sidebar.types';
 import { colors, spacing, sizes, animations } from '../../../styles';
 
