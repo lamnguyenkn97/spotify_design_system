@@ -13,9 +13,9 @@ import {
   faSearch,
 } from '@fortawesome/free-solid-svg-icons';
 import { ButtonSize, ButtonVariant } from '../../atoms/Button';
-import { HorizontalTileCard } from '../../molecules/horizontalTIleCard';
+import { HorizontalTileCard } from '../../molecules/horizontalTileCard';
 import { SidebarProps, LibraryItem } from './Sidebar.types';
-import { colors, spacing, sizes, animations } from '../../../styles';
+import { colors, spacing } from '../../../styles';
 
 // Sidebar configuration using design tokens
 const SIDEBAR_STYLES = {
@@ -86,7 +86,7 @@ const DEFAULT_LIBRARY_ITEMS: LibraryItem[] = [
 // Logo Section Component
 const LogoSection: React.FC<{ showLogo: boolean }> = ({ showLogo }) => {
   if (!showLogo) return null;
-  
+
   return (
     <div style={SIDEBAR_STYLES.logoSection}>
       <Stack direction="row" align="center" spacing="md">
@@ -139,10 +139,13 @@ const SearchSection: React.FC<{
 }> = ({ onSearch }) => {
   const [searchValue, setSearchValue] = useState('');
 
-  const handleSearchChange = useCallback((value: string) => {
-    setSearchValue(value);
-    onSearch?.(value);
-  }, [onSearch]);
+  const handleSearchChange = useCallback(
+    (value: string) => {
+      setSearchValue(value);
+      onSearch?.(value);
+    },
+    [onSearch]
+  );
 
   return (
     <div style={SIDEBAR_STYLES.searchSection}>
@@ -173,18 +176,18 @@ const ViewToggle: React.FC<{
 
   return (
     <div style={SIDEBAR_STYLES.viewToggleGroup}>
-      <Icon 
-        icon={faList} 
-        size="sm" 
-        clickable 
+      <Icon
+        icon={faList}
+        size="sm"
+        clickable
         onClick={handleListView}
         aria-label="List view"
         color={currentView === 'list' ? 'primary' : 'secondary'}
       />
-      <Icon 
-        icon={faGripHorizontal} 
-        size="sm" 
-        clickable 
+      <Icon
+        icon={faGripHorizontal}
+        size="sm"
+        clickable
         onClick={handleGridView}
         aria-label="Grid view"
         color={currentView === 'grid' ? 'primary' : 'secondary'}
@@ -198,9 +201,12 @@ const LibraryList: React.FC<{
   libraryItems: LibraryItem[];
   onLibraryItemClick?: (item: LibraryItem) => void;
 }> = ({ libraryItems, onLibraryItemClick }) => {
-  const handleItemClick = useCallback((item: LibraryItem) => {
-    onLibraryItemClick?.(item);
-  }, [onLibraryItemClick]);
+  const handleItemClick = useCallback(
+    (item: LibraryItem) => {
+      onLibraryItemClick?.(item);
+    },
+    [onLibraryItemClick]
+  );
 
   if (libraryItems.length === 0) {
     return (
@@ -252,25 +258,34 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
     ref
   ) => {
     // Memoized default handlers to prevent unnecessary re-renders
-    const defaultHandlers = useMemo(() => ({
-      onFilterClick: () => {},
-      onAddClick: () => {},
-      onExpandClick: () => {},
-      onSearch: () => {},
-      onLibraryItemClick: () => {},
-      onViewToggle: () => {},
-    }), []);
+    const defaultHandlers = useMemo(
+      () => ({
+        onFilterClick: () => {},
+        onAddClick: () => {},
+        onExpandClick: () => {},
+        onSearch: () => {},
+        onLibraryItemClick: () => {},
+        onViewToggle: () => {},
+      }),
+      []
+    );
 
     // Memoized merged styles
-    const mergedStyles = useMemo(() => ({
-      ...SIDEBAR_STYLES.container,
-      ...style,
-    }), [style]);
+    const mergedStyles = useMemo(
+      () => ({
+        ...SIDEBAR_STYLES.container,
+        ...style,
+      }),
+      [style]
+    );
 
     // Memoized event handlers
-    const handleFilterClick = useCallback((filter: string) => {
-      (onFilterClick || defaultHandlers.onFilterClick)(filter);
-    }, [onFilterClick, defaultHandlers.onFilterClick]);
+    const handleFilterClick = useCallback(
+      (filter: string) => {
+        (onFilterClick || defaultHandlers.onFilterClick)(filter);
+      },
+      [onFilterClick, defaultHandlers.onFilterClick]
+    );
 
     const handleAddClick = useCallback(() => {
       (onAddClick || defaultHandlers.onAddClick)();
@@ -280,64 +295,87 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
       (onExpandClick || defaultHandlers.onExpandClick)();
     }, [onExpandClick, defaultHandlers.onExpandClick]);
 
-    const handleSearch = useCallback((query: string) => {
-      (onSearch || defaultHandlers.onSearch)(query);
-    }, [onSearch, defaultHandlers.onSearch]);
+    const handleSearch = useCallback(
+      (query: string) => {
+        (onSearch || defaultHandlers.onSearch)(query);
+      },
+      [onSearch, defaultHandlers.onSearch]
+    );
 
-    const handleLibraryItemClick = useCallback((item: LibraryItem) => {
-      (onLibraryItemClick || defaultHandlers.onLibraryItemClick)(item);
-    }, [onLibraryItemClick, defaultHandlers.onLibraryItemClick]);
+    const handleLibraryItemClick = useCallback(
+      (item: LibraryItem) => {
+        (onLibraryItemClick || defaultHandlers.onLibraryItemClick)(item);
+      },
+      [onLibraryItemClick, defaultHandlers.onLibraryItemClick]
+    );
 
-    const handleViewToggle = useCallback((viewType: 'list' | 'grid') => {
-      (onViewToggle || defaultHandlers.onViewToggle)(viewType);
-    }, [onViewToggle, defaultHandlers.onViewToggle]);
+    const handleViewToggle = useCallback(
+      (viewType: 'list' | 'grid') => {
+        (onViewToggle || defaultHandlers.onViewToggle)(viewType);
+      },
+      [onViewToggle, defaultHandlers.onViewToggle]
+    );
 
     // Memoized sections for performance
-    const logoSection = useMemo(() => (
-      <LogoSection showLogo={showLogo} />
-    ), [showLogo]);
+    const logoSection = useMemo(
+      () => <LogoSection showLogo={showLogo} />,
+      [showLogo]
+    );
 
-    const titleSection = useMemo(() => (
-      <div style={SIDEBAR_STYLES.titleSection}>
-        <Typography variant="heading" weight="bold" color="primary">
-          Your Library
-        </Typography>
-      </div>
-    ), []);
-
-    const filterSection = useMemo(() => (
-      <FilterControls
-        filters={filters}
-        onFilterClick={handleFilterClick}
-        onAddClick={handleAddClick}
-        onExpandClick={handleExpandClick}
-      />
-    ), [filters, handleFilterClick, handleAddClick, handleExpandClick]);
-
-    const searchSection = useMemo(() => (
-      <SearchSection onSearch={handleSearch} />
-    ), [handleSearch]);
-
-    const recentsSection = useMemo(() => (
-      <div style={SIDEBAR_STYLES.recentsSection}>
-        <Stack direction="row" align="center" justify="space-between">
-          <Typography variant="body" color="secondary">
-            Recents
+    const titleSection = useMemo(
+      () => (
+        <div style={SIDEBAR_STYLES.titleSection}>
+          <Typography variant="heading" weight="bold" color="primary">
+            Your Library
           </Typography>
-          <ViewToggle 
-            currentView={currentView} 
-            onViewToggle={handleViewToggle}
-          />
-        </Stack>
-      </div>
-    ), [currentView, handleViewToggle]);
+        </div>
+      ),
+      []
+    );
 
-    const librarySection = useMemo(() => (
-      <LibraryList 
-        libraryItems={libraryItems}
-        onLibraryItemClick={handleLibraryItemClick}
-      />
-    ), [libraryItems, handleLibraryItemClick]);
+    const filterSection = useMemo(
+      () => (
+        <FilterControls
+          filters={filters}
+          onFilterClick={handleFilterClick}
+          onAddClick={handleAddClick}
+          onExpandClick={handleExpandClick}
+        />
+      ),
+      [filters, handleFilterClick, handleAddClick, handleExpandClick]
+    );
+
+    const searchSection = useMemo(
+      () => <SearchSection onSearch={handleSearch} />,
+      [handleSearch]
+    );
+
+    const recentsSection = useMemo(
+      () => (
+        <div style={SIDEBAR_STYLES.recentsSection}>
+          <Stack direction="row" align="center" justify="space-between">
+            <Typography variant="body" color="secondary">
+              Recents
+            </Typography>
+            <ViewToggle
+              currentView={currentView}
+              onViewToggle={handleViewToggle}
+            />
+          </Stack>
+        </div>
+      ),
+      [currentView, handleViewToggle]
+    );
+
+    const librarySection = useMemo(
+      () => (
+        <LibraryList
+          libraryItems={libraryItems}
+          onLibraryItemClick={handleLibraryItemClick}
+        />
+      ),
+      [libraryItems, handleLibraryItemClick]
+    );
 
     return (
       <nav
