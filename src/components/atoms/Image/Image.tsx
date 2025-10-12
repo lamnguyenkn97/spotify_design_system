@@ -68,6 +68,11 @@ export const Image = forwardRef<HTMLImageElement, ImageProps>(
             isLoading={false}
             onError={handleError}
             loading={lazy ? 'lazy' : 'eager'}
+            style={{
+              maxWidth: '100%',
+              maxHeight: '100%',
+              ...props.style,
+            }}
             {...props}
           />
         )}
