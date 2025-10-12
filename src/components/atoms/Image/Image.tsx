@@ -8,6 +8,7 @@ import {
 } from './Image.style';
 import { ImageProps } from './Image.types';
 import { getPlaceholderIcon } from './Image.utils';
+import { spacing } from '../../../styles';
 
 export const Image = forwardRef<HTMLImageElement, ImageProps>(
   (
@@ -51,6 +52,14 @@ export const Image = forwardRef<HTMLImageElement, ImageProps>(
       setShowPlaceholder(true);
     };
 
+    // Get size value for inline styles to prevent FOUC
+    // Use custom dimensions from props.style if provided, otherwise use design tokens
+    const customWidth = props.style?.width;
+    const customHeight = props.style?.height;
+    const sizeValue = spacing.image[size];
+    const wrapperWidth = customWidth || sizeValue;
+    const wrapperHeight = customHeight || sizeValue;
+
     return (
       <ImageWrapper
         size={size}
@@ -58,6 +67,10 @@ export const Image = forwardRef<HTMLImageElement, ImageProps>(
         variant={variant}
         isLoading={false}
         className={className}
+        style={{
+          width: wrapperWidth,
+          height: wrapperHeight,
+        }}
       >
         {/* Show image if we have a src and not showing placeholder */}
         {imageSrc && !showPlaceholder && (
@@ -69,6 +82,8 @@ export const Image = forwardRef<HTMLImageElement, ImageProps>(
             onError={handleError}
             loading={lazy ? 'lazy' : 'eager'}
             style={{
+              width: '100%',
+              height: '100%',
               maxWidth: '100%',
               maxHeight: '100%',
               ...props.style,
