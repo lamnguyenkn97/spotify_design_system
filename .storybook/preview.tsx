@@ -1,14 +1,12 @@
 import type { Preview } from '@storybook/react';
-import { GlobalStyle } from '../src/styles';
+import { ThemeProvider, GlobalStyle } from '../src/styles';
 import React from 'react';
 
 const preview: Preview = {
   parameters: {
     docs: {
-      theme: {
-        brandTitle: 'Spotify Design System (fanmade)',
-        brandUrl: 'https://github.com/lamnguyenkn97/spotify_design_system',
-        brandImage: '/logo.svg',
+      source: {
+        state: 'open', // Show code snippets by default
       },
     },
     controls: {
@@ -34,10 +32,10 @@ const preview: Preview = {
   },
   decorators: [
     (Story) => (
-      <>
+      <ThemeProvider>
         <GlobalStyle />
         <Story />
-      </>
+      </ThemeProvider>
     ),
   ],
 };

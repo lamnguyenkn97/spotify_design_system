@@ -39,9 +39,11 @@ const typographyTokens = {
   
   // Color mappings - semantic usage from design tokens
   color: {
-    primary: colors.primary.white,           // Main text
+    primary: colors.primary.white,           // Main text (for dark backgrounds)
     secondary: colors.grey.grey6,            // Secondary text
     muted: colors.grey.grey4,                // Subtle text
+    black: colors.primary.black,             // Black text (for light backgrounds)
+    inverse: colors.primary.black,           // Alias for black (for light backgrounds)
     success: colors.decorative.evergreen,    // Success states (green)
     warning: colors.decorative.mellowYellow, // Warning states (yellow)
     error: colors.decorative.redRedWine,     // Error states

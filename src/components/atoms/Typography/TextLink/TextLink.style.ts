@@ -14,6 +14,11 @@ export const StyledTextLink = styled.a.withConfig({
         return css`
           color: ${colors.grey.grey4};
         `;
+      case 'black':
+      case 'inverse':
+        return css`
+          color: ${colors.primary.black};
+        `;
       case 'danger':
         return css`
           color: ${colors.decorative.redRedWine};
