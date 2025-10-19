@@ -99,8 +99,8 @@ A simplified typography component focused on Spotify's actual needs with semanti
     },
     color: {
       control: 'select',
-      options: ['primary', 'secondary', 'muted', 'success', 'warning', 'error'],
-      description: 'Semantic color variants',
+      options: ['primary', 'secondary', 'muted', 'black', 'inverse', 'success', 'warning', 'error'],
+      description: 'Semantic color variants (black/inverse for light backgrounds)',
     },
     component: {
       control: 'text',
@@ -218,7 +218,7 @@ export const FontWeights: Story = {
 // Color variations
 export const Colors: Story = {
   render: () => {
-    const colorVariants: TypographyColor[] = ['primary', 'secondary', 'muted', 'success', 'warning', 'error'];
+    const colorVariants: TypographyColor[] = ['primary', 'secondary', 'muted', 'black', 'inverse', 'success', 'warning', 'error'];
     
     return (
       <div style={storyStyles.container}>
@@ -349,7 +349,7 @@ const InteractiveCombinationsComponent = () => {
   const variants: TypographyVariant[] = ['title', 'heading', 'body', 'caption'];
   const sizes: TypographySize[] = ['sm', 'md', 'lg', 'xl', 'xxl', '2xl'];
   const weights: TypographyWeight[] = ['light', 'regular', 'medium', 'bold'];
-  const colorOptions: TypographyColor[] = ['primary', 'secondary', 'muted', 'success', 'warning', 'error'];
+  const colorOptions: TypographyColor[] = ['primary', 'secondary', 'muted', 'black', 'inverse', 'success', 'warning', 'error'];
   
   return (
     <div style={storyStyles.container}>
@@ -564,4 +564,71 @@ export const WarningColor: Story = {
 
 export const ErrorColor: Story = {
   args: { variant: 'body', size: 'md', color: 'error', children: 'Error Color' },
+};
+
+export const BlackColor: Story = {
+  args: { variant: 'body', size: 'md', color: 'black', children: 'Black Color (for light backgrounds)' },
+};
+
+export const InverseColor: Story = {
+  args: { variant: 'body', size: 'md', color: 'inverse', children: 'Inverse Color (for light backgrounds)' },
+};
+
+// Black text on light backgrounds showcase
+export const LightBackgrounds: Story = {
+  render: () => (
+    <div style={{ backgroundColor: colors.primary.white, padding: spacing.lg }}>
+      <Stack direction="column" spacing="lg">
+        
+        {/* White background card */}
+        <div style={{ 
+          padding: spacing.xl,
+          backgroundColor: '#FFFFFF',
+          borderRadius: '12px',
+          border: '1px solid rgba(0,0,0,0.1)'
+        }}>
+          <Stack direction="column" spacing="md">
+            <Typography variant="caption" size="sm" color="black" style={{ opacity: 0.6 }}>
+              PLAYLIST
+            </Typography>
+            <Typography variant="title" size="2xl" color="black" weight="bold">
+              Your Top Songs 2024
+            </Typography>
+            <Typography variant="body" size="md" color="black" style={{ opacity: 0.8 }}>
+              Your most played songs from this year. Updates every day.
+            </Typography>
+          </Stack>
+        </div>
+
+        {/* Light grey background card */}
+        <div style={{ 
+          padding: spacing.xl,
+          backgroundColor: '#F5F5F5',
+          borderRadius: '12px'
+        }}>
+          <Stack direction="column" spacing="md">
+            <Typography variant="heading" size="xl" color="inverse" weight="bold">
+              Premium Features
+            </Typography>
+            <Typography variant="body" size="md" color="inverse">
+              Unlock unlimited skips, offline downloads, and ad-free listening with Spotify Premium.
+            </Typography>
+          </Stack>
+        </div>
+
+        {/* Success message on light background */}
+        <div style={{ 
+          padding: spacing.md,
+          backgroundColor: '#E8F5E9',
+          borderRadius: '8px',
+          border: '1px solid #4CAF50'
+        }}>
+          <Typography variant="body" size="sm" color="black" style={{ opacity: 0.9 }}>
+            ✓ Playlist successfully created
+          </Typography>
+        </div>
+
+      </Stack>
+    </div>
+  ),
 };

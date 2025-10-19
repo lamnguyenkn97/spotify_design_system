@@ -25,9 +25,11 @@ export type TypographyWeight =
 
 // Semantic color variants
 export type TypographyColor = 
-  | 'primary'   // White text
+  | 'primary'   // White text (for dark backgrounds)
   | 'secondary' // Light grey text
   | 'muted'     // Darker grey text
+  | 'black'     // Black text (for light backgrounds)
+  | 'inverse'   // Alias for black (for light backgrounds)
   | 'success'   // Green text
   | 'warning'   // Yellow text
   | 'error';    // Red text
