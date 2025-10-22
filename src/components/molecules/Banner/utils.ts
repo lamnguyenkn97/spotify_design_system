@@ -6,18 +6,17 @@ export const getImageGradient = async (imageUrl: string): Promise<string> => {
     // Create an image element to load the image
     const img = new Image();
     img.crossOrigin = 'anonymous'; // Handle CORS for external images
-    
+
     // Wait for the image to load
     await new Promise((resolve, reject) => {
       img.onload = resolve;
       img.onerror = reject;
       img.src = imageUrl;
     });
-    
+
     // Use dont-crop library to fit a gradient to the image
-    const gradient = fitGradient(img);
-    
-    return gradient;
+
+    return fitGradient(img);
   } catch (error) {
     // Silent failure with graceful fallback for production resilience
     return 'linear-gradient(135deg, rgb(35, 35, 35), rgb(15, 15, 15))';
