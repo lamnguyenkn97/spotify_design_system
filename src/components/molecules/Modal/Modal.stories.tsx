@@ -73,7 +73,7 @@ const ModalWithTrigger = (args: any) => {
  * Modal with signup flow (like Spotify's signup modal)
  */
 export const SignupModal: Story = {
-  render: () => <ModalWithTrigger {...SignupModal.args} />,
+  render: (args) => <ModalWithTrigger {...args} />,
   args: {
     size: ModalSize.Medium,
     title: 'Start listening with a free Spotify account',
@@ -114,7 +114,7 @@ export const SignupModal: Story = {
  * Simple confirmation modal
  */
 export const ConfirmationModal: Story = {
-  render: () => <ModalWithTrigger {...ConfirmationModal.args} />,
+  render: (args) => <ModalWithTrigger {...args} />,
   args: {
     size: ModalSize.Small,
     title: 'Remove from playlist?',
@@ -139,7 +139,7 @@ export const ConfirmationModal: Story = {
  * Modal with custom content
  */
 export const CustomContentModal: Story = {
-  render: () => <ModalWithTrigger {...CustomContentModal.args} />,
+  render: (args) => <ModalWithTrigger {...args} />,
   args: {
     size: ModalSize.Large,
     title: 'Choose your plan',
@@ -185,7 +185,7 @@ export const CustomContentModal: Story = {
  * Small modal without media
  */
 export const SmallModal: Story = {
-  render: () => <ModalWithTrigger {...SmallModal.args} />,
+  render: (args) => <ModalWithTrigger {...args} />,
   args: {
     size: ModalSize.Small,
     title: 'Success!',
@@ -204,7 +204,7 @@ export const SmallModal: Story = {
  * Large modal with media
  */
 export const LargeModal: Story = {
-  render: () => <ModalWithTrigger {...LargeModal.args} />,
+  render: (args) => <ModalWithTrigger {...args} />,
   args: {
     size: ModalSize.Large,
     title: 'Lover',
@@ -231,7 +231,7 @@ export const LargeModal: Story = {
  * Modal without close button
  */
 export const NoCloseButton: Story = {
-  render: () => <ModalWithTrigger {...NoCloseButton.args} />,
+  render: (args) => <ModalWithTrigger {...args} />,
   args: {
     size: ModalSize.Medium,
     title: 'Action required',
