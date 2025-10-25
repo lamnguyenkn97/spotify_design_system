@@ -18,8 +18,8 @@ export const spacing = {
   // Card-specific positioning
   card: {
     playButton: {
-      bottom: '12px',
-      right: '8px',
+      top: '30%',
+      right: '20%',
     },
   },
 };

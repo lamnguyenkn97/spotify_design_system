@@ -26,9 +26,21 @@ export const sizes = {
     width: {
       sm: '160px',
       md: '200px',
+      category: '200px',
+    },
+    height: {
+      category: '120px',
     },
     image: {
       borderRadius: '8px',
+    },
+    overlay: {
+      width: '100px',
+      height: '100px',
+      borderRadius: '4px',
+      rotation: '25deg',
+      bottomOffset: '-20px',
+      rightOffset: '-40px',
     },
   },
 
