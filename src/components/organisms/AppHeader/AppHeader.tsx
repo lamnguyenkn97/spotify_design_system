@@ -1,5 +1,5 @@
 import React, { forwardRef, useCallback, useMemo } from 'react';
-import { AppHeaderProps, User } from './AppHeader.types';
+import { AppHeaderProps, User, HeaderAction, HeaderLink } from './AppHeader.types';
 import {
   Button,
   Divider,
@@ -49,12 +49,12 @@ const NAVIGATION_ITEMS = [
   { icon: faHome, size: 'md' as const, label: 'Home' },
 ] as const;
 
-// Guest menu items
-const GUEST_MENU_ITEMS = [
-  { text: 'Premium', href: '#' },
-  { text: 'Support', href: '#' },
-  { text: 'Download', href: '#' },
-] as const;
+// Default guest menu items (fallback)
+const DEFAULT_GUEST_LINKS: HeaderLink[] = [
+  { id: 'premium', label: 'Premium', href: '#' },
+  { id: 'support', label: 'Support', href: '#' },
+  { id: 'download', label: 'Download', href: '#' },
+];
 
 export const AppHeader = forwardRef<HTMLElement, AppHeaderProps>(
   (
@@ -67,6 +67,11 @@ export const AppHeader = forwardRef<HTMLElement, AppHeaderProps>(
       onHomeClick,
       user,
       className,
+      customActions = [],
+      customLinks,
+      showInstallApp = true,
+      showAuthButtons = true,
+      showCustomLinks = true,
       ...props
     },
     ref
@@ -97,6 +102,50 @@ export const AppHeader = forwardRef<HTMLElement, AppHeaderProps>(
     const handleSignUp = useCallback(() => {
       onSignUp();
     }, [onSignUp]);
+
+    // Helper function to render custom actions
+    const renderCustomActions = useCallback((actions: HeaderAction[]) => {
+      return actions.map((action) => {
+        if (action.type === 'link' && action.href) {
+          return (
+            <TextLink
+              key={action.id}
+              component="a"
+              href={action.href}
+              aria-label={action.label}
+            >
+              {action.label}
+            </TextLink>
+          );
+        }
+
+        return (
+          <Button
+            key={action.id}
+            onClick={action.onClick}
+            text={action.label}
+            icon={action.icon}
+            variant={action.variant as ButtonVariant || ButtonVariant.Text}
+            size={ButtonSize.Small}
+            aria-label={action.label}
+          />
+        );
+      });
+    }, []);
+
+    // Helper function to render custom links
+    const renderCustomLinks = useCallback((links: HeaderLink[]) => {
+      return links.map((link) => (
+        <TextLink
+          key={link.id}
+          component="a"
+          href={link.href}
+          aria-label={link.label}
+        >
+          {link.label}
+        </TextLink>
+      ));
+    }, []);
 
     // Memoized user avatar display
     const userAvatarDisplay = useMemo(() => {
@@ -150,60 +199,69 @@ export const AppHeader = forwardRef<HTMLElement, AppHeaderProps>(
     // Memoized authenticated user section
     const authenticatedSection = useMemo(() => (
       <Stack direction="row" spacing="md" align="center">
-        <Button
-          onClick={handleInstallApp}
-          text="Install App"
-          icon={<Icon icon={faDownload} size="sm" />}
-          variant={ButtonVariant.Text}
-          size={ButtonSize.Small}
-          aria-label="Install Spotify app"
-        />
+        {showInstallApp && (
+          <Button
+            onClick={handleInstallApp}
+            text="Install App"
+            icon={<Icon icon={faDownload} size="sm" />}
+            variant={ButtonVariant.Text}
+            size={ButtonSize.Small}
+            aria-label="Install Spotify app"
+          />
+        )}
+        {renderCustomActions(customActions)}
         {userAvatarDisplay}
       </Stack>
-    ), [handleInstallApp, userAvatarDisplay]);
+    ), [handleInstallApp, userAvatarDisplay, showInstallApp, customActions, renderCustomActions]);
 
     // Memoized guest user section
-    const guestSection = useMemo(() => (
-      <Stack direction="row" spacing="md" align="center">
-        {GUEST_MENU_ITEMS.map((item, index) => (
-          <TextLink 
-            key={index}
-            component="a"
-            href={item.href}
-            aria-label={item.text}
-          >
-            {item.text}
-          </TextLink>
-        ))}
-        
-        <Divider orientation="vertical" color="secondary" />
-        
-        <Button
-          variant={ButtonVariant.Text}
-          onClick={handleInstallApp}
-          icon={<Icon icon={faDownload} size="sm" />}
-          text="Install App"
-          size={ButtonSize.Small}
-          aria-label="Install Spotify app"
-        />
-        
-        <Button
-          onClick={handleSignUp}
-          text="Sign Up"
-          variant={ButtonVariant.White}
-          size={ButtonSize.Small}
-          aria-label="Sign up for Spotify"
-        />
-        
-        <Button
-          onClick={handleLogin}
-          variant={ButtonVariant.White}
-          text="Log In"
-          size={ButtonSize.Small}
-          aria-label="Log in to Spotify"
-        />
-      </Stack>
-    ), [handleInstallApp, handleSignUp, handleLogin]);
+    const guestSection = useMemo(() => {
+      const linksToShow = customLinks || DEFAULT_GUEST_LINKS;
+      const hasLinks = showCustomLinks && linksToShow.length > 0;
+      const hasInstallApp = showInstallApp;
+      const hasAuthButtons = showAuthButtons;
+      
+      return (
+        <Stack direction="row" spacing="md" align="center">
+          {hasLinks && renderCustomLinks(linksToShow)}
+          
+          {(hasLinks && (hasInstallApp || hasAuthButtons)) && (
+            <Divider orientation="vertical" color="secondary" />
+          )}
+          
+          {hasInstallApp && (
+            <Button
+              variant={ButtonVariant.Text}
+              onClick={handleInstallApp}
+              icon={<Icon icon={faDownload} size="sm" />}
+              text="Install App"
+              size={ButtonSize.Small}
+              aria-label="Install Spotify app"
+            />
+          )}
+          
+          {hasAuthButtons && (
+            <>
+              <Button
+                onClick={handleSignUp}
+                text="Sign Up"
+                variant={ButtonVariant.White}
+                size={ButtonSize.Small}
+                aria-label="Sign up for Spotify"
+              />
+              
+              <Button
+                onClick={handleLogin}
+                variant={ButtonVariant.White}
+                text="Log In"
+                size={ButtonSize.Small}
+                aria-label="Log in to Spotify"
+              />
+            </>
+          )}
+        </Stack>
+      );
+    }, [handleInstallApp, handleSignUp, handleLogin, customLinks, showCustomLinks, showInstallApp, showAuthButtons, renderCustomLinks]);
 
     return (
       <header

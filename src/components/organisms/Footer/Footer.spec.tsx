@@ -2,6 +2,8 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { ThemeProvider } from '../../../styles/ThemeProvider';
 import { Footer } from './Footer';
+import { FooterLinkItem, SocialLinkItem } from './Footer.types';
+import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 
 const renderWithTheme = (component: React.ReactElement) => {
   return render(<ThemeProvider>{component}</ThemeProvider>);
@@ -116,5 +118,224 @@ describe('Footer Component', () => {
     const footer = screen.getByTestId('footer-test');
     expect(footer).toBeInTheDocument();
     expect(footer).toHaveAttribute('role', 'contentinfo');
+  });
+
+  // Dynamic Configuration Tests
+  describe('Dynamic Configuration', () => {
+    describe('Custom Links', () => {
+      it('should render custom footer links', () => {
+        const customLinks: FooterLinkItem[] = [
+          {
+            title: 'Product',
+            links: [
+              { name: 'Features', url: '#features' },
+              { name: 'Pricing', url: '#pricing' },
+            ],
+          },
+          {
+            title: 'Company',
+            links: [
+              { name: 'About Us', url: '#about' },
+              { name: 'Contact', url: '#contact' },
+            ],
+          },
+        ];
+
+        renderWithTheme(<Footer customLinks={customLinks} />);
+
+        expect(screen.getByRole('heading', { name: 'Product' })).toBeInTheDocument();
+        expect(screen.getByRole('heading', { name: 'Company' })).toBeInTheDocument();
+        expect(screen.getByRole('link', { name: 'Features' })).toBeInTheDocument();
+        expect(screen.getByRole('link', { name: 'Pricing' })).toBeInTheDocument();
+        expect(screen.getByRole('link', { name: 'About Us' })).toBeInTheDocument();
+        expect(screen.getByRole('link', { name: 'Contact' })).toBeInTheDocument();
+      });
+
+      it('should call custom link onClick handlers', () => {
+        const mockOnClick = jest.fn();
+        const customLinks: FooterLinkItem[] = [
+          {
+            title: 'Actions',
+            links: [
+              { name: 'Download', url: '#download', onClick: mockOnClick },
+            ],
+          },
+        ];
+
+        renderWithTheme(<Footer customLinks={customLinks} />);
+
+        const downloadLink = screen.getByRole('link', { name: 'Download' });
+        fireEvent.click(downloadLink);
+        expect(mockOnClick).toHaveBeenCalledTimes(1);
+      });
+
+      it('should hide default links when custom links are provided', () => {
+        const customLinks: FooterLinkItem[] = [
+          {
+            title: 'Custom',
+            links: [{ name: 'Custom Link', url: '#custom' }],
+          },
+        ];
+
+        renderWithTheme(<Footer customLinks={customLinks} />);
+
+        // Default links should not be present
+        expect(screen.queryByRole('heading', { name: 'Company' })).not.toBeInTheDocument();
+        expect(screen.queryByRole('heading', { name: 'Communities' })).not.toBeInTheDocument();
+        
+        // Custom links should be present
+        expect(screen.getByRole('heading', { name: 'Custom' })).toBeInTheDocument();
+        expect(screen.getByRole('link', { name: 'Custom Link' })).toBeInTheDocument();
+      });
+    });
+
+    describe('Custom Social Links', () => {
+      it('should render custom social media links', () => {
+        const customSocialLinks: SocialLinkItem[] = [
+          { icon: faGithub, url: '#github', label: 'GitHub' },
+          { icon: faLinkedin, url: '#linkedin', label: 'LinkedIn' },
+        ];
+
+        renderWithTheme(<Footer customSocialLinks={customSocialLinks} />);
+
+        expect(screen.getByLabelText('Visit our GitHub page')).toBeInTheDocument();
+        expect(screen.getByLabelText('Visit our LinkedIn page')).toBeInTheDocument();
+      });
+
+      it('should call custom social link onClick handlers', () => {
+        const mockOnClick = jest.fn();
+        const customSocialLinks: SocialLinkItem[] = [
+          { icon: faGithub, url: '#github', label: 'GitHub', onClick: mockOnClick },
+        ];
+
+        renderWithTheme(<Footer customSocialLinks={customSocialLinks} />);
+
+        const githubLink = screen.getByLabelText('Visit our GitHub page');
+        fireEvent.click(githubLink);
+        expect(mockOnClick).toHaveBeenCalledTimes(1);
+      });
+
+      it('should hide default social links when custom social links are provided', () => {
+        const customSocialLinks: SocialLinkItem[] = [
+          { icon: faGithub, url: '#github', label: 'GitHub' },
+        ];
+
+        renderWithTheme(<Footer customSocialLinks={customSocialLinks} />);
+
+        // Default social links should not be present
+        expect(screen.queryByLabelText('Visit our Instagram page')).not.toBeInTheDocument();
+        expect(screen.queryByLabelText('Visit our Twitter page')).not.toBeInTheDocument();
+        expect(screen.queryByLabelText('Visit our Facebook page')).not.toBeInTheDocument();
+        
+        // Custom social links should be present
+        expect(screen.getByLabelText('Visit our GitHub page')).toBeInTheDocument();
+      });
+    });
+
+    describe('Visibility Controls', () => {
+      it('should hide links when showLinks is false', () => {
+        renderWithTheme(<Footer showLinks={false} />);
+
+        expect(screen.queryByRole('heading', { name: 'Company' })).not.toBeInTheDocument();
+        expect(screen.queryByRole('heading', { name: 'Communities' })).not.toBeInTheDocument();
+        expect(screen.queryByRole('heading', { name: 'Useful Links' })).not.toBeInTheDocument();
+        expect(screen.queryByRole('heading', { name: 'Spotify Plans' })).not.toBeInTheDocument();
+      });
+
+      it('should hide social links when showSocialLinks is false', () => {
+        renderWithTheme(<Footer showSocialLinks={false} />);
+
+        expect(screen.queryByLabelText(/Visit our .* page/)).toBeNull();
+      });
+
+      it('should hide copyright when showCopyright is false', () => {
+        renderWithTheme(<Footer showCopyright={false} />);
+
+        expect(screen.queryByText('© 2024 Spotify AB')).not.toBeInTheDocument();
+      });
+
+      it('should show custom copyright text', () => {
+        const customCopyright = '© 2024 My Awesome Company';
+        renderWithTheme(<Footer copyrightText={customCopyright} />);
+
+        expect(screen.getByText(customCopyright)).toBeInTheDocument();
+        expect(screen.queryByText('© 2024 Spotify AB')).not.toBeInTheDocument();
+      });
+    });
+
+    describe('Minimal Configuration', () => {
+      it('should render minimal footer with all features disabled', () => {
+        renderWithTheme(
+          <Footer 
+            showLinks={false} 
+            showSocialLinks={false} 
+            showCopyright={false} 
+          />
+        );
+
+        // Should not show any links, social media, or copyright
+        expect(screen.queryByRole('heading')).not.toBeInTheDocument();
+        expect(screen.queryByRole('link')).not.toBeInTheDocument();
+        expect(screen.queryByText(/©/)).not.toBeInTheDocument();
+        
+        // Should still have the footer container
+        expect(screen.getByRole('contentinfo')).toBeInTheDocument();
+      });
+
+      it('should render only copyright when other features are disabled', () => {
+        const customCopyright = '© 2024 Minimal Footer';
+        renderWithTheme(
+          <Footer 
+            showLinks={false} 
+            showSocialLinks={false} 
+            copyrightText={customCopyright}
+          />
+        );
+
+        expect(screen.getByText(customCopyright)).toBeInTheDocument();
+        expect(screen.queryByRole('heading')).not.toBeInTheDocument();
+        expect(screen.queryByLabelText(/Visit our .* page/)).toBeNull();
+      });
+    });
+
+    describe('Mixed Configuration', () => {
+      it('should render custom links with default social links', () => {
+        const customLinks: FooterLinkItem[] = [
+          {
+            title: 'Custom',
+            links: [{ name: 'Custom Link', url: '#custom' }],
+          },
+        ];
+
+        renderWithTheme(<Footer customLinks={customLinks} />);
+
+        // Custom links should be present
+        expect(screen.getByRole('heading', { name: 'Custom' })).toBeInTheDocument();
+        expect(screen.getByRole('link', { name: 'Custom Link' })).toBeInTheDocument();
+        
+        // Default social links should still be present
+        expect(screen.getByLabelText('Visit our Instagram page')).toBeInTheDocument();
+        expect(screen.getByLabelText('Visit our Twitter page')).toBeInTheDocument();
+        expect(screen.getByLabelText('Visit our Facebook page')).toBeInTheDocument();
+      });
+
+      it('should render default links with custom social links', () => {
+        const customSocialLinks: SocialLinkItem[] = [
+          { icon: faGithub, url: '#github', label: 'GitHub' },
+        ];
+
+        renderWithTheme(<Footer customSocialLinks={customSocialLinks} />);
+
+        // Default links should be present
+        expect(screen.getByRole('heading', { name: 'Company' })).toBeInTheDocument();
+        expect(screen.getByRole('heading', { name: 'Communities' })).toBeInTheDocument();
+        
+        // Custom social links should be present
+        expect(screen.getByLabelText('Visit our GitHub page')).toBeInTheDocument();
+        
+        // Default social links should not be present
+        expect(screen.queryByLabelText('Visit our Instagram page')).not.toBeInTheDocument();
+      });
+    });
   });
 }); 
