@@ -7,6 +7,7 @@ import {
 import { FooterLinkItem, SocialLinkItem, FooterProps } from './Footer.types';
 import { Stack } from '../../atoms/Stack';
 import { Typography } from '../../atoms/Typography/Text/Typography';
+import { TextLink } from '../../atoms/Typography/TextLink/TextLink';
 import { Icon } from '../../atoms/Icon/Icon';
 import { 
   colors, 
@@ -16,8 +17,8 @@ import {
   borderRadius 
 } from '../../../styles';
 
-// Footer data configuration
-const footerLinks: FooterLinkItem[] = [
+// Default footer data (fallback)
+const DEFAULT_FOOTER_LINKS: FooterLinkItem[] = [
   {
     title: 'Company',
     links: [
@@ -53,10 +54,10 @@ const footerLinks: FooterLinkItem[] = [
   },
 ];
 
-const socialLinks: SocialLinkItem[] = [
-  { icon: faInstagram, url: '#' },
-  { icon: faTwitter, url: '#' },
-  { icon: faFacebook, url: '#' },
+const DEFAULT_SOCIAL_LINKS: SocialLinkItem[] = [
+  { icon: faInstagram, url: '#', label: 'Instagram' },
+  { icon: faTwitter, url: '#', label: 'Twitter' },
+  { icon: faFacebook, url: '#', label: 'Facebook' },
 ];
 
 // Helper function to get icon name for accessibility
@@ -86,19 +87,6 @@ const FOOTER_STYLES = {
     marginTop: spacing.md,
   },
   
-  // Footer link styles
-  link: {
-    base: {
-      textDecoration: 'none',
-      fontSize: `${fontSizes.sm}rem`,
-      transition: animations.transitions.colors,
-      display: 'block',
-    },
-    getStyles: (isHovered: boolean): React.CSSProperties => ({
-      color: isHovered ? colors.primary.white : colors.grey.grey6,
-    }),
-  },
-  
   // Social icon wrapper
   socialIcon: {
     display: 'inline-block',
@@ -116,21 +104,24 @@ const FOOTER_STYLES = {
 } as const;
 
 // Footer Link Component
-const FooterLink: React.FC<{ name: string; url: string }> = ({ name, url }) => {
-  const [isHovered, setIsHovered] = useState(false);
+const FooterLink: React.FC<{ name: string; url: string; onClick?: () => void }> = ({ name, url, onClick }) => {
+  const handleClick = (e: React.MouseEvent) => {
+    if (onClick) {
+      e.preventDefault();
+      onClick();
+    }
+  };
 
   return (
-    <a
+    <TextLink
       href={url}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      style={{
-        ...FOOTER_STYLES.link.base,
-        ...FOOTER_STYLES.link.getStyles(isHovered),
-      }}
+      onClick={handleClick}
+      variant="muted"
+      weight="regular"
+      underline={false}
     >
       {name}
-    </a>
+    </TextLink>
   );
 };
 
@@ -138,14 +129,25 @@ const FooterLink: React.FC<{ name: string; url: string }> = ({ name, url }) => {
 const SocialIcon: React.FC<{ social: SocialLinkItem }> = ({ social }) => {
   const [isHovered, setIsHovered] = useState(false);
   
-  // Get icon name from helper function
-  const iconName = getIconName(social.icon);
+  // Get icon name from helper function or use custom label
+  const iconName = social.label || getIconName(social.icon);
+
+  const handleClick = (e: React.MouseEvent) => {
+    if (social.onClick) {
+      e.preventDefault();
+      social.onClick();
+    }
+  };
 
   return (
-    <a
+    <TextLink
       href={social.url}
+      onClick={handleClick}
       target="_blank"
       rel="noopener noreferrer"
+      variant="muted"
+      weight="regular"
+      underline={false}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       style={{
@@ -160,12 +162,25 @@ const SocialIcon: React.FC<{ social: SocialLinkItem }> = ({ social }) => {
         color="primary"
         clickable
       />
-    </a>
+    </TextLink>
   );
 };
 
 export const Footer = forwardRef<HTMLDivElement, FooterProps>(
-  ({ className, ...props }, ref) => {
+  ({ 
+    className, 
+    customLinks,
+    customSocialLinks,
+    showSocialLinks = true,
+    showLinks = true,
+    copyrightText = '© 2024 Spotify AB',
+    showCopyright = true,
+    ...props 
+  }, ref) => {
+    // Use custom data or fallback to defaults
+    const linksToShow = customLinks || DEFAULT_FOOTER_LINKS;
+    const socialLinksToShow = customSocialLinks || DEFAULT_SOCIAL_LINKS;
+
     return (
       <div
         ref={ref}
@@ -184,7 +199,7 @@ export const Footer = forwardRef<HTMLDivElement, FooterProps>(
             style={FOOTER_STYLES.content}
           >
             {/* Footer Links Columns */}
-            {footerLinks.map((column, index) => (
+            {showLinks && linksToShow.map((column, index) => (
               <Stack key={index} direction="column" spacing="sm" align="start">
                 <Typography
                   variant="body"
@@ -196,24 +211,44 @@ export const Footer = forwardRef<HTMLDivElement, FooterProps>(
                 </Typography>
                 <Stack direction="column" spacing="sm">
                   {column.links.map((link, linkIndex) => (
-                    <FooterLink key={linkIndex} name={link.name} url={link.url} />
+                    <FooterLink 
+                      key={linkIndex} 
+                      name={link.name} 
+                      url={link.url} 
+                      onClick={link.onClick}
+                    />
                   ))}
                 </Stack>
               </Stack>
             ))}
 
             {/* Social Icons */}
-            <Stack
-              direction="row"
-              spacing="md"
-              align="center"
-              style={FOOTER_STYLES.socialContainer}
-            >
-              {socialLinks.map((social, index) => (
-                <SocialIcon key={index} social={social} />
-              ))}
-            </Stack>
+            {showSocialLinks && (
+              <Stack
+                direction="row"
+                spacing="md"
+                align="center"
+                style={FOOTER_STYLES.socialContainer}
+              >
+                {socialLinksToShow.map((social, index) => (
+                  <SocialIcon key={index} social={social} />
+                ))}
+              </Stack>
+            )}
           </Stack>
+
+          {/* Copyright */}
+          {showCopyright && (
+            <Stack direction="row" justify="center" align="center">
+              <Typography
+                variant="body"
+                color="secondary"
+                style={{ fontSize: `${fontSizes.sm}rem` }}
+              >
+                {copyrightText}
+              </Typography>
+            </Stack>
+          )}
         </Stack>
       </div>
     );
