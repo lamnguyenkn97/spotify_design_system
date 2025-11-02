@@ -24,10 +24,10 @@ const getCardDimensions = (size: CardSize) => {
   return sizeMap[size];
 };
 
-// Play button positioning using design tokens
+// Play button positioning using design tokens - positioned to the right of center
 const getPlayButtonPosition = () => ({
-  top: '30%',
-  right: '20%',
+  top: '50%',
+  left: '60%',
 });
 
 // Style configuration using design tokens - Spotify playlist card style
@@ -61,13 +61,17 @@ const getCardStyles = (isHovered: boolean, size: CardSize) => {
     playButtonContainer: {
       position: 'absolute' as const,
       top: playButtonPos.top,
-      right: playButtonPos.right,
+      left: playButtonPos.left,
       opacity: isHovered ? 1 : 0,
       transition: animations.transitions.all,
       transform: isHovered
-        ? 'translateY(0) scale(1)'
-        : 'translateY(8px) scale(0.8)',
+        ? 'translate(-50%, -50%) scale(1)'
+        : 'translate(-50%, -50%) translateY(8px) scale(0.8)',
       zIndex: sizes.zIndex.dropdown,
+      width: 'auto',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
     },
 
     contentContainer: {
@@ -178,19 +182,19 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
 
           {/* Play Button */}
           {showPlayButton && onPlayClick && (
-            <Stack style={styles.playButtonContainer}>
+            <div style={styles.playButtonContainer}>
               <Icon
                 color="primary"
                 backgroundColor={colors.primary.brand}
                 circular
                 clickable
                 icon={faPlay}
-                size="md"
+                size="sm"
                 onClick={onPlayClick}
                 aria-label={`Play ${title}`}
                 style={{ cursor: 'pointer' }}
               />
-            </Stack>
+            </div>
           )}
         </Stack>
 

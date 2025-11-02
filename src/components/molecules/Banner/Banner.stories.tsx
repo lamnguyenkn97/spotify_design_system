@@ -1,6 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 import { Banner } from './Banner';
+import { Table } from '../../atoms/Table';
+import { Stack } from '../../atoms/Stack';
+import { Typography } from '../../atoms/Typography/Text';
+import { Image } from '../../atoms/Image';
+import { colors, spacing } from '../../../styles';
 
 const meta: Meta<typeof Banner> = {
   title: 'Molecules/Banner',
