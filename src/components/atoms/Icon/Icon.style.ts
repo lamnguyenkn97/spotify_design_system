@@ -107,15 +107,30 @@ export const StyledIcon = styled.span.withConfig({
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  line-height: 1;
+  line-height: 0; /* Prevent line-height from affecting centering */
+  box-sizing: border-box; /* Include padding in width/height calculation */
 
   /* Size styles */
-  width: ${({ size }) => getSizeValue(size)};
-  height: ${({ size }) => getSizeValue(size)};
+  /* For circular icons with background, ensure equal width and height */
+  width: ${({ size, backgroundColor, circular }) => {
+    const baseSize = getSizeValue(size);
+    // For circular backgrounds, container should be perfectly square
+    if (circular && backgroundColor && backgroundColor !== 'transparent') {
+      return `calc(${baseSize} * 3)`; // base + padding-left + padding-right
+    }
+    return baseSize;
+  }};
+  height: ${({ size, backgroundColor, circular }) => {
+    const baseSize = getSizeValue(size);
+    // For circular backgrounds, container should be perfectly square
+    if (circular && backgroundColor && backgroundColor !== 'transparent') {
+      return `calc(${baseSize} * 3)`; // base + padding-top + padding-bottom
+    }
+    return baseSize;
+  }};
   font-size: ${({ size }) => getSizeValue(size)};
   padding: ${({ size, backgroundColor }) => {
     // If background color is set, add padding to create space around the icon
-    // Padding expands the container size (box-sizing: content-box by default)
     return backgroundColor && backgroundColor !== 'transparent' ? getSizeValue(size) : '0';
   }};
 
@@ -135,6 +150,8 @@ export const StyledIcon = styled.span.withConfig({
     width: 1em; /* Scales with the icon container's font-size (design token) */
     height: 1em; /* Scales with the icon container's font-size (design token) */
     flex-shrink: 0; /* Prevents icon from shrinking */
+    margin: 0; /* Ensure no default margins */
+    padding: 0; /* Ensure no default padding */
   }
 `;
 

@@ -236,6 +236,12 @@ describe('Sidebar Component', () => {
       );
       
       const searchInput = screen.getByPlaceholderText('Search in Your Library');
+      
+      // First set a value to test clearing it
+      fireEvent.change(searchInput, { target: { value: 'test' } });
+      expect(mockOnSearch).toHaveBeenCalledWith('test');
+      
+      // Then clear it to empty
       fireEvent.change(searchInput, { target: { value: '' } });
       
       expect(searchInput).toHaveValue('');

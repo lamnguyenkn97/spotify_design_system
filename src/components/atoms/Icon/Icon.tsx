@@ -1,6 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SizeProp } from '@fortawesome/fontawesome-svg-core';
+import { Stack } from '../Stack';
 import { StyledIcon, iconDefaults } from './Icon.style';
 import { IconProps } from './Icon.types';
 
@@ -55,11 +56,19 @@ export const Icon: React.FC<IconProps> = ({
       {...accessibilityProps}
       {...props}
     >
-      <FontAwesomeIcon
-        icon={icon}
-        size={fontAwesomeSize}
-        spin={spin}
-      />
+      <Stack
+        direction="row"
+        align="center"
+        justify="center"
+        spacing="xs"
+        style={{ width: '100%', height: '100%', gap: 0 }}
+      >
+        <FontAwesomeIcon
+          icon={icon}
+          size={fontAwesomeSize}
+          spin={spin}
+        />
+      </Stack>
     </StyledIcon>
   );
 };
