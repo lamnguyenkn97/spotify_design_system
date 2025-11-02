@@ -10,6 +10,14 @@ export const TextLink: React.FC<TextLinkProps> = ({
   underline = false,
   children,
   className = '',
+  target,
+  rel,
+  onClick,
+  onMouseEnter,
+  onMouseLeave,
+  style,
+  'aria-label': ariaLabel,
+  ...restProps
 }) => {
   const isExternal = href?.startsWith('http');
   const Component = component as React.ElementType;
@@ -18,12 +26,18 @@ export const TextLink: React.FC<TextLinkProps> = ({
     <StyledTextLink
       as={Component}
       href={href}
-      target={isExternal ? '_blank' : undefined}
-      rel={isExternal ? 'noopener noreferrer' : undefined}
+      target={target || (isExternal ? '_blank' : undefined)}
+      rel={rel || (isExternal ? 'noopener noreferrer' : undefined)}
       variant={variant}
       weight={weight}
       underline={underline}
       className={className}
+      onClick={onClick}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      style={style}
+      aria-label={ariaLabel}
+      {...restProps}
     >
       {children}
     </StyledTextLink>

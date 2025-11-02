@@ -35,10 +35,6 @@ export default {
       action: 'login',
       description: 'Login handler',
     },
-    onSignUp: {
-      action: 'signup',
-      description: 'Sign up handler',
-    },
     onInstallApp: {
       action: 'install',
       description: 'Install app handler',
@@ -77,7 +73,6 @@ LoggedOut.args = {
   isAuthenticated: false,
   onSearch: (value) => console.log('Searching for:', value),
   onLogin: () => alert('Log in clicked'),
-  onSignUp: () => alert('Sign up clicked'),
   onInstallApp: () => alert('Install App clicked'),
   onHomeClick: () => alert('Home clicked'),
 };
@@ -91,7 +86,6 @@ LoggedIn.args = {
   },
   onSearch: (value) => console.log('Searching for:', value),
   onLogin: () => alert('Log in clicked'),
-  onSignUp: () => alert('Sign up clicked'),
   onInstallApp: () => alert('Install App clicked'),
   onHomeClick: () => alert('Home clicked'),
 };
@@ -101,7 +95,6 @@ LoggedInWithoutUser.args = {
   isAuthenticated: true,
   onSearch: (value) => console.log('Searching for:', value),
   onLogin: () => alert('Log in clicked'),
-  onSignUp: () => alert('Sign up clicked'),
   onInstallApp: () => alert('Install App clicked'),
   onHomeClick: () => alert('Home clicked'),
 };
@@ -112,7 +105,6 @@ MinimalGuest.args = {
   isAuthenticated: false,
   onSearch: (value) => console.log('Searching for:', value),
   onLogin: () => alert('Log in clicked'),
-  onSignUp: () => alert('Sign up clicked'),
   onInstallApp: () => alert('Install App clicked'),
   onHomeClick: () => alert('Home clicked'),
   showInstallApp: false,
@@ -125,7 +117,6 @@ CustomGuestLinks.args = {
   isAuthenticated: false,
   onSearch: (value) => console.log('Searching for:', value),
   onLogin: () => alert('Log in clicked'),
-  onSignUp: () => alert('Sign up clicked'),
   onInstallApp: () => alert('Install App clicked'),
   onHomeClick: () => alert('Home clicked'),
   customLinks: [
@@ -145,7 +136,6 @@ CustomAuthenticatedActions.args = {
   },
   onSearch: (value) => console.log('Searching for:', value),
   onLogin: () => alert('Log in clicked'),
-  onSignUp: () => alert('Sign up clicked'),
   onInstallApp: () => alert('Install App clicked'),
   onHomeClick: () => alert('Home clicked'),
   customActions: [
@@ -183,7 +173,6 @@ MixedCustomActions.args = {
   },
   onSearch: (value) => console.log('Searching for:', value),
   onLogin: () => alert('Log in clicked'),
-  onSignUp: () => alert('Sign up clicked'),
   onInstallApp: () => alert('Install App clicked'),
   onHomeClick: () => alert('Home clicked'),
   customActions: [

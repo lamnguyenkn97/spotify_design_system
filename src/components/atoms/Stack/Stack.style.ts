@@ -38,6 +38,7 @@ export const StyledStack = styled.div.withConfig({
   justify: StackJustify;
 }>`
   display: flex;
+  width: 100%;
   flex-direction: ${({ direction }) => direction};
   align-items: ${({ align }) => align};
   justify-content: ${({ justify }) => justify};

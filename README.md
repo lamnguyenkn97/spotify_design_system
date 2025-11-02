@@ -344,6 +344,60 @@ function SpotifyApp() {
 }
 ```
 
+### Using Design Tokens
+
+The design system exports all design tokens (colors, spacing, typography, etc.) for use in your own components:
+
+```tsx
+import { colors, spacing, borderRadius } from 'spotify-design-system';
+
+function CustomComponent() {
+  return (
+    <div
+      style={{
+        backgroundColor: colors.primary.black,
+        padding: spacing.lg,
+        borderRadius: borderRadius.md,
+        color: colors.primary.white,
+      }}
+    >
+      <h2 style={{ color: colors.primary.brand }}>
+        Using Design Tokens
+      </h2>
+      <p style={{ color: colors.grey.grey6 }}>
+        Consistent styling across your app
+      </p>
+    </div>
+  );
+}
+```
+
+**Available Design Tokens:**
+- `colors` - Color palette (primary, grey, decorative, image)
+- `spacing` - Spacing scale (xs, sm, md, lg, xl, xxl, etc.)
+- `fontSizes` - Typography sizes
+- `fontFamilies` - Font families
+- `fontWeights` - Font weights
+- `lineHeights` - Line height scale
+- `borderRadius` - Border radius values
+- `animations` - Animation durations and easing
+- `opacity` - Opacity values
+- `shadows` - Shadow definitions
+
+**Example:**
+```tsx
+import { colors, spacing } from 'spotify-design-system';
+
+// Primary brand color
+const brandGreen = colors.primary.brand; // '#57B660'
+
+// Grey scale
+const lightGrey = colors.grey.grey3; // 'rgba(255, 255, 255, 0.2)'
+
+// Spacing
+const mediumPadding = spacing.lg; // '20px'
+```
+
 ### Explore Components
 
 **📚 Interactive Documentation**: [https://spotify-storybook.vercel.app](https://spotify-storybook.vercel.app)

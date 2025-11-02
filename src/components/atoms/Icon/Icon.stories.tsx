@@ -44,6 +44,10 @@ const meta: Meta<typeof Icon> = {
   },
   tags: ['autodocs'],
   argTypes: {
+    icon: {
+      control: false,
+      description: 'FontAwesome icon definition',
+    },
     size: {
       control: 'select',
       options: ['sm', 'md', 'lg'],

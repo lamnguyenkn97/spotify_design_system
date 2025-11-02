@@ -37,7 +37,6 @@ The component uses design tokens for consistent styling:
 const BANNER_STYLES = {
   container: {
     height: sizes.container.banner,    // Standard banner height
-    borderRadius: borderRadius.lg,     // Large rounded corners
     padding: spacing.md,               // Medium padding
   },
   enhancedImage: {

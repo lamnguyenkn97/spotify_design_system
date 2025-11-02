@@ -17,7 +17,6 @@ const defaultProps: AppHeaderProps = {
   isAuthenticated: false,
   onSearch: jest.fn(),
   onLogin: jest.fn(),
-  onSignUp: jest.fn(),
   onInstallApp: jest.fn(),
   onHomeClick: jest.fn(),
 };
@@ -57,7 +56,6 @@ describe('AppHeader', () => {
       expect(screen.getByText('Premium')).toBeInTheDocument();
       expect(screen.getByText('Support')).toBeInTheDocument();
       expect(screen.getByText('Download')).toBeInTheDocument();
-      expect(screen.getByText('Sign Up')).toBeInTheDocument();
       expect(screen.getByText('Log In')).toBeInTheDocument();
     });
 
@@ -69,13 +67,6 @@ describe('AppHeader', () => {
       expect(mockOnLogin).toHaveBeenCalledTimes(1);
     });
 
-    it('calls onSignUp when sign up button is clicked', () => {
-      const mockOnSignUp = jest.fn();
-      render(<AppHeader {...defaultProps} onSignUp={mockOnSignUp} />);
-      
-      fireEvent.click(screen.getByText('Sign Up'));
-      expect(mockOnSignUp).toHaveBeenCalledTimes(1);
-    });
   });
 
   describe('Authenticated state', () => {
@@ -85,7 +76,6 @@ describe('AppHeader', () => {
       expect(screen.queryByText('Premium')).not.toBeInTheDocument();
       expect(screen.queryByText('Support')).not.toBeInTheDocument();
       expect(screen.queryByText('Download')).not.toBeInTheDocument();
-      expect(screen.queryByText('Sign Up')).not.toBeInTheDocument();
       expect(screen.queryByText('Log In')).not.toBeInTheDocument();
     });
 
@@ -323,7 +313,6 @@ describe('AppHeader', () => {
           />
         );
 
-        expect(screen.queryByText('Sign Up')).not.toBeInTheDocument();
         expect(screen.queryByText('Log In')).not.toBeInTheDocument();
       });
 
@@ -381,7 +370,6 @@ describe('AppHeader', () => {
         
         // Should not show any buttons or links
         expect(screen.queryByText('Install App')).not.toBeInTheDocument();
-        expect(screen.queryByText('Sign Up')).not.toBeInTheDocument();
         expect(screen.queryByText('Log In')).not.toBeInTheDocument();
         expect(screen.queryByText('Premium')).not.toBeInTheDocument();
       });

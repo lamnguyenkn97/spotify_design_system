@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { BannerProps } from './Banner.types';
 import { Typography, Stack, Image } from '../../atoms';
 import { getImageGradient, getBannerTypeLabel } from './utils';
-import { spacing, borderRadius, shadows, sizes, borders } from '../../../styles';
+import { spacing, shadows, sizes, borders } from '../../../styles';
 
 // Clean constants using design tokens - no hardcoded values
 const BANNER_STYLES = {
   container: {
     height: sizes.container.banner,
-    borderRadius: borderRadius.lg,
     padding: spacing.md,
   },
   enhancedImage: {

@@ -62,7 +62,6 @@ export const AppHeader = forwardRef<HTMLElement, AppHeaderProps>(
       isAuthenticated,
       onSearch,
       onLogin,
-      onSignUp,
       onInstallApp,
       onHomeClick,
       user,
@@ -98,10 +97,6 @@ export const AppHeader = forwardRef<HTMLElement, AppHeaderProps>(
     const handleLogin = useCallback(() => {
       onLogin();
     }, [onLogin]);
-
-    const handleSignUp = useCallback(() => {
-      onSignUp();
-    }, [onSignUp]);
 
     // Helper function to render custom actions
     const renderCustomActions = useCallback((actions: HeaderAction[]) => {
@@ -241,27 +236,17 @@ export const AppHeader = forwardRef<HTMLElement, AppHeaderProps>(
           )}
           
           {hasAuthButtons && (
-            <>
-              <Button
-                onClick={handleSignUp}
-                text="Sign Up"
-                variant={ButtonVariant.White}
-                size={ButtonSize.Small}
-                aria-label="Sign up for Spotify"
-              />
-              
-              <Button
-                onClick={handleLogin}
-                variant={ButtonVariant.White}
-                text="Log In"
-                size={ButtonSize.Small}
-                aria-label="Log in to Spotify"
-              />
-            </>
+            <Button
+              onClick={handleLogin}
+              variant={ButtonVariant.White}
+              text="Log In"
+              size={ButtonSize.Small}
+              aria-label="Log in to Spotify"
+            />
           )}
         </Stack>
       );
-    }, [handleInstallApp, handleSignUp, handleLogin, customLinks, showCustomLinks, showInstallApp, showAuthButtons, renderCustomLinks]);
+    }, [handleInstallApp, handleLogin, customLinks, showCustomLinks, showInstallApp, showAuthButtons, renderCustomLinks]);
 
     return (
       <header

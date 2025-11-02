@@ -26,7 +26,6 @@ The AppHeader component creates a **consistent navigation experience** across th
 | `isAuthenticated` | `boolean` | - | **Required.** User authentication status |
 | `onSearch` | `(value: string) => void` | - | **Required.** Search input handler |
 | `onLogin` | `() => void` | - | **Required.** Login button handler |
-| `onSignUp` | `() => void` | - | **Required.** Sign up button handler |
 | `onInstallApp` | `() => void` | - | **Required.** Install app button handler |
 | `onHomeClick` | `() => void` | - | *Optional.* Home icon click handler |
 | `user` | `User` | - | *Optional.* User information when authenticated |
@@ -88,7 +87,6 @@ searchInput: {
   isAuthenticated={false}
   onSearch={(value) => console.log('Searching:', value)}
   onLogin={() => handleLogin()}
-  onSignUp={() => handleSignUp()}
   onInstallApp={() => handleInstallApp()}
   onHomeClick={() => navigate('/')}
 />
@@ -104,7 +102,6 @@ searchInput: {
   }}
   onSearch={(value) => performSearch(value)}
   onLogin={() => {}}
-  onSignUp={() => {}}
   onInstallApp={() => downloadApp()}
   onHomeClick={() => navigate('/home')}
 />
@@ -118,7 +115,6 @@ searchInput: {
   data-testid="app-header"
   onSearch={handleSearch}
   onLogin={handleLogin}
-  onSignUp={handleSignUp}
   onInstallApp={handleInstallApp}
   aria-label="Custom navigation header"
 />
@@ -130,7 +126,6 @@ searchInput: {
 When `isAuthenticated={false}`:
 - **Premium**, **Support**, **Download** text links
 - **Install App** button with download icon
-- **Sign Up** button (primary white style)
 - **Log In** button (primary white style)
 - Vertical divider between sections
 
@@ -244,7 +239,7 @@ const handleHomeClick = useCallback(() => {
 - **Search input**: `aria-label="Search for music"`
 - **User avatar**: `aria-label="John Doe's profile"`
 - **Install button**: `aria-label="Install Spotify app"`
-- **Auth buttons**: `aria-label="Sign up for Spotify"`
+- **Log In button**: `aria-label="Log in to Spotify"`
 
 ### Keyboard Navigation
 - **Focusable elements**: All interactive elements support keyboard navigation
@@ -298,7 +293,6 @@ const Header = () => {
       onSearch={(value) => navigate(`/search?q=${value}`)}
       onHomeClick={() => navigate('/')}
       onLogin={() => navigate('/login')}
-      onSignUp={() => navigate('/signup')}
       onInstallApp={() => window.open('/download')}
     />
   );
@@ -308,7 +302,7 @@ const Header = () => {
 ### With State Management
 ```tsx
 const Header = () => {
-  const { user, login, signup } = useAuth();
+  const { user, login } = useAuth();
   const { search } = useSearch();
   
   return (
@@ -317,7 +311,6 @@ const Header = () => {
       user={user.profile}
       onSearch={search}
       onLogin={login}
-      onSignUp={signup}
       onInstallApp={() => trackEvent('install_app')}
     />
   );

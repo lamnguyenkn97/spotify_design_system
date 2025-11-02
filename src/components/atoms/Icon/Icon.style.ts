@@ -115,7 +115,8 @@ export const StyledIcon = styled.span.withConfig({
   font-size: ${({ size }) => getSizeValue(size)};
   padding: ${({ size, backgroundColor }) => {
     // If background color is set, add padding to create space around the icon
-    return backgroundColor ? `${getSizeValue(size)}` : '0';
+    // Padding expands the container size (box-sizing: content-box by default)
+    return backgroundColor && backgroundColor !== 'transparent' ? getSizeValue(size) : '0';
   }};
 
   /* Color styles */
@@ -130,8 +131,10 @@ export const StyledIcon = styled.span.withConfig({
 
   /* FontAwesome icon styling - 1em scales with container's font-size */
   svg {
+    display: block; /* Prevents inline spacing issues */
     width: 1em; /* Scales with the icon container's font-size (design token) */
     height: 1em; /* Scales with the icon container's font-size (design token) */
+    flex-shrink: 0; /* Prevents icon from shrinking */
   }
 `;
 

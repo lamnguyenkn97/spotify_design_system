@@ -9,7 +9,7 @@ export type TextLinkVariant =
 
 export type TextLinkWeight = 'light' | 'regular' | 'medium' | 'bold';
 
-export interface TextLinkProps {
+export interface TextLinkProps extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
   href?: string;
   children: React.ReactNode;
   component?: React.ElementType;
