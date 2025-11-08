@@ -1,5 +1,5 @@
 export * from './Banner';
 export * from './Card';
-export * from './horizontalTileCard';
+export * from './HorizontalTileCard';
 export * from './Modal';
 export * from './CategoryCard';

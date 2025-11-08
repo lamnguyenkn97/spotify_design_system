@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { HorizontalTileCard } from './horizontalTileCard';
+import { HorizontalTileCard } from './HorizontalTileCard';
 import { Stack } from '../../atoms';
 
 const meta: Meta<typeof HorizontalTileCard> = {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Sidebar } from './Sidebar';
-import { LibraryItem } from './Sidebar.types';
+import { LibraryItem, SidebarProps } from './Sidebar.types';
 
 // Sample library items for stories
 const sampleLibraryItems: LibraryItem[] = [
@@ -100,17 +100,11 @@ const meta: Meta<typeof Sidebar> = {
       control: 'boolean',
       description: 'Whether to show the Spotify logo',
     },
-    currentView: {
-      control: 'radio',
-      options: ['list', 'grid'],
-      description: 'Current view type',
-    },
     onFilterClick: { action: 'filter clicked' },
     onAddClick: { action: 'add clicked' },
     onExpandClick: { action: 'expand clicked' },
     onSearch: { action: 'search performed' },
     onLibraryItemClick: { action: 'library item clicked' },
-    onViewToggle: { action: 'view toggled' },
   },
   tags: ['autodocs'],
 };
@@ -123,7 +117,6 @@ export const Default: Story = {
   args: {
     libraryItems: sampleLibraryItems,
     showLogo: true,
-    currentView: 'list',
   },
   parameters: {
     docs: {
@@ -134,77 +127,72 @@ export const Default: Story = {
   },
 };
 
+// Interactive component with state management
+const InteractiveSidebar: React.FC<SidebarProps> = (args) => {
+  const [filteredItems, setFilteredItems] = useState(sampleLibraryItems);
+  const [activeFilter, setActiveFilter] = useState<string | null>(null);
+
+  const handleFilterClick = (filter: string) => {
+    console.log('Filter clicked:', filter);
+    setActiveFilter(activeFilter === filter ? null : filter);
+
+    if (activeFilter === filter) {
+      setFilteredItems(sampleLibraryItems);
+    } else {
+      const filterMap: Record<string, LibraryItem['type']> = {
+        Playlists: 'playlist',
+        Artists: 'artist',
+        Albums: 'album',
+        'Podcasts & Shows': 'podcast',
+      };
+
+      const filtered = sampleLibraryItems.filter(
+        (item) => item.type === filterMap[filter]
+      );
+      setFilteredItems(filtered);
+    }
+  };
+
+  const handleSearch = (query: string) => {
+    console.log('Search:', query);
+    if (!query.trim()) {
+      setFilteredItems(sampleLibraryItems);
+      return;
+    }
+
+    const searched = sampleLibraryItems.filter(
+      (item) =>
+        item.title.toLowerCase().includes(query.toLowerCase()) ||
+        item.subtitle.toLowerCase().includes(query.toLowerCase())
+    );
+    setFilteredItems(searched);
+  };
+
+  const handleLibraryItemClick = (item: LibraryItem) => {
+    console.log('Library item clicked:', item);
+  };
+
+  return (
+    <Sidebar
+      {...args}
+      libraryItems={filteredItems}
+      onFilterClick={handleFilterClick}
+      onSearch={handleSearch}
+      onLibraryItemClick={handleLibraryItemClick}
+      onAddClick={() => console.log('Add new content')}
+      onExpandClick={() => console.log('Expand sidebar')}
+    />
+  );
+};
+
 // Interactive story with state management
 export const Interactive: Story = {
-  render: (args) => {
-    const [currentView, setCurrentView] = useState<'list' | 'grid'>('list');
-    const [filteredItems, setFilteredItems] = useState(sampleLibraryItems);
-    const [activeFilter, setActiveFilter] = useState<string | null>(null);
-
-    const handleFilterClick = (filter: string) => {
-      console.log('Filter clicked:', filter);
-      setActiveFilter(activeFilter === filter ? null : filter);
-
-      if (activeFilter === filter) {
-        setFilteredItems(sampleLibraryItems);
-      } else {
-        const filterMap: Record<string, LibraryItem['type']> = {
-          Playlists: 'playlist',
-          Artists: 'artist',
-          Albums: 'album',
-          'Podcasts & Shows': 'podcast',
-        };
-
-        const filtered = sampleLibraryItems.filter(
-          (item) => item.type === filterMap[filter]
-        );
-        setFilteredItems(filtered);
-      }
-    };
-
-    const handleSearch = (query: string) => {
-      console.log('Search:', query);
-      if (!query.trim()) {
-        setFilteredItems(sampleLibraryItems);
-        return;
-      }
-
-      const searched = sampleLibraryItems.filter(
-        (item) =>
-          item.title.toLowerCase().includes(query.toLowerCase()) ||
-          item.subtitle.toLowerCase().includes(query.toLowerCase())
-      );
-      setFilteredItems(searched);
-    };
-
-    const handleViewToggle = (viewType: 'list' | 'grid') => {
-      console.log('View toggled:', viewType);
-      setCurrentView(viewType);
-    };
-
-    const handleLibraryItemClick = (item: LibraryItem) => {
-      console.log('Library item clicked:', item);
-    };
-
-    return (
-      <Sidebar
-        {...args}
-        libraryItems={filteredItems}
-        currentView={currentView}
-        onFilterClick={handleFilterClick}
-        onSearch={handleSearch}
-        onViewToggle={handleViewToggle}
-        onLibraryItemClick={handleLibraryItemClick}
-        onAddClick={() => console.log('Add new content')}
-        onExpandClick={() => console.log('Expand sidebar')}
-      />
-    );
-  },
+  render: (args) => <InteractiveSidebar {...args} />,
   parameters: {
     docs: {
       description: {
         story:
-          'Interactive sidebar with working filters, search, and view toggle.',
+          'Interactive sidebar with working filters and search.',
       },
     },
   },
@@ -215,7 +203,6 @@ export const EmptyLibrary: Story = {
   args: {
     libraryItems: [],
     showLogo: true,
-    currentView: 'list',
   },
   parameters: {
     docs: {
@@ -231,7 +218,6 @@ export const WithoutLogo: Story = {
   args: {
     libraryItems: sampleLibraryItems,
     showLogo: false,
-    currentView: 'list',
   },
   parameters: {
     docs: {
@@ -248,7 +234,6 @@ export const CustomFilters: Story = {
     libraryItems: sampleLibraryItems,
     filters: ['My Music', 'Recently Played', 'Favorites'],
     showLogo: true,
-    currentView: 'list',
   },
   parameters: {
     docs: {
@@ -264,7 +249,6 @@ export const GridView: Story = {
   args: {
     libraryItems: sampleLibraryItems,
     showLogo: true,
-    currentView: 'grid',
   },
   parameters: {
     docs: {
@@ -289,7 +273,6 @@ export const LargeLibrary: Story = {
       pinned: index < 5,
     })),
     showLogo: true,
-    currentView: 'list',
   },
   parameters: {
     docs: {
@@ -306,7 +289,6 @@ export const CustomStyling: Story = {
   args: {
     libraryItems: sampleLibraryItems,
     showLogo: true,
-    currentView: 'list',
     style: {
       width: '320px',
       backgroundColor: '#2D2D2D',

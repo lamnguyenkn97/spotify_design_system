@@ -1,4 +1,4 @@
-export { HorizontalTileCard } from './horizontalTileCard';
+export { HorizontalTileCard } from './HorizontalTileCard';
 export type {
   HorizontalTileCardProps,
   HorizontalTileCardSize,
