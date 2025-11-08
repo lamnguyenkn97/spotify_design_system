@@ -9,7 +9,25 @@ import {
   TableBody,
 } from './Table.style';
 
-export const Table = <T,>({ data, columns }: TableProps<T>) => {
+export const Table = <T,>({ data, columns, onRowClick, onRowHover }: TableProps<T>) => {
+  const handleRowClick = (row: T, rowIndex: number) => {
+    if (onRowClick) {
+      onRowClick(row, rowIndex);
+    }
+  };
+
+  const handleRowMouseEnter = (row: T, rowIndex: number) => {
+    if (onRowHover) {
+      onRowHover(row, rowIndex, true);
+    }
+  };
+
+  const handleRowMouseLeave = (row: T, rowIndex: number) => {
+    if (onRowHover) {
+      onRowHover(row, rowIndex, false);
+    }
+  };
+
   return (
     <TableWrapper>
       <TableHead>
@@ -27,7 +45,13 @@ export const Table = <T,>({ data, columns }: TableProps<T>) => {
       </TableHead>
       <TableBody>
         {data.map((row, rowIndex) => (
-          <TableRow key={rowIndex}>
+          <TableRow 
+            key={rowIndex}
+            onClick={() => handleRowClick(row, rowIndex)}
+            onMouseEnter={() => handleRowMouseEnter(row, rowIndex)}
+            onMouseLeave={() => handleRowMouseLeave(row, rowIndex)}
+            $clickable={!!onRowClick}
+          >
             {columns.map((col) => (
               <TableCell 
                 key={col.key as string}

@@ -58,27 +58,6 @@ const meta: Meta<typeof Typography> = {
   component: Typography,
   parameters: {
     layout: 'padded',
-    docs: {
-      description: {
-        component: `
-A simplified typography component focused on Spotify's actual needs with semantic variants and a clean size system.
-
-**Key Features:**
-- 🎯 **Spotify-Focused**: Only the variants Spotify actually uses
-- 📏 **Flexible Sizing**: Separate size prop for granular control
-- 🎨 **Semantic Colors**: Success, warning, error states
-- 🔤 **Design Tokens**: Fully token-driven with zero hardcoded values
-- ♿ **Accessible**: Automatic semantic HTML element selection
-- 🏗️ **Clean API**: Intuitive props with sensible defaults
-
-**New Simplified API:**
-- \`variant\`: semantic purpose (title, heading, body, caption)
-- \`size\`: visual size (sm, md, lg, xl, xxl, 2xl)
-- \`weight\`: font weight (light, regular, medium, bold)
-- \`color\`: semantic colors (primary, secondary, muted, success, warning, error)
-        `,
-      },
-    },
   },
   tags: ['autodocs'],
   argTypes: {

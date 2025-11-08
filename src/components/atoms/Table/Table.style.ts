@@ -17,8 +17,9 @@ export const TableBody = styled.tbody`
   background-color: transparent;
 `;
 
-export const TableRow = styled.tr`
+export const TableRow = styled.tr<{ $clickable?: boolean }>`
   transition: background-color 0.2s ease;
+  cursor: ${({ $clickable }) => ($clickable ? 'pointer' : 'default')};
   
   &:hover {
     background-color: ${colors.grey.grey1};

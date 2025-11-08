@@ -17,29 +17,6 @@ export default {
         { name: 'light', value: '#ffffff' },
       ],
     },
-    docs: {
-      description: {
-        component: `
-A comprehensive application header component providing **navigation, search, authentication, and user management** for Spotify-style applications.
-
-**Key Features:**
-- 🔐 **Authentication-Aware UI**: Displays different controls based on authentication state (guest links vs. user avatar)
-- 🔍 **Integrated Search**: Full-width search input with icon and keyboard support
-- 🎨 **Spotify Branding**: Consistent brand presence with logo and colors
-- 📱 **Responsive Navigation**: Adapts to different screen sizes and states
-- ⚡ **Performance Optimized**: Memoized sections and callbacks for smooth interactions
-- ♿ **Accessibility First**: Comprehensive ARIA labels and semantic HTML (WCAG compliant)
-- 🛡️ **Error Resilient**: Graceful fallbacks for failed avatar loading
-- 🎯 **Design Token Integration**: Consistent styling using design system tokens
-
-**Usage Patterns:**
-- Use for main application navigation and branding
-- Automatically adapts UI based on \`isAuthenticated\` prop
-- Supports custom actions and links for both authenticated and guest users
-- Integrates seamlessly with routing libraries (React Router, Next.js)
-        `,
-      },
-    },
   },
   tags: ['autodocs'],
   argTypes: {

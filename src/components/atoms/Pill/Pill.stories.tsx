@@ -7,29 +7,6 @@ import { Stack } from '../Stack';
 export default {
   title: 'Atoms/Pill',
   component: Pill,
-  parameters: {
-    docs: {
-      description: {
-        component: `
-A standalone pill component for Spotify-style tags, filters, and categories.
-
-**Key Features:**
-- 🎯 **Standalone Architecture**: No dependencies on Button component for better maintainability
-- 🎨 **Design Token Integration**: Uses consistent spacing, colors, and transitions
-- 📱 **Responsive Sizes**: Small, medium, and large variants
-- 🔄 **Interactive States**: Default, selected, and filter variants
-- ❌ **Dismissible**: Optional close functionality for filters
-- ♿ **Accessible**: Full keyboard navigation and screen reader support
-
-**Best Practices:**
-- Use \`default\` variant for genre tags and categories
-- Use \`selected\` state for active selections
-- Use \`filter\` variant with \`dismissible\` for active filters
-- Prefer \`sm\` size for compact layouts, \`md\` for general use
-        `,
-      },
-    },
-  },
   tags: ['autodocs'],
   argTypes: {
     label: {

@@ -10,12 +10,6 @@ const meta: Meta<typeof Footer> = {
   component: Footer,
   parameters: {
     layout: 'fullscreen',
-    docs: {
-      description: {
-        component:
-          'Footer component displays company links, social media icons, and other footer content commonly found at the bottom of Spotify pages.',
-      },
-    },
   },
   argTypes: {
     className: {
