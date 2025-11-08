@@ -8,11 +8,6 @@ const meta: Meta<typeof MessageText> = {
   component: MessageText,
   parameters: {
     layout: 'padded',
-    docs: {
-      description: {
-        component: 'A reusable message text component for displaying helper text, errors, success messages, and warnings with appropriate icons.',
-      },
-    },
   },
   tags: ['autodocs'],
   argTypes: {

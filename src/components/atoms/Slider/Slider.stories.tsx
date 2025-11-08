@@ -8,13 +8,6 @@ import { Typography } from '../Typography/Text/Typography';
 export default {
   title: 'Atoms/Slider',
   component: Slider,
-  parameters: {
-    docs: {
-      description: {
-        component: 'A clean, minimal slider component with a prominent circular marker, optimized for Spotify use cases like volume control and progress bars.',
-      },
-    },
-  },
   argTypes: {
     value: {
       control: { type: 'number', min: 0, max: 100, step: 1 },

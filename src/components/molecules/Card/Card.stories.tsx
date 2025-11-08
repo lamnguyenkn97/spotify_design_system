@@ -9,12 +9,6 @@ const meta: Meta<typeof Card> = {
   component: Card,
   parameters: {
     layout: 'padded',
-    docs: {
-      description: {
-        component:
-          'A flexible card component for displaying music content like albums, playlists, and artists with configurable sizes, hover effects, and play buttons.',
-      },
-    },
   },
   tags: ['autodocs'],
   argTypes: {

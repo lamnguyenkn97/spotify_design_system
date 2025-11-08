@@ -12,12 +12,6 @@ const meta: Meta<typeof Banner> = {
   component: Banner,
   parameters: {
     layout: 'padded',
-    docs: {
-      description: {
-        component:
-          'A banner component that displays album, playlist, podcast, or artist information with dynamic background gradients generated from cover images.',
-      },
-    },
   },
   tags: ['autodocs'],
   argTypes: {

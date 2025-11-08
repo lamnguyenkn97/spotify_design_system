@@ -5,13 +5,9 @@ import { Progress } from './index';
 const meta: Meta<typeof Progress> = {
   title: 'Atoms/Progress',
   component: Progress,
+  tags: ['autodocs'],
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component: 'Progress component for displaying loading states, song progress, and completion status.',
-      },
-    },
   },
   argTypes: {
     variant: {
@@ -247,12 +243,5 @@ export const CircularIndeterminate = {
     variant: 'circular',
     size: 'md',
     color: 'primary',
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Circular indeterminate progress using FontAwesome spinner with built-in spin animation. Much simpler than custom CSS animations.',
-      },
-    },
   },
 }; 

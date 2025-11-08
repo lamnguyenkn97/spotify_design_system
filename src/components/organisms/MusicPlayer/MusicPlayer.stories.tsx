@@ -13,12 +13,6 @@ const meta: Meta<typeof MusicPlayer> = {
   component: MusicPlayer,
   parameters: {
     layout: 'centered',
-    docs: {
-      description: {
-        component:
-          "MusicPlayer is a comprehensive audio player component that displays current track information, playback controls, progress bar, and volume control. It follows Spotify's design patterns.",
-      },
-    },
   },
   decorators: [
     (Story) => (

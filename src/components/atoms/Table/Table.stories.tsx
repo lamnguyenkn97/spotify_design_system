@@ -433,3 +433,20 @@ export const Compact: Story = {
     columns: compactColumns,
   },
 };
+
+// Interactive table with row click and hover handlers
+export const Interactive: Story = {
+  args: {
+    data: spotifyData.slice(0, 5),
+    columns,
+    onRowClick: (row, index) => {
+      console.log('Row clicked:', row, 'at index:', index);
+      alert(`Playing: ${row.title} by ${row.artist}`);
+    },
+    onRowHover: (row, index, isHovering) => {
+      if (isHovering) {
+        console.log('Hovering over:', row.title);
+      }
+    },
+  },
+};

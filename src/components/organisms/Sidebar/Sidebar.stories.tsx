@@ -60,12 +60,6 @@ const meta: Meta<typeof Sidebar> = {
   component: Sidebar,
   parameters: {
     layout: 'fullscreen',
-    docs: {
-      description: {
-        component:
-          'Sidebar component provides navigation and library management for Spotify-style applications. Features filtering, search, view toggles, and organized library display with comprehensive accessibility and performance optimizations.',
-      },
-    },
   },
   decorators: [
     (Story) => (
