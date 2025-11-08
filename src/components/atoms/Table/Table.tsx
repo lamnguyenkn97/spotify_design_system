@@ -15,7 +15,11 @@ export const Table = <T,>({ data, columns }: TableProps<T>) => {
       <TableHead>
         <tr>
           {columns.map((col) => (
-            <TableHeader key={col.key as string} style={{ width: col.width }}>
+            <TableHeader 
+              key={col.key as string} 
+              style={{ width: col.width }}
+              align={col.align}
+            >
               {col.label}
             </TableHeader>
           ))}
@@ -25,7 +29,10 @@ export const Table = <T,>({ data, columns }: TableProps<T>) => {
         {data.map((row, rowIndex) => (
           <TableRow key={rowIndex}>
             {columns.map((col) => (
-              <TableCell key={col.key as string}>
+              <TableCell 
+                key={col.key as string}
+                align={col.align}
+              >
                 {
                   col.renderCell
                     ? col.renderCell(row)
