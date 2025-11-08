@@ -2,18 +2,17 @@ import React, { forwardRef, useCallback, useMemo, useState } from 'react';
 import { Stack } from '../../atoms/Stack';
 import { Typography } from '../../atoms/Typography/Text/Typography';
 import { Button } from '../../atoms/Button/Button';
+import { Pill } from '../../atoms/Pill';
 import { Icon } from '../../atoms/Icon/Icon';
 import { Input } from '../../atoms/Input';
 import { faSpotify } from '@fortawesome/free-brands-svg-icons';
 import {
   faPlus,
   faExpand,
-  faList,
-  faGripHorizontal,
   faSearch,
 } from '@fortawesome/free-solid-svg-icons';
 import { ButtonSize, ButtonVariant } from '../../atoms/Button';
-import { HorizontalTileCard } from '../../molecules/horizontalTileCard';
+import { HorizontalTileCard } from '../../molecules/HorizontalTileCard';
 import { SidebarProps, LibraryItem } from './Sidebar.types';
 import { colors, spacing } from '../../../styles';
 
@@ -38,26 +37,13 @@ const SIDEBAR_STYLES = {
     padding: `${spacing.sm} 0`,
   },
   filtersSection: {
-    display: 'flex',
     flexWrap: 'wrap' as const,
-    gap: spacing.xs,
     padding: `${spacing.sm} 0`,
-  },
-  searchSection: {
-    width: '100%',
-  },
-  recentsSection: {
-    padding: `${spacing.sm} 0`,
-    borderBottom: `1px solid ${colors.grey.grey3}`,
   },
   librarySection: {
     flex: 1,
     overflowY: 'auto' as const,
     padding: `${spacing.sm} 0`,
-  },
-  viewToggleGroup: {
-    display: 'flex',
-    gap: spacing.xs,
   },
 } as const;
 
@@ -88,29 +74,38 @@ const LogoSection: React.FC<{ showLogo: boolean }> = ({ showLogo }) => {
   if (!showLogo) return null;
 
   return (
-    <div style={SIDEBAR_STYLES.logoSection}>
-      <Stack direction="row" align="center" spacing="md">
-        <Icon icon={faSpotify} size="lg" color="primary" aria-label="Spotify" />
-      </Stack>
-    </div>
+    <Stack
+      direction="row"
+      align="center"
+      spacing="md"
+      style={SIDEBAR_STYLES.logoSection}
+    >
+      <Icon icon={faSpotify} size="lg" color="primary" aria-label="Spotify" />
+    </Stack>
   );
 };
 
 // Filter Controls Component
 const FilterControls: React.FC<{
   filters: string[];
+  activeFilter?: string;
   onFilterClick?: (filter: string) => void;
   onAddClick?: () => void;
   onExpandClick?: () => void;
-}> = ({ filters, onFilterClick, onAddClick, onExpandClick }) => {
+}> = ({ filters, activeFilter, onFilterClick, onAddClick, onExpandClick }) => {
   return (
-    <div style={SIDEBAR_STYLES.filtersSection}>
+    <Stack
+      direction="row"
+      spacing="xs"
+      style={SIDEBAR_STYLES.filtersSection}
+    >
       {filters.map((filter) => (
-        <Button
+        <Pill
           key={filter}
-          text={filter}
-          size={ButtonSize.Small}
-          variant={ButtonVariant.Secondary}
+          label={filter}
+          size="sm"
+          variant="filter"
+          selected={activeFilter === filter}
           onClick={() => onFilterClick?.(filter)}
           aria-label={`Filter by ${filter}`}
         />
@@ -129,7 +124,7 @@ const FilterControls: React.FC<{
         onClick={() => onExpandClick?.()}
         aria-label="Expand sidebar"
       />
-    </div>
+    </Stack>
   );
 };
 
@@ -148,7 +143,7 @@ const SearchSection: React.FC<{
   );
 
   return (
-    <div style={SIDEBAR_STYLES.searchSection}>
+    <Stack>
       <Input
         type="search"
         placeholder="Search in Your Library"
@@ -157,50 +152,16 @@ const SearchSection: React.FC<{
         leftIcon={<Icon icon={faSearch} size="sm" />}
         aria-label="Search your library"
       />
-    </div>
-  );
-};
-
-// View Toggle Component
-const ViewToggle: React.FC<{
-  currentView: 'list' | 'grid';
-  onViewToggle?: (viewType: 'list' | 'grid') => void;
-}> = ({ currentView, onViewToggle }) => {
-  const handleListView = useCallback(() => {
-    onViewToggle?.('list');
-  }, [onViewToggle]);
-
-  const handleGridView = useCallback(() => {
-    onViewToggle?.('grid');
-  }, [onViewToggle]);
-
-  return (
-    <div style={SIDEBAR_STYLES.viewToggleGroup}>
-      <Icon
-        icon={faList}
-        size="sm"
-        clickable
-        onClick={handleListView}
-        aria-label="List view"
-        color={currentView === 'list' ? 'primary' : 'secondary'}
-      />
-      <Icon
-        icon={faGripHorizontal}
-        size="sm"
-        clickable
-        onClick={handleGridView}
-        aria-label="Grid view"
-        color={currentView === 'grid' ? 'primary' : 'secondary'}
-      />
-    </div>
+    </Stack>
   );
 };
 
 // Library List Component
 const LibraryList: React.FC<{
   libraryItems: LibraryItem[];
+  activeItemId?: string;
   onLibraryItemClick?: (item: LibraryItem) => void;
-}> = ({ libraryItems, onLibraryItemClick }) => {
+}> = ({ libraryItems, activeItemId, onLibraryItemClick }) => {
   const handleItemClick = useCallback(
     (item: LibraryItem) => {
       onLibraryItemClick?.(item);
@@ -210,30 +171,29 @@ const LibraryList: React.FC<{
 
   if (libraryItems.length === 0) {
     return (
-      <div style={SIDEBAR_STYLES.librarySection}>
+      <Stack style={SIDEBAR_STYLES.librarySection}>
         <Typography variant="body" color="secondary">
           No items in your library
         </Typography>
-      </div>
+      </Stack>
     );
   }
 
   return (
-    <div style={SIDEBAR_STYLES.librarySection}>
-      <Stack direction="column" spacing="xs">
-        {libraryItems.map((item) => (
-          <HorizontalTileCard
-            key={item.id || item.title}
-            image={item.image}
-            title={item.title}
-            subtitle={item.subtitle}
-            width="100%"
-            onClick={() => handleItemClick(item)}
-            size="small"
-          />
-        ))}
-      </Stack>
-    </div>
+    <Stack direction="column" spacing="xs" style={SIDEBAR_STYLES.librarySection}>
+      {libraryItems.map((item) => (
+        <HorizontalTileCard
+          key={item.id || item.title}
+          image={item.image}
+          title={item.title}
+          subtitle={item.subtitle}
+          width="100%"
+          onClick={() => handleItemClick(item)}
+          size="small"
+          isActive={activeItemId === (item.id || item.title)}
+        />
+      ))}
+    </Stack>
   );
 };
 
@@ -248,15 +208,17 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
       onExpandClick,
       onSearch,
       onLibraryItemClick,
-      onViewToggle,
       showLogo = true,
-      currentView = 'list',
       className,
       style,
       ...props
     },
     ref
   ) => {
+    // State to track active filter and library item
+    const [activeFilter, setActiveFilter] = useState<string | undefined>();
+    const [activeItemId, setActiveItemId] = useState<string | undefined>();
+
     // Memoized default handlers to prevent unnecessary re-renders
     const defaultHandlers = useMemo(
       () => ({
@@ -265,7 +227,6 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
         onExpandClick: () => {},
         onSearch: () => {},
         onLibraryItemClick: () => {},
-        onViewToggle: () => {},
       }),
       []
     );
@@ -282,6 +243,7 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
     // Memoized event handlers
     const handleFilterClick = useCallback(
       (filter: string) => {
+        setActiveFilter(filter);
         (onFilterClick || defaultHandlers.onFilterClick)(filter);
       },
       [onFilterClick, defaultHandlers.onFilterClick]
@@ -304,17 +266,12 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
 
     const handleLibraryItemClick = useCallback(
       (item: LibraryItem) => {
+        setActiveItemId(item.id || item.title);
         (onLibraryItemClick || defaultHandlers.onLibraryItemClick)(item);
       },
       [onLibraryItemClick, defaultHandlers.onLibraryItemClick]
     );
 
-    const handleViewToggle = useCallback(
-      (viewType: 'list' | 'grid') => {
-        (onViewToggle || defaultHandlers.onViewToggle)(viewType);
-      },
-      [onViewToggle, defaultHandlers.onViewToggle]
-    );
 
     // Memoized sections for performance
     const logoSection = useMemo(
@@ -324,11 +281,11 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
 
     const titleSection = useMemo(
       () => (
-        <div style={SIDEBAR_STYLES.titleSection}>
+        <Stack style={SIDEBAR_STYLES.titleSection}>
           <Typography variant="heading" weight="bold" color="primary">
             Your Library
           </Typography>
-        </div>
+        </Stack>
       ),
       []
     );
@@ -337,12 +294,13 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
       () => (
         <FilterControls
           filters={filters}
+          activeFilter={activeFilter}
           onFilterClick={handleFilterClick}
           onAddClick={handleAddClick}
           onExpandClick={handleExpandClick}
         />
       ),
-      [filters, handleFilterClick, handleAddClick, handleExpandClick]
+      [filters, activeFilter, handleFilterClick, handleAddClick, handleExpandClick]
     );
 
     const searchSection = useMemo(
@@ -350,31 +308,16 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
       [handleSearch]
     );
 
-    const recentsSection = useMemo(
-      () => (
-        <div style={SIDEBAR_STYLES.recentsSection}>
-          <Stack direction="row" align="center" justify="space-between">
-            <Typography variant="body" color="secondary">
-              Recents
-            </Typography>
-            <ViewToggle
-              currentView={currentView}
-              onViewToggle={handleViewToggle}
-            />
-          </Stack>
-        </div>
-      ),
-      [currentView, handleViewToggle]
-    );
 
     const librarySection = useMemo(
       () => (
         <LibraryList
           libraryItems={libraryItems}
+          activeItemId={activeItemId}
           onLibraryItemClick={handleLibraryItemClick}
         />
       ),
-      [libraryItems, handleLibraryItemClick]
+      [libraryItems, activeItemId, handleLibraryItemClick]
     );
 
     return (
@@ -386,12 +329,11 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
         aria-label="Library navigation"
         {...props}
       >
-        {logoSection}
-        {titleSection}
-        {filterSection}
-        {searchSection}
-        {recentsSection}
-        {librarySection}
+            {logoSection}
+            {titleSection}
+            {filterSection}
+            {searchSection}
+            {librarySection}
       </nav>
     );
   }

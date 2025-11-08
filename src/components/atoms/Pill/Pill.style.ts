@@ -50,7 +50,7 @@ const pillVariantStyles = {
   selected: css`
     background-color: ${colors.primary.white};
     color: ${colors.primary.black};
-    border-color: transparent;
+    border: none;
 
     &:hover:not(:disabled) {
       background-color: ${colors.grey.grey6};
@@ -86,8 +86,7 @@ const basePillStyles = css`
   }
 
   &:focus {
-    outline: 2px solid ${colors.primary.brand};
-    outline-offset: 1px;
+    outline: none;
   }
 `;
 

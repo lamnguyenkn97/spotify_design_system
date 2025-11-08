@@ -15,8 +15,6 @@ export interface SidebarProps extends React.HTMLAttributes<HTMLElement> {
   onExpandClick?: () => void;
   onSearch?: (query: string) => void;
   onLibraryItemClick?: (item: LibraryItem) => void;
-  onViewToggle?: (viewType: 'list' | 'grid') => void;
   showLogo?: boolean;
   className?: string;
-  currentView?: 'list' | 'grid';
 } 

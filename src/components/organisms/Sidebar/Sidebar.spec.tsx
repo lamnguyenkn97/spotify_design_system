@@ -47,9 +47,7 @@ const defaultProps: Partial<SidebarProps> = {
   onExpandClick: jest.fn(),
   onSearch: jest.fn(),
   onLibraryItemClick: jest.fn(),
-  onViewToggle: jest.fn(),
   showLogo: true,
-  currentView: 'list',
 };
 
 describe('Sidebar Component', () => {
@@ -297,55 +295,6 @@ describe('Sidebar Component', () => {
     });
   });
 
-  describe('View Toggle', () => {
-    it('renders view toggle controls with proper labels', () => {
-      render(
-        <TestWrapper>
-          <Sidebar {...defaultProps} />
-        </TestWrapper>
-      );
-      
-      expect(screen.getByLabelText('List view')).toBeInTheDocument();
-      expect(screen.getByLabelText('Grid view')).toBeInTheDocument();
-    });
-
-    it('calls onViewToggle when list view is clicked', () => {
-      const mockOnViewToggle = jest.fn();
-      render(
-        <TestWrapper>
-          <Sidebar {...defaultProps} onViewToggle={mockOnViewToggle} />
-        </TestWrapper>
-      );
-      
-      fireEvent.click(screen.getByLabelText('List view'));
-      expect(mockOnViewToggle).toHaveBeenCalledWith('list');
-    });
-
-    it('calls onViewToggle when grid view is clicked', () => {
-      const mockOnViewToggle = jest.fn();
-      render(
-        <TestWrapper>
-          <Sidebar {...defaultProps} onViewToggle={mockOnViewToggle} />
-        </TestWrapper>
-      );
-      
-      fireEvent.click(screen.getByLabelText('Grid view'));
-      expect(mockOnViewToggle).toHaveBeenCalledWith('grid');
-    });
-
-    it('shows correct active view state', () => {
-      render(
-        <TestWrapper>
-          <Sidebar {...defaultProps} currentView="grid" />
-        </TestWrapper>
-      );
-      
-      // Both icons should be present, but we can't easily test color differences
-      expect(screen.getByLabelText('List view')).toBeInTheDocument();
-      expect(screen.getByLabelText('Grid view')).toBeInTheDocument();
-    });
-  });
-
   describe('Conditional Rendering', () => {
     it('applies custom className when provided', () => {
       render(
@@ -434,16 +383,6 @@ describe('Sidebar Component', () => {
       expect(screen.getByRole('navigation')).toBeInTheDocument();
     });
 
-    it('handles invalid current view gracefully', () => {
-      render(
-        <TestWrapper>
-          <Sidebar {...defaultProps} currentView={'invalid' as any} />
-        </TestWrapper>
-      );
-      
-      // Should still render properly
-      expect(screen.getByRole('navigation')).toBeInTheDocument();
-    });
   });
 
   describe('Performance', () => {
