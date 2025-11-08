@@ -30,6 +30,7 @@ A standalone pill component for Spotify-style tags, filters, and categories.
       },
     },
   },
+  tags: ['autodocs'],
   argTypes: {
     label: {
       control: { type: 'text' },
