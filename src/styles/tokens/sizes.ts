@@ -17,7 +17,8 @@ export const sizes = {
   container: {
     banner: '240px',
     card: '320px',
-    header: '90px', // Increased from 64px to give music player more height
+    header: '100px',
+    musicPlayer: '150px', // Music player container height
     footer: 'auto',
   },
 
@@ -123,5 +124,24 @@ export const sizes = {
     tooltip: '320px',
     popover: '400px',
     modal: '600px',
+    musicPlayer: '600px', // Minimum width for music player
+  },
+
+  // Music player specific sizes
+  musicPlayer: {
+    leftSection: {
+      maxWidth: '30%', // Maximum width for now playing section
+    },
+    centerSection: {
+      minWidth: '400px',
+      maxWidth: '600px',
+    },
+    rightSection: {
+      width: '300px', // Fixed width for utility icons and volume
+    },
+    progressBar: {
+      clickAreaWidth: '80%', // Width of clickable progress area
+      volumeMinWidth: '80px', // Minimum width for volume slider
+    },
   },
 } as const;

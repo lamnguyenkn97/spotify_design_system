@@ -2,11 +2,6 @@ import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { MusicPlayer } from './MusicPlayer';
 import { MusicPlayerProps, Track } from './MusicPlayer.types';
-import { PlayerControls } from './PlayerControls';
-import { ProgressBar } from './ProgressBar';
-import { VolumeControl } from './VolumeControl';
-import { NowPlaying } from './NowPlaying';
-import { Stack } from '../../atoms/Stack';
 
 const meta: Meta<typeof MusicPlayer> = {
   title: 'Organisms/MusicPlayer',
@@ -153,6 +148,13 @@ const InteractiveTemplate = (args: MusicPlayerProps) => {
         }}
         onSeek={(time) => setCurrentTime(time)}
         onVolumeChange={(vol) => setVolume(vol)}
+        onShuffle={() => {}}
+        onRepeat={() => {}}
+        onAddToPlaylist={() => {}}
+        onLyrics={() => {}}
+        onQueue={() => {}}
+        onCast={() => {}}
+        onFullscreen={() => {}}
         style={{
           position: 'relative',
           bottom: 'auto',
@@ -236,57 +238,6 @@ export const NoTrack: Story = {
     currentTime: 0,
     duration: 0,
     volume: 50,
-  },
-};
-
-// Sub-component stories
-export const ComponentShowcase: Story = {
-  render: () => (
-    <div
-      style={{
-        padding: '2rem',
-        backgroundColor: '#121212',
-        minHeight: '100vh',
-      }}
-    >
-      <Stack direction="column" spacing="lg" align="start">
-        <div>
-          <h3 style={{ color: 'white', marginBottom: '1rem' }}>
-            Player Controls
-          </h3>
-          <PlayerControls
-            isPlaying={true}
-            onPlayPause={() => {}}
-            onNext={() => {}}
-            onPrevious={() => {}}
-          />
-        </div>
-
-        <div>
-          <h3 style={{ color: 'white', marginBottom: '1rem' }}>Now Playing</h3>
-          <NowPlaying {...sampleTracks[0]} />
-        </div>
-
-        <div>
-          <h3 style={{ color: 'white', marginBottom: '1rem' }}>Progress Bar</h3>
-          <ProgressBar currentTime={75} duration={180} onSeek={() => {}} />
-        </div>
-
-        <div>
-          <h3 style={{ color: 'white', marginBottom: '1rem' }}>
-            Volume Control
-          </h3>
-          <VolumeControl volume={65} onVolumeChange={() => {}} />
-        </div>
-      </Stack>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story: 'Individual components that make up the MusicPlayer.',
-      },
-    },
   },
 };
 
