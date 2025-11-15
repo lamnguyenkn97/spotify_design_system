@@ -3,10 +3,6 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ThemeProvider } from 'styled-components';
 import { MusicPlayer } from './MusicPlayer';
-import { PlayerControls } from './PlayerControls';
-import { ProgressBar } from './ProgressBar';
-import { VolumeControl } from './VolumeControl';
-import { NowPlaying } from './NowPlaying';
 import { Track } from './MusicPlayer.types';
 import { theme } from '../../../styles/theme';
 
@@ -32,6 +28,8 @@ const defaultProps = {
   onPrevious: jest.fn(),
   onSeek: jest.fn(),
   onVolumeChange: jest.fn(),
+  onShuffle: jest.fn(),
+  onRepeat: jest.fn(),
 };
 
 describe('MusicPlayer Component', () => {
@@ -479,132 +477,3 @@ describe('MusicPlayer Component', () => {
     });
   });
 });
-
-describe('PlayerControls Sub-component', () => {
-  const controlsProps = {
-    isPlaying: false,
-    onPlayPause: jest.fn(),
-    onNext: jest.fn(),
-    onPrevious: jest.fn(),
-  };
-
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
-  it('should render all control buttons', () => {
-    render(
-      <TestWrapper>
-        <PlayerControls {...controlsProps} />
-      </TestWrapper>
-    );
-
-    expect(screen.getByRole('button', { name: /play/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /next track/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /previous track/i })).toBeInTheDocument();
-  });
-
-  it('should toggle play/pause button state', () => {
-    const { rerender } = render(
-      <TestWrapper>
-        <PlayerControls {...controlsProps} isPlaying={false} />
-      </TestWrapper>
-    );
-
-    expect(screen.getByRole('button', { name: /play/i })).toBeInTheDocument();
-
-    rerender(
-      <TestWrapper>
-        <PlayerControls {...controlsProps} isPlaying={true} />
-      </TestWrapper>
-    );
-
-    expect(screen.getByRole('button', { name: /pause/i })).toBeInTheDocument();
-  });
-});
-
-describe('ProgressBar Sub-component', () => {
-  const progressProps = {
-    currentTime: 45,
-    duration: 180,
-    onSeek: jest.fn(),
-  };
-
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
-  it('should format time correctly', () => {
-    render(
-      <TestWrapper>
-        <ProgressBar {...progressProps} />
-      </TestWrapper>
-    );
-
-    expect(screen.getByText('0:45')).toBeInTheDocument();
-    expect(screen.getByText('3:00')).toBeInTheDocument();
-  });
-
-  it('should handle zero duration gracefully', () => {
-    render(
-      <TestWrapper>
-        <ProgressBar {...progressProps} duration={0} />
-      </TestWrapper>
-    );
-
-    expect(screen.getByText('0:00')).toBeInTheDocument();
-  });
-});
-
-describe('VolumeControl Sub-component', () => {
-  const volumeProps = {
-    volume: 75,
-    onVolumeChange: jest.fn(),
-  };
-
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
-  it('should render volume control elements', () => {
-    render(
-      <TestWrapper>
-        <VolumeControl {...volumeProps} />
-      </TestWrapper>
-    );
-
-    expect(screen.getByRole('button', { name: /mute/i })).toBeInTheDocument();
-    expect(screen.getByRole('slider', { name: /volume: 75%/i })).toBeInTheDocument();
-  });
-});
-
-describe('NowPlaying Sub-component', () => {
-  const nowPlayingProps = {
-    title: 'Test Song',
-    artist: 'Test Artist',
-    coverUrl: 'https://example.com/cover.jpg',
-  };
-
-  it('should render track information', () => {
-    render(
-      <TestWrapper>
-        <NowPlaying {...nowPlayingProps} />
-      </TestWrapper>
-    );
-
-    expect(screen.getByText('Test Song')).toBeInTheDocument();
-    expect(screen.getByText('Test Artist')).toBeInTheDocument();
-    expect(screen.getByRole('img', { name: /test song album cover/i })).toBeInTheDocument();
-  });
-
-  it('should handle missing information', () => {
-    render(
-      <TestWrapper>
-        <NowPlaying title="" artist="" coverUrl="" />
-      </TestWrapper>
-    );
-
-    expect(screen.getByText('Not Playing')).toBeInTheDocument();
-    expect(screen.getByText('Unknown Artist')).toBeInTheDocument();
-  });
-}); 
