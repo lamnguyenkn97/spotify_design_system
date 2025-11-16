@@ -2,6 +2,8 @@
  * Size tokens for consistent component dimensions across the design system
  */
 
+import { spacing } from './spacing';
+
 export const sizes = {
   // Component heights
   height: {
@@ -108,6 +110,17 @@ export const sizes = {
     center: '50%',
   },
 
+  // Fixed positioning patterns (for components that need to stick to viewport edges)
+  fixed: {
+    bottom: {
+      zIndex: 1000, // z-[1000] - for fixed bottom components like music player, footer bars
+      minHeight: '90px', // min-h-[90px] - minimum height for fixed bottom bars
+    },
+    top: {
+      zIndex: 200, // For fixed headers, navigation bars
+    },
+  },
+
   // Z-index layering system
   zIndex: {
     base: 0,
@@ -142,6 +155,25 @@ export const sizes = {
     progressBar: {
       clickAreaWidth: '80%', // Width of clickable progress area
       volumeMinWidth: '80px', // Minimum width for volume slider
+    },
+  },
+
+  // Equalizer component sizes
+  equalizer: {
+    container: {
+      sm: '12px', // Small equalizer container
+      md: '16px', // Medium equalizer container (matches icon.lg)
+      lg: '20px', // Large equalizer container (matches icon.xl)
+    },
+    bar: {
+      sm: '2px',
+      md: '3px',
+      lg: spacing.xs, // 4px
+    },
+    gap: {
+      sm: '2px',
+      md: '3px',
+      lg: spacing.xs, // 4px
     },
   },
 } as const;

@@ -141,6 +141,22 @@ export const animations = {
       },
     },
   },
+
+  // Equalizer animations
+  equalizer: {
+    duration: '800ms', // 0.8s animation cycle
+    easing: 'ease-in-out',
+    iteration: 'infinite',
+    delay: {
+      base: '0s',
+      step: '200ms', // Delay increment between bars (0.2s)
+    },
+    scale: {
+      min: '0.3', // Minimum bar height (30%)
+      max: '1', // Maximum bar height (100%)
+    },
+    transition: '150ms', // Fast transition for state changes (matches duration.fast)
+  },
 } as const;
 
 // Properly defined keyframes using styled-components
