@@ -144,12 +144,12 @@ export const MusicPlayer = forwardRef<HTMLDivElement, MusicPlayerProps>(
 
     // Get repeat icon color based on mode
     const repeatIconColor = useMemo(() => {
-      return repeatMode !== 'off' ? colors.primary.brand : undefined;
+      return repeatMode !== 'off' ? 'brand' : 'primary';
     }, [repeatMode]);
 
     // Get shuffle icon color
     const shuffleIconColor = useMemo(() => {
-      return isShuffled ? colors.primary.brand : undefined;
+      return isShuffled ? 'brand' : 'primary';
     }, [isShuffled]);
 
     return (
@@ -244,10 +244,10 @@ export const MusicPlayer = forwardRef<HTMLDivElement, MusicPlayerProps>(
                 <Icon
                   icon={faShuffle}
                   size="md"
-                  color={shuffleIconColor || 'primary'}
+                  color={shuffleIconColor}
                   clickable
                   onClick={onShuffle}
-                  aria-label="Shuffle"
+                  aria-label={isShuffled ? 'Disable shuffle' : 'Enable shuffle'}
                 />
               )}
               {onPrevious && (
@@ -286,7 +286,7 @@ export const MusicPlayer = forwardRef<HTMLDivElement, MusicPlayerProps>(
                 <Icon
                   icon={faRepeat}
                   size="md"
-                  color={repeatIconColor || 'primary'}
+                  color={repeatIconColor}
                   clickable
                   onClick={onRepeat}
                   aria-label={`Repeat ${repeatMode}`}
