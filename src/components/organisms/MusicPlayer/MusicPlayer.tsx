@@ -20,7 +20,6 @@ import {
   faVolumeUp,
   faVolumeDown,
   faVolumeMute,
-  faCirclePlus,
 } from '@fortawesome/free-solid-svg-icons';
 
 export const MusicPlayer = forwardRef<HTMLDivElement, MusicPlayerProps>(
@@ -40,7 +39,6 @@ export const MusicPlayer = forwardRef<HTMLDivElement, MusicPlayerProps>(
       onRepeat,
       onSeek,
       onVolumeChange,
-      onAddToPlaylist,
       onLyrics,
       className,
       style,
@@ -214,16 +212,6 @@ export const MusicPlayer = forwardRef<HTMLDivElement, MusicPlayerProps>(
                 {currentTrack?.artist || 'Unknown Artist'}
               </Typography>
             </Stack>
-            {onAddToPlaylist && (
-              <Icon
-                icon={faCirclePlus}
-                size="md"
-                color="primary"
-                clickable
-                onClick={onAddToPlaylist}
-                aria-label="Add to playlist"
-              />
-            )}
           </Stack>
 
           {/* Center Section: Controls and Progress */}

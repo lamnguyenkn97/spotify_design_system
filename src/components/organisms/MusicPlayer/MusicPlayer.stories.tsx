@@ -130,15 +130,15 @@ const InteractiveTemplate = (args: MusicPlayerProps) => {
   };
 
   const handleRepeat = () => {
-    // If repeat is being enabled (going from off to all), turn off shuffle
+    // Toggle between 'off' and 'one' (repeat current track only)
     if (repeatMode === 'off') {
+      // If repeat is being enabled, turn off shuffle
       if (isShuffled) {
         setIsShuffled(false);
       }
-      setRepeatMode('all');
-    } else if (repeatMode === 'all') {
       setRepeatMode('one');
     } else {
+      // If repeat is active, turn it off
       setRepeatMode('off');
     }
   };
@@ -177,7 +177,6 @@ const InteractiveTemplate = (args: MusicPlayerProps) => {
         onVolumeChange={(vol) => setVolume(vol)}
         onShuffle={handleShuffle}
         onRepeat={handleRepeat}
-        onAddToPlaylist={() => {}}
         onLyrics={() => {}}
         onQueue={() => {}}
         onCast={() => {}}
