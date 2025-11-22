@@ -115,8 +115,33 @@ const InteractiveTemplate = (args: MusicPlayerProps) => {
   const [currentTime, setCurrentTime] = useState(args.currentTime || 0);
   const [volume, setVolume] = useState(args.volume || 100);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
+  const [isShuffled, setIsShuffled] = useState(args.isShuffled || false);
+  const [repeatMode, setRepeatMode] = useState<'off' | 'one' | 'all'>(args.repeatMode || 'off');
 
   const currentTrack = args.currentTrack || sampleTracks[currentTrackIndex];
+
+  const handleShuffle = () => {
+    const newShuffleState = !isShuffled;
+    setIsShuffled(newShuffleState);
+    // If shuffle is being enabled, turn off repeat
+    if (newShuffleState && repeatMode !== 'off') {
+      setRepeatMode('off');
+    }
+  };
+
+  const handleRepeat = () => {
+    // If repeat is being enabled (going from off to all), turn off shuffle
+    if (repeatMode === 'off') {
+      if (isShuffled) {
+        setIsShuffled(false);
+      }
+      setRepeatMode('all');
+    } else if (repeatMode === 'all') {
+      setRepeatMode('one');
+    } else {
+      setRepeatMode('off');
+    }
+  };
 
   return (
     <div 
@@ -133,6 +158,8 @@ const InteractiveTemplate = (args: MusicPlayerProps) => {
         isPlaying={isPlaying}
         currentTime={currentTime}
         volume={volume}
+        isShuffled={isShuffled}
+        repeatMode={repeatMode}
         onPlayPause={() => setIsPlaying(!isPlaying)}
         onNext={() => {
           setCurrentTrackIndex((prev) => (prev + 1) % sampleTracks.length);
@@ -148,8 +175,8 @@ const InteractiveTemplate = (args: MusicPlayerProps) => {
         }}
         onSeek={(time) => setCurrentTime(time)}
         onVolumeChange={(vol) => setVolume(vol)}
-        onShuffle={() => {}}
-        onRepeat={() => {}}
+        onShuffle={handleShuffle}
+        onRepeat={handleRepeat}
         onAddToPlaylist={() => {}}
         onLyrics={() => {}}
         onQueue={() => {}}

@@ -419,7 +419,7 @@ describe('MusicPlayer Component - Logic Tests', () => {
         </TestWrapper>
       );
 
-      const shuffleButton = screen.getByRole('button', { name: /^shuffle$/i });
+      const shuffleButton = screen.getByRole('button', { name: /disable shuffle/i });
       expect(shuffleButton).toBeInTheDocument();
     });
 
@@ -433,7 +433,7 @@ describe('MusicPlayer Component - Logic Tests', () => {
         </TestWrapper>
       );
 
-      const shuffleButton = screen.getByRole('button', { name: /^shuffle$/i });
+      const shuffleButton = screen.getByRole('button', { name: /enable shuffle/i });
       await user.click(shuffleButton);
 
       expect(onShuffle).toHaveBeenCalledTimes(1);
@@ -536,7 +536,7 @@ describe('MusicPlayer Component - Logic Tests', () => {
       );
 
       // Test all button clicks
-      const shuffleButton = screen.getByRole('button', { name: /^shuffle$/i });
+      const shuffleButton = screen.getByRole('button', { name: /enable shuffle/i });
       await user.click(shuffleButton);
       expect(handlers.onShuffle).toHaveBeenCalledTimes(1);
 
