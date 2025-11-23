@@ -28,9 +28,16 @@ The component has been **completely modernized** with semantic color functions, 
 | `currentTime` | `number` | `0` | Current playback time in seconds |
 | `duration` | `number` | `0` | Total track duration in seconds |
 | `volume` | `number` | `100` | Volume level (0-100) |
+| `isShuffled` | `boolean` | `false` | Whether shuffle is enabled |
+| `repeatMode` | `'off' \| 'one' \| 'all'` | `'off'` | Repeat mode setting |
+| `isQueueOpen` | `boolean` | `false` | Whether queue panel is open |
 | `onPlayPause` | `() => void` | - | Callback when play/pause is clicked |
 | `onNext` | `() => void` | - | Callback when next track is clicked |
 | `onPrevious` | `() => void` | - | Callback when previous track is clicked |
+| `onShuffle` | `() => void` | - | Callback when shuffle is toggled |
+| `onRepeat` | `() => void` | - | Callback when repeat is toggled |
+| `onQueue` | `() => void` | - | Callback when queue is toggled |
+| `onLyrics` | `() => void` | - | Callback when lyrics is clicked |
 | `onSeek` | `(time: number) => void` | - | Callback when seeking to a specific time |
 | `onVolumeChange` | `(volume: number) => void` | - | Callback when volume is changed |
 | `className` | `string` | - | Additional CSS classes |
@@ -165,16 +172,46 @@ animations.transitions.card            // Component hover effects
 const [isPlaying, setIsPlaying] = useState(false);
 const [currentTime, setCurrentTime] = useState(0);
 const [volume, setVolume] = useState(100);
+const [isShuffled, setIsShuffled] = useState(false);
+const [repeatMode, setRepeatMode] = useState<'off' | 'one' | 'all'>('off');
+const [isQueueOpen, setIsQueueOpen] = useState(false);
 
 <MusicPlayer
   currentTrack={currentTrack}
   isPlaying={isPlaying}
   currentTime={currentTime}
   volume={volume}
+  isShuffled={isShuffled}
+  repeatMode={repeatMode}
+  isQueueOpen={isQueueOpen}
   onPlayPause={() => setIsPlaying(!isPlaying)}
   onSeek={(time) => setCurrentTime(time)}
   onVolumeChange={(vol) => setVolume(vol)}
+  onShuffle={() => setIsShuffled(!isShuffled)}
+  onRepeat={() => setRepeatMode(mode => mode === 'off' ? 'one' : 'off')}
+  onQueue={() => setIsQueueOpen(!isQueueOpen)}
+  onLyrics={() => console.log('Show lyrics')}
 />
+```
+
+### Queue Management
+```tsx
+const [isQueueOpen, setIsQueueOpen] = useState(false);
+
+<MusicPlayer
+  currentTrack={currentTrack}
+  isQueueOpen={isQueueOpen}
+  onQueue={() => setIsQueueOpen(!isQueueOpen)}
+  // ... other props
+/>
+
+{/* Render queue panel when open */}
+{isQueueOpen && (
+  <QueuePanel 
+    tracks={queueTracks}
+    onClose={() => setIsQueueOpen(false)}
+  />
+)}
 ```
 
 ## Recent Improvements
@@ -310,12 +347,25 @@ const handlePlayPause = useCallback(() => {
 - **Paused**: Pause icon becomes play icon, progress bar static
 - **No Track**: Dimmed display with fallback text and placeholder image
 - **Volume States**: Different icons for mute, low, and high volume
+- **Shuffle Active**: Shuffle icon highlighted in brand color when enabled
+- **Repeat Active**: Repeat icon highlighted in brand color when enabled
+- **Queue Open**: Queue icon highlighted in brand color when queue panel is open
 
 ### Interactive Behaviors
 - **Progress Seeking**: Click anywhere on progress bar to seek
 - **Volume Control**: Click on volume bar to adjust, button to mute/unmute
+- **Shuffle Toggle**: Click shuffle icon to enable/disable shuffle mode
+- **Repeat Toggle**: Click repeat icon to cycle through repeat modes
+- **Queue Toggle**: Click queue icon to open/close queue panel
+- **Lyrics Toggle**: Click lyrics icon to show/hide lyrics view
 - **Keyboard Navigation**: Arrow keys for fine-grained control
 - **Responsive Layout**: Adapts to different container sizes
+
+### Utility Icons
+The player includes several utility icons in the right section:
+- **Queue** (faListUl): Opens/closes the queue panel - highlighted when open
+- **Lyrics** (faMicrophone): Shows/hides lyrics view - highlighted when active
+- **Volume** (faVolumeUp/Down/Mute): Controls volume with visual feedback
 
 ## Testing
 

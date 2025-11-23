@@ -20,6 +20,7 @@ import {
   faVolumeUp,
   faVolumeDown,
   faVolumeMute,
+  faListUl,
 } from '@fortawesome/free-solid-svg-icons';
 
 export const MusicPlayer = forwardRef<HTMLDivElement, MusicPlayerProps>(
@@ -32,6 +33,7 @@ export const MusicPlayer = forwardRef<HTMLDivElement, MusicPlayerProps>(
       volume = 100,
       isShuffled = false,
       repeatMode = 'off',
+      isQueueOpen = false,
       onPlayPause,
       onNext,
       onPrevious,
@@ -40,6 +42,7 @@ export const MusicPlayer = forwardRef<HTMLDivElement, MusicPlayerProps>(
       onSeek,
       onVolumeChange,
       onLyrics,
+      onQueue,
       className,
       style,
       ...props
@@ -149,6 +152,11 @@ export const MusicPlayer = forwardRef<HTMLDivElement, MusicPlayerProps>(
     const shuffleIconColor = useMemo(() => {
       return isShuffled ? 'brand' : 'primary';
     }, [isShuffled]);
+
+    // Get queue icon color
+    const queueIconColor = useMemo(() => {
+      return isQueueOpen ? 'brand' : 'primary';
+    }, [isQueueOpen]);
 
     return (
       <MusicPlayerContainer
@@ -321,6 +329,16 @@ export const MusicPlayer = forwardRef<HTMLDivElement, MusicPlayerProps>(
               height: '100%',
             }}
           >
+            {onQueue && (
+              <Icon
+                icon={faListUl}
+                size="md"
+                color={queueIconColor}
+                clickable
+                onClick={onQueue}
+                aria-label={isQueueOpen ? 'Close queue' : 'Open queue'}
+              />
+            )}
             {onLyrics && (
               <Icon
                 icon={faMicrophone}

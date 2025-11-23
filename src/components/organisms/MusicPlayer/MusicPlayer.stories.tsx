@@ -117,6 +117,7 @@ const InteractiveTemplate = (args: MusicPlayerProps) => {
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [isShuffled, setIsShuffled] = useState(args.isShuffled || false);
   const [repeatMode, setRepeatMode] = useState<'off' | 'one' | 'all'>(args.repeatMode || 'off');
+  const [isQueueOpen, setIsQueueOpen] = useState(args.isQueueOpen || false);
 
   const currentTrack = args.currentTrack || sampleTracks[currentTrackIndex];
 
@@ -160,6 +161,7 @@ const InteractiveTemplate = (args: MusicPlayerProps) => {
         volume={volume}
         isShuffled={isShuffled}
         repeatMode={repeatMode}
+        isQueueOpen={isQueueOpen}
         onPlayPause={() => setIsPlaying(!isPlaying)}
         onNext={() => {
           setCurrentTrackIndex((prev) => (prev + 1) % sampleTracks.length);
@@ -178,7 +180,7 @@ const InteractiveTemplate = (args: MusicPlayerProps) => {
         onShuffle={handleShuffle}
         onRepeat={handleRepeat}
         onLyrics={() => {}}
-        onQueue={() => {}}
+        onQueue={() => setIsQueueOpen(!isQueueOpen)}
         onCast={() => {}}
         onFullscreen={() => {}}
         style={{
