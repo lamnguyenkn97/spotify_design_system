@@ -112,7 +112,7 @@ const getPositionStyles = (position: DrawerPosition, width?: string) => {
 // Drawer container
 export const DrawerContainer = styled.div<{ $position: DrawerPosition; $width?: string }>`
   position: fixed;
-  background: ${colors.grey.grey1}; /* Dark Spotify background */
+  background: ${colors.primary.black}; /* Solid dark Spotify background */
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
