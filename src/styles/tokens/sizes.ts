@@ -130,6 +130,7 @@ export const sizes = {
     tooltip: 1000,
     popover: 1100,
     overlay: 1200,
+    drawer: 1300, // Above all other overlays
   },
 
   // Max width constraints

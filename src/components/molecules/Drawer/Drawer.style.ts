@@ -7,6 +7,7 @@ import {
   fontWeights,
   lineHeights,
   letterSpacing,
+  sizes,
 } from '../../../styles';
 import { DrawerPosition } from './Drawer.types';
 
@@ -62,7 +63,7 @@ export const DrawerBackdrop = styled.div<{ $showBackdrop: boolean }>`
   inset: 0;
   background-color: ${({ $showBackdrop }) =>
     $showBackdrop ? 'rgba(0, 0, 0, 0.8)' : 'transparent'};
-  z-index: 1000;
+  z-index: ${sizes.zIndex.drawer}; /* Above modals and overlays */
   animation: ${({ $showBackdrop }) => ($showBackdrop ? fadeIn : 'none')} 0.2s ease-out;
   pointer-events: ${({ $showBackdrop }) => ($showBackdrop ? 'auto' : 'none')};
 `;
@@ -117,7 +118,7 @@ export const DrawerContainer = styled.div<{ $position: DrawerPosition; $width?: 
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  z-index: 1001;
+  z-index: ${sizes.zIndex.drawer + 1}; /* Above backdrop and all other overlays */
   ${({ $position, $width }) => getPositionStyles($position, $width)}
 `;
 
