@@ -196,3 +196,24 @@ export const DrawerContent = styled.div`
   }
 `;
 
+// Drawer footer with actions
+export const DrawerFooter = styled.div`
+  display: flex;
+  gap: ${spacing.md};
+  padding: ${spacing.lg};
+  border-top: 1px solid ${colors.grey.grey2};
+  flex-shrink: 0;
+`;
+
+// Action buttons container
+export const DrawerActions = styled.div`
+  display: flex;
+  gap: ${spacing.md};
+  width: 100%;
+  
+  /* Stack buttons vertically on narrow drawers */
+  @media (max-width: 400px) {
+    flex-direction: column;
+  }
+`;
+

@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { Button } from '../../atoms/Button';
+import { ButtonVariant, ButtonSize } from '../../atoms/Button/Button.types';
 import {
   DrawerBackdrop,
   DrawerContainer,
@@ -9,6 +11,8 @@ import {
   DrawerTitle,
   DrawerCloseButton,
   DrawerContent,
+  DrawerFooter,
+  DrawerActions,
 } from './Drawer.style';
 import { DrawerProps } from './Drawer.types';
 
@@ -19,6 +23,7 @@ export const Drawer: React.FC<DrawerProps> = ({
   width,
   title,
   children,
+  actions,
   showBackdrop = true,
   closeOnBackdropClick = true,
   closeOnEscape = true,
@@ -120,6 +125,33 @@ export const Drawer: React.FC<DrawerProps> = ({
 
         {/* Content */}
         <DrawerContent data-testid={`${dataTestId}-content`}>{children}</DrawerContent>
+
+        {/* Actions */}
+        {actions && actions.length > 0 && (
+          <DrawerFooter data-testid={`${dataTestId}-footer`}>
+            <DrawerActions>
+              {actions.map((action, index) => (
+                <Button
+                  key={index}
+                  onClick={action.onClick}
+                  variant={
+                    action.variant === 'primary'
+                      ? ButtonVariant.Primary
+                      : action.variant === 'secondary'
+                      ? ButtonVariant.Secondary
+                      : ButtonVariant.Text
+                  }
+                  size={ButtonSize.Medium}
+                  disabled={action.disabled}
+                  fullWidth={true}
+                  data-testid={`${dataTestId}-action-${index}`}
+                >
+                  {action.label}
+                </Button>
+              ))}
+            </DrawerActions>
+          </DrawerFooter>
+        )}
       </DrawerContainer>
     </DrawerBackdrop>
   );

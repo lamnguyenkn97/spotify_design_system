@@ -180,6 +180,49 @@ describe('Drawer', () => {
     });
   });
 
+  describe('Actions', () => {
+    it('renders action buttons', () => {
+      const actions = [
+        { label: 'Cancel', onClick: jest.fn(), variant: 'secondary' as const },
+        { label: 'Save', onClick: jest.fn(), variant: 'primary' as const },
+      ];
+
+      render(<Drawer {...defaultProps} actions={actions} />);
+      expect(screen.getByText('Cancel')).toBeInTheDocument();
+      expect(screen.getByText('Save')).toBeInTheDocument();
+    });
+
+    it('calls action onClick when clicked', () => {
+      const mockAction = jest.fn();
+      const actions = [{ label: 'Test Action', onClick: mockAction, variant: 'primary' as const }];
+
+      render(<Drawer {...defaultProps} actions={actions} />);
+      fireEvent.click(screen.getByText('Test Action'));
+      expect(mockAction).toHaveBeenCalledTimes(1);
+    });
+
+    it('disables action button when disabled is true', () => {
+      const actions = [
+        { label: 'Disabled', onClick: jest.fn(), variant: 'primary' as const, disabled: true },
+      ];
+
+      render(<Drawer {...defaultProps} actions={actions} />);
+      expect(screen.getByText('Disabled')).toBeDisabled();
+    });
+
+    it('does not render footer when no actions provided', () => {
+      render(<Drawer {...defaultProps} />);
+      expect(screen.queryByTestId('drawer-footer')).not.toBeInTheDocument();
+    });
+
+    it('renders footer when actions are provided', () => {
+      const actions = [{ label: 'Save', onClick: jest.fn(), variant: 'primary' as const }];
+
+      render(<Drawer {...defaultProps} actions={actions} />);
+      expect(screen.getByTestId('drawer-footer')).toBeInTheDocument();
+    });
+  });
+
   describe('Body scroll prevention', () => {
     it('prevents body scroll when open', () => {
       render(<Drawer {...defaultProps} />);

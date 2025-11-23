@@ -423,6 +423,130 @@ export const WideDrawer: Story = {
 };
 
 /**
+ * Drawer with action buttons
+ */
+export const WithActions: Story = {
+  render: (args) => <DrawerWithTrigger {...args} />,
+  args: {
+    position: 'right',
+    title: 'Edit Profile',
+    children: (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <div>
+          <Typography variant="body" size="sm" weight="bold" style={{ color: '#fff', marginBottom: '8px' }}>
+            Display Name
+          </Typography>
+          <Typography variant="caption" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+            John Doe
+          </Typography>
+        </div>
+        <div>
+          <Typography variant="body" size="sm" weight="bold" style={{ color: '#fff', marginBottom: '8px' }}>
+            Email
+          </Typography>
+          <Typography variant="caption" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+            john.doe@example.com
+          </Typography>
+        </div>
+        <div>
+          <Typography variant="body" size="sm" weight="bold" style={{ color: '#fff', marginBottom: '8px' }}>
+            Bio
+          </Typography>
+          <Typography variant="caption" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+            Music lover and playlist curator
+          </Typography>
+        </div>
+      </div>
+    ),
+    actions: [
+      {
+        label: 'Cancel',
+        onClick: () => console.log('Cancel clicked'),
+        variant: 'secondary' as const,
+      },
+      {
+        label: 'Save Changes',
+        onClick: () => console.log('Save clicked'),
+        variant: 'primary' as const,
+      },
+    ],
+  },
+};
+
+/**
+ * Drawer with single action button
+ */
+export const WithSingleAction: Story = {
+  render: (args) => <DrawerWithTrigger {...args} />,
+  args: {
+    position: 'right',
+    title: 'Confirm Deletion',
+    width: '400px',
+    children: (
+      <div>
+        <Typography variant="body" style={{ color: '#fff', marginBottom: '16px' }}>
+          Are you sure you want to delete this playlist? This action cannot be undone.
+        </Typography>
+        <Typography variant="caption" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
+          All songs and metadata will be permanently removed.
+        </Typography>
+      </div>
+    ),
+    actions: [
+      {
+        label: 'Delete Playlist',
+        onClick: () => console.log('Delete confirmed'),
+        variant: 'primary' as const,
+      },
+    ],
+  },
+};
+
+/**
+ * Drawer with multiple actions
+ */
+export const WithMultipleActions: Story = {
+  render: (args) => <DrawerWithTrigger {...args} />,
+  args: {
+    position: 'right',
+    title: 'Export Playlist',
+    width: '450px',
+    children: (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <Typography variant="body" style={{ color: '#fff' }}>
+          Choose how you want to export your playlist:
+        </Typography>
+        <div style={{ padding: '16px', backgroundColor: 'rgba(255, 255, 255, 0.08)', borderRadius: '8px' }}>
+          <Typography variant="body" size="sm" weight="bold" style={{ color: '#fff', marginBottom: '8px' }}>
+            Export Format
+          </Typography>
+          <Typography variant="caption" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+            JSON, CSV, or Plain Text
+          </Typography>
+        </div>
+      </div>
+    ),
+    actions: [
+      {
+        label: 'Export as JSON',
+        onClick: () => console.log('Export JSON'),
+        variant: 'text' as const,
+      },
+      {
+        label: 'Export as CSV',
+        onClick: () => console.log('Export CSV'),
+        variant: 'secondary' as const,
+      },
+      {
+        label: 'Export as Text',
+        onClick: () => console.log('Export Text'),
+        variant: 'primary' as const,
+      },
+    ],
+  },
+};
+
+/**
  * Drawer without title
  */
 export const NoTitle: Story = {

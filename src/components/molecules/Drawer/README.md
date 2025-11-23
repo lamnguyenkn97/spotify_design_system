@@ -50,12 +50,22 @@ function MyComponent() {
 | `width` | `string` | `'400px'` | Width (for left/right) or height (for top/bottom) |
 | `title` | `string` | - | Optional title displayed in header |
 | `children` | `React.ReactNode` | required | Content to display in drawer |
+| `actions` | `DrawerAction[]` | - | Action buttons displayed in footer |
 | `showBackdrop` | `boolean` | `true` | Whether to show backdrop overlay |
 | `closeOnBackdropClick` | `boolean` | `true` | Close drawer when backdrop is clicked |
 | `closeOnEscape` | `boolean` | `true` | Close drawer when ESC key is pressed |
 | `showCloseButton` | `boolean` | `true` | Show close button in header |
 | `className` | `string` | - | Custom CSS class |
 | `data-testid` | `string` | `'drawer'` | Test ID for testing |
+
+### DrawerAction
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `label` | `string` | required | Button label text |
+| `onClick` | `() => void` | required | Callback when button is clicked |
+| `variant` | `'primary' \| 'secondary' \| 'text'` | - | Button variant/style |
+| `disabled` | `boolean` | `false` | Whether button is disabled |
 
 ## Examples
 
@@ -126,6 +136,81 @@ function MyComponent() {
   title="Complete Action"
 >
   <Form onComplete={() => setOpen(false)} />
+</Drawer>
+```
+
+### With Action Buttons
+
+```tsx
+<Drawer
+  open={open}
+  onClose={() => setOpen(false)}
+  title="Edit Profile"
+  actions={[
+    {
+      label: 'Cancel',
+      onClick: () => setOpen(false),
+      variant: 'secondary',
+    },
+    {
+      label: 'Save Changes',
+      onClick: () => {
+        saveProfile();
+        setOpen(false);
+      },
+      variant: 'primary',
+    },
+  ]}
+>
+  <ProfileForm />
+</Drawer>
+```
+
+### Single Action Button
+
+```tsx
+<Drawer
+  open={open}
+  onClose={() => setOpen(false)}
+  title="Confirm Deletion"
+  actions={[
+    {
+      label: 'Delete Playlist',
+      onClick: () => handleDelete(),
+      variant: 'primary',
+    },
+  ]}
+>
+  <p>Are you sure you want to delete this playlist?</p>
+</Drawer>
+```
+
+### Multiple Actions with Different Variants
+
+```tsx
+<Drawer
+  open={open}
+  onClose={() => setOpen(false)}
+  title="Export Options"
+  actions={[
+    {
+      label: 'Export as JSON',
+      onClick: () => exportAsJSON(),
+      variant: 'text',
+    },
+    {
+      label: 'Export as CSV',
+      onClick: () => exportAsCSV(),
+      variant: 'secondary',
+    },
+    {
+      label: 'Export as Text',
+      onClick: () => exportAsText(),
+      variant: 'primary',
+    },
+  ]}
+>
+  <ExportOptions />
 </Drawer>
 ```
 

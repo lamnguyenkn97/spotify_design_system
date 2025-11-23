@@ -2,6 +2,13 @@ import React from 'react';
 
 export type DrawerPosition = 'left' | 'right' | 'top' | 'bottom';
 
+export interface DrawerAction {
+  label: string;
+  onClick: () => void;
+  variant?: 'primary' | 'secondary' | 'text';
+  disabled?: boolean;
+}
+
 export interface DrawerProps {
   /** Whether the drawer is open */
   open: boolean;
@@ -15,6 +22,8 @@ export interface DrawerProps {
   title?: string;
   /** Drawer content */
   children: React.ReactNode;
+  /** Action buttons */
+  actions?: DrawerAction[];
   /** Show backdrop overlay */
   showBackdrop?: boolean;
   /** Close on backdrop click */
