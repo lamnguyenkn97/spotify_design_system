@@ -82,30 +82,30 @@ export const Default: Story = {
     title: 'Settings',
     children: (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        <Typography variant="body1" style={{ color: '#fff' }}>
+        <Typography variant="body" style={{ color: '#fff' }}>
           Configure your settings here
         </Typography>
         <div style={{ padding: '16px', backgroundColor: 'rgba(255, 255, 255, 0.08)', borderRadius: '8px' }}>
-          <Typography variant="h6" style={{ color: '#fff', marginBottom: '8px' }}>
+          <Typography variant="heading" size="md" style={{ color: '#fff', marginBottom: '8px' }}>
             Account
           </Typography>
-          <Typography variant="body2" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+          <Typography variant="caption" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
             Manage your account settings and preferences
           </Typography>
         </div>
         <div style={{ padding: '16px', backgroundColor: 'rgba(255, 255, 255, 0.08)', borderRadius: '8px' }}>
-          <Typography variant="h6" style={{ color: '#fff', marginBottom: '8px' }}>
+          <Typography variant="heading" size="md" style={{ color: '#fff', marginBottom: '8px' }}>
             Privacy
           </Typography>
-          <Typography variant="body2" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+          <Typography variant="caption" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
             Control your privacy and data sharing options
           </Typography>
         </div>
         <div style={{ padding: '16px', backgroundColor: 'rgba(255, 255, 255, 0.08)', borderRadius: '8px' }}>
-          <Typography variant="h6" style={{ color: '#fff', marginBottom: '8px' }}>
+          <Typography variant="heading" size="md" style={{ color: '#fff', marginBottom: '8px' }}>
             Notifications
           </Typography>
-          <Typography variant="body2" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+          <Typography variant="caption" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
             Customize what notifications you receive
           </Typography>
         </div>
@@ -162,7 +162,7 @@ export const TopDrawer: Story = {
     children: (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
         <div style={{ padding: '12px', backgroundColor: 'rgba(255, 255, 255, 0.08)', borderRadius: '8px' }}>
-          <Typography variant="body2" style={{ color: '#fff', fontWeight: 600 }}>
+          <Typography variant="body" size="sm" weight="bold" style={{ color: '#fff' }}>
             New Release
           </Typography>
           <Typography variant="caption" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
@@ -170,7 +170,7 @@ export const TopDrawer: Story = {
           </Typography>
         </div>
         <div style={{ padding: '12px', backgroundColor: 'rgba(255, 255, 255, 0.08)', borderRadius: '8px' }}>
-          <Typography variant="body2" style={{ color: '#fff', fontWeight: 600 }}>
+          <Typography variant="body" size="sm" weight="bold" style={{ color: '#fff' }}>
             Weekly Discover
           </Typography>
           <Typography variant="caption" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
@@ -199,10 +199,10 @@ export const BottomDrawer: Story = {
           style={{ width: '120px', height: '120px', borderRadius: '8px' }}
         />
         <div style={{ textAlign: 'center' }}>
-          <Typography variant="h6" style={{ color: '#fff' }}>
+          <Typography variant="heading" size="md" style={{ color: '#fff' }}>
             Lover
           </Typography>
-          <Typography variant="body2" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+          <Typography variant="caption" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
             Taylor Swift
           </Typography>
         </div>
@@ -223,7 +223,7 @@ export const NoBackdrop: Story = {
     showBackdrop: false,
     children: (
       <div>
-        <Typography variant="body1" style={{ color: '#fff' }}>
+        <Typography variant="body" style={{ color: '#fff' }}>
           This drawer doesn't have a backdrop, so you can interact with the content behind it.
         </Typography>
       </div>
@@ -244,7 +244,7 @@ export const NoCloseButton: Story = {
     closeOnEscape: false,
     children: (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        <Typography variant="body1" style={{ color: '#fff' }}>
+        <Typography variant="body" style={{ color: '#fff' }}>
           You must complete this action to continue.
         </Typography>
         <Button variant={ButtonVariant.Primary} fullWidth>
@@ -273,20 +273,20 @@ export const WideDrawer: Story = {
             style={{ width: '160px', height: '160px', borderRadius: '8px', flexShrink: 0 }}
           />
           <div>
-            <Typography variant="h5" style={{ color: '#fff', marginBottom: '8px' }}>
+            <Typography variant="heading" size="lg" style={{ color: '#fff', marginBottom: '8px' }}>
               My Awesome Playlist
             </Typography>
-            <Typography variant="body2" style={{ color: 'rgba(255, 255, 255, 0.7)', marginBottom: '16px' }}>
+            <Typography variant="caption" style={{ color: 'rgba(255, 255, 255, 0.7)', marginBottom: '16px' }}>
               50 songs • 3h 25min
             </Typography>
             <Button variant={ButtonVariant.Primary}>Play</Button>
           </div>
         </div>
         <div>
-          <Typography variant="h6" style={{ color: '#fff', marginBottom: '12px' }}>
+          <Typography variant="heading" size="md" style={{ color: '#fff', marginBottom: '12px' }}>
             Description
           </Typography>
-          <Typography variant="body2" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+          <Typography variant="caption" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
             A collection of my favorite songs for every mood. Perfect for long drives, workout sessions, or just
             relaxing at home.
           </Typography>
@@ -305,10 +305,10 @@ export const NoTitle: Story = {
     position: 'right',
     children: (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        <Typography variant="h5" style={{ color: '#fff', marginBottom: '8px' }}>
+        <Typography variant="heading" size="lg" style={{ color: '#fff', marginBottom: '8px' }}>
           Custom Header
         </Typography>
-        <Typography variant="body1" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+        <Typography variant="body" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
           This drawer doesn't use the built-in title prop, so you can create your own header structure.
         </Typography>
       </div>
