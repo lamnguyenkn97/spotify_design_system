@@ -22,6 +22,8 @@ export interface MusicPlayerProps extends Omit<React.HTMLAttributes<HTMLDivEleme
   isShuffled?: boolean;
   /** Repeat mode: 'off' | 'one' | 'all' */
   repeatMode?: 'off' | 'one' | 'all';
+  /** Whether queue is open */
+  isQueueOpen?: boolean;
   /** Callback when play/pause is clicked */
   onPlayPause?: () => void;
   /** Callback when next track is clicked */

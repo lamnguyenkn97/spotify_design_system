@@ -467,6 +467,57 @@ describe('MusicPlayer Component - Logic Tests', () => {
     });
   });
 
+  describe('Queue Logic', () => {
+    it('should show queue icon as active when isQueueOpen is true', () => {
+      render(
+        <TestWrapper>
+          <MusicPlayer {...defaultProps} isQueueOpen={true} onQueue={jest.fn()} />
+        </TestWrapper>
+      );
+
+      const queueButton = screen.getByRole('button', { name: /close queue/i });
+      expect(queueButton).toBeInTheDocument();
+    });
+
+    it('should show queue icon as inactive when isQueueOpen is false', () => {
+      render(
+        <TestWrapper>
+          <MusicPlayer {...defaultProps} isQueueOpen={false} onQueue={jest.fn()} />
+        </TestWrapper>
+      );
+
+      const queueButton = screen.getByRole('button', { name: /open queue/i });
+      expect(queueButton).toBeInTheDocument();
+    });
+
+    it('should call onQueue when queue button is clicked', async () => {
+      const user = userEvent.setup();
+      const onQueue = jest.fn();
+      
+      render(
+        <TestWrapper>
+          <MusicPlayer {...defaultProps} isQueueOpen={false} onQueue={onQueue} />
+        </TestWrapper>
+      );
+
+      const queueButton = screen.getByRole('button', { name: /open queue/i });
+      await user.click(queueButton);
+
+      expect(onQueue).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not render queue button when onQueue is not provided', () => {
+      render(
+        <TestWrapper>
+          <MusicPlayer {...defaultProps} />
+        </TestWrapper>
+      );
+
+      const queueButton = screen.queryByRole('button', { name: /queue/i });
+      expect(queueButton).not.toBeInTheDocument();
+    });
+  });
+
   describe('Display Volume Logic', () => {
     it('should display actual volume in progress bar', () => {
       render(
