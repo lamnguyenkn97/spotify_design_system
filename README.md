@@ -24,7 +24,7 @@ A professional-grade design system demonstrating **modern component library arch
 | Resource | Description |
 |----------|-------------|
 | **[📚 Interactive Docs](https://spotify-storybook.vercel.app)** | Storybook with live component examples |
-| **[📦 NPM Package](https://www.npmjs.com/package/spotify-design-system)** | Published library (1K+ downloads) |
+| **[📦 NPM Package](https://www.npmjs.com/package/spotify-design-system)** | Published & actively maintained library |
 | **[🎵 Live Application](https://github.com/lamnguyenkn97)** | Full Spotify clone built with this system |
 | **[💻 Source Code](https://github.com/lamnguyenkn97/spotify_design_system)** | GitHub repository |
 
@@ -253,7 +253,7 @@ npm publish               # Publish to NPM (after build)
 |--------|-------|
 | **Version** | 1.0.54 |
 | **Components** | 23 (15 Atoms, 5 Molecules, 3 Organisms) |
-| **NPM Downloads** | 1,000+ |
+| **Published to NPM** | ✅ Active deployment & versioning |
 | **Test Cases** | 70+ (Jest + React Testing Library) |
 | **Storybook Stories** | 100% component coverage |
 | **TypeScript** | 100% type coverage |
