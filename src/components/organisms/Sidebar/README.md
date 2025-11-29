@@ -1,37 +1,49 @@
 # Sidebar Component
 
 ## Overview
-A comprehensive sidebar navigation component providing **user library management, search functionality, and content organization** for Spotify-style applications. Serves as the primary library navigation interface with **adaptive filtering and view controls**.
+A versatile sidebar navigation component supporting both **Library** and **Queue** variants. Provides user library management, search functionality, content organization, and queue display for Spotify-style applications.
 
 ## Key Features
 
-| Feature | Description | Example |
-|---------|-------------|---------|
-| **Library Management** | Displays user's playlists, artists, albums, and podcasts | "Your Library" section with items |
-| **Content Filtering** | Filter by content type with interactive buttons | Playlists, Artists, Albums, Podcasts & Shows |
-| **Search Integration** | Search within user's library with real-time input | "Search in Your Library" input |
-| **View Toggle** | Switch between list and grid views | List/Grid icon controls |
-| **Action Controls** | Add new content and expand/collapse sidebar | Plus and expand icons |
-| **Spotify Branding** | Consistent brand presence with logo | Spotify logo at top |
-| **Horizontal Tiles** | Rich display of library items with images | Song/playlist cards with metadata |
-| **Responsive Design** | Adapts to different screen sizes and states | Mobile-friendly layout |
+| Feature | Description | Variants |
+|---------|-------------|----------|
+| **Two Variants** | Library (left) for content browsing, Queue (right) for playback queue | Library, Queue |
+| **Flexible Positioning** | Can be positioned on left or right side | Left, Right |
+| **Library Management** | Displays user's playlists, artists, albums, and podcasts | Library variant |
+| **Queue Display** | Shows now playing and upcoming tracks | Queue variant |
+| **Content Filtering** | Filter by content type with interactive buttons | Library variant |
+| **Search Integration** | Search within user's library with real-time input | Library variant |
+| **Action Controls** | Add new content and expand/collapse sidebar | Library variant |
+| **Close Button** | Dismissible queue sidebar with close button | Queue variant |
+| **Now Playing** | Dedicated section for currently playing track | Queue variant |
+| **Spotify Branding** | Consistent brand presence with logo | Library variant |
+| **Horizontal Tiles** | Rich display of items with images and metadata | Both variants |
+| **Responsive Design** | Adapts to different screen sizes and states | Both variants |
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `libraryItems` | `LibraryItem[]` | `[]` | *Optional.* Array of library items to display |
-| `filters` | `string[]` | `['Playlists', 'Artists', 'Albums', 'Podcasts & Shows']` | *Optional.* Available filter options |
-| `onFilterClick` | `(filter: string) => void` | - | *Optional.* Handler for filter button clicks |
-| `onAddClick` | `() => void` | - | *Optional.* Handler for add button click |
-| `onExpandClick` | `() => void` | - | *Optional.* Handler for expand button click |
-| `onSearch` | `(query: string) => void` | - | *Optional.* Handler for search input changes |
-| `onLibraryItemClick` | `(item: LibraryItem) => void` | - | *Optional.* Handler for library item clicks |
-| `onViewToggle` | `(viewType: 'list' \| 'grid') => void` | - | *Optional.* Handler for view toggle clicks |
-| `showLogo` | `boolean` | `true` | *Optional.* Whether to show Spotify logo |
-| `currentView` | `'list' \| 'grid'` | `'list'` | *Optional.* Current view type |
-| `className` | `string` | - | *Optional.* Custom CSS class name |
-| `...props` | `React.HTMLAttributes<HTMLElement>` | - | Additional HTML attributes |
+| `variant` | `'library' \| 'queue'` | `'library'` | Sidebar variant type |
+| `position` | `'left' \| 'right'` | `'left'` | Sidebar position on screen |
+| `title` | `string` | Auto | Custom sidebar title (defaults based on variant) |
+| `libraryItems` | `LibraryItem[]` | `[]` | Array of library items (library variant) |
+| `queueItems` | `QueueItem[]` | `[]` | Array of queue items (queue variant) |
+| `nowPlaying` | `QueueItem` | - | Currently playing track (queue variant) |
+| `filters` | `string[]` | `['Playlists', 'Artists', ...]` | Available filter options (library variant) |
+| `showSearch` | `boolean` | `true` | Show search input (library variant) |
+| `showFilters` | `boolean` | `true` | Show filter buttons (library variant) |
+| `showLogo` | `boolean` | `true` | Show Spotify logo (library variant) |
+| `showCloseButton` | `boolean` | `false` | Show close button in header |
+| `onFilterClick` | `(filter: string) => void` | - | Handler for filter button clicks |
+| `onAddClick` | `() => void` | - | Handler for add button click |
+| `onExpandClick` | `() => void` | - | Handler for expand button click |
+| `onSearch` | `(query: string) => void` | - | Handler for search input changes |
+| `onLibraryItemClick` | `(item: LibraryItem) => void` | - | Handler for library item clicks |
+| `onQueueItemClick` | `(item: QueueItem) => void` | - | Handler for queue item clicks |
+| `onClose` | `() => void` | - | Handler for close button click |
+| `className` | `string` | - | Custom CSS class name |
+| `style` | `React.CSSProperties` | - | Custom inline styles |
 
 ### LibraryItem Type
 ```tsx
@@ -45,23 +57,66 @@ interface LibraryItem {
 }
 ```
 
+### QueueItem Type
+```tsx
+interface QueueItem {
+  id: string;           // Unique identifier
+  image: string;        // Track cover image URL
+  title: string;        // Track title
+  artist: string;       // Artist name
+  album?: string;       // Album name (optional)
+  duration?: string;    // Track duration (e.g., "3:20")
+}
+```
+
+## Variants
+
+### Library Variant (`variant="library"`)
+**Purpose**: Browse and manage user's saved content (playlists, albums, artists, podcasts)
+
+**Features**:
+- Positioned on the **left** side by default
+- Includes Spotify logo
+- Filter buttons for content types
+- Search functionality
+- Add and expand controls
+- Persistent display
+
+**Use when**: Building the main navigation/library browsing interface
+
+### Queue Variant (`variant="queue"`)
+**Purpose**: Display current playback queue and now playing information
+
+**Features**:
+- Positioned on the **right** side by default
+- Shows "Now Playing" section with current track
+- Lists upcoming tracks in queue
+- Optional close button for toggle behavior
+- No filters or search (focused on queue only)
+- Can be toggled on/off
+
+**Use when**: Showing playback queue, controlled by MusicPlayer queue button
+
 ## Design Tokens Integration
 
 The component uses design tokens for consistent styling:
 
 ### Layout Structure
 ```tsx
-const SIDEBAR_STYLES = {
+const getSidebarStyles = (position: SidebarPosition = 'left') => ({
   container: {
-    width: '280px',                                    // Standard sidebar width
-    height: '100vh',                                   // Full viewport height
+    width: '360px',                                   // Wider for better content display
+    height: '100vh',                                  // Full viewport height
     backgroundColor: colors.primary.black,            // Spotify black background
     color: colors.primary.white,                      // White text
     padding: spacing.md,                              // Standard padding
-    borderRight: `1px solid ${colors.grey.grey3}`,   // Subtle border
+    // Dynamic border based on position
+    ...(position === 'left'
+      ? { borderRight: `1px solid ${colors.grey.grey3}` }
+      : { borderLeft: `1px solid ${colors.grey.grey3}` }),
   },
   // ... additional styles
-};
+});
 ```
 
 ### Component Sections
@@ -87,14 +142,31 @@ searchWrapper: {
 
 ## Usage Patterns
 
-### Basic Sidebar
+### Library Sidebar (Default)
 ```tsx
-<Sidebar />
+<Sidebar 
+  variant="library"
+  position="left"
+/>
 ```
 
-### Customized Sidebar with Handlers
+### Queue Sidebar (Right Side)
 ```tsx
 <Sidebar
+  variant="queue"
+  position="right"
+  queueItems={upcomingTracks}
+  nowPlaying={currentTrack}
+  showCloseButton={true}
+  onClose={() => setQueueOpen(false)}
+  onQueueItemClick={(item) => playTrack(item)}
+/>
+```
+
+### Library Sidebar with Customization
+```tsx
+<Sidebar
+  variant="library"
   libraryItems={userLibrary}
   filters={['Playlists', 'Albums', 'Artists']}
   onFilterClick={(filter) => handleFilterChange(filter)}
@@ -102,9 +174,98 @@ searchWrapper: {
   onExpandClick={() => toggleSidebarExpansion()}
   onSearch={(query) => handleLibrarySearch(query)}
   onLibraryItemClick={(item) => navigateToItem(item)}
-  onViewToggle={(view) => setCurrentView(view)}
-  currentView="grid"
   showLogo={true}
+/>
+```
+
+### Complete App Layout with Library + Queue
+```tsx
+function SpotifyApp() {
+  const [isQueueOpen, setIsQueueOpen] = useState(false);
+  const [currentTrack, setCurrentTrack] = useState(tracks[0]);
+  const [queue, setQueue] = useState(tracks.slice(1));
+
+  return (
+    <div style={{ display: 'flex', height: '100vh' }}>
+      {/* Library Sidebar - Left */}
+      <Sidebar
+        variant="library"
+        position="left"
+        libraryItems={myLibrary}
+        onLibraryItemClick={(item) => playPlaylist(item)}
+      />
+      
+      {/* Main Content Area */}
+      <main style={{ flex: 1 }}>
+        {/* Your main content */}
+      </main>
+      
+      {/* Queue Sidebar - Right (conditional) */}
+      {isQueueOpen && (
+        <Sidebar
+          variant="queue"
+          position="right"
+          nowPlaying={{
+            id: currentTrack.id,
+            image: currentTrack.coverUrl,
+            title: currentTrack.title,
+            artist: currentTrack.artist,
+            album: currentTrack.album,
+            duration: currentTrack.duration,
+          }}
+          queueItems={queue.map(track => ({
+            id: track.id,
+            image: track.coverUrl,
+            title: track.title,
+            artist: track.artist,
+            album: track.album,
+            duration: track.duration,
+          }))}
+          showCloseButton={true}
+          onClose={() => setIsQueueOpen(false)}
+          onQueueItemClick={(item) => playTrack(item.id)}
+        />
+      )}
+      
+      {/* Music Player - Bottom */}
+      <MusicPlayer
+        currentTrack={currentTrack}
+        isQueueOpen={isQueueOpen}
+        onQueue={() => setIsQueueOpen(!isQueueOpen)}
+        {...otherPlayerProps}
+      />
+    </div>
+  );
+}
+```
+
+### Queue Sidebar Only
+```tsx
+<Sidebar
+  variant="queue"
+  position="right"
+  title="Up Next"
+  nowPlaying={{
+    id: '1',
+    image: 'https://example.com/cover.jpg',
+    title: 'Anti-Hero',
+    artist: 'Taylor Swift',
+    album: 'Midnights',
+    duration: '3:20',
+  }}
+  queueItems={[
+    {
+      id: '2',
+      image: 'https://example.com/track2.jpg',
+      title: 'Lavender Haze',
+      artist: 'Taylor Swift',
+      duration: '3:22',
+    },
+    // ... more tracks
+  ]}
+  showCloseButton={true}
+  onClose={() => console.log('Close queue')}
+  onQueueItemClick={(item) => console.log('Play:', item.title)}
 />
 ```
 

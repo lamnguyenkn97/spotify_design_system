@@ -1,2 +1,8 @@
 export { Sidebar } from './Sidebar';
-export type { SidebarProps, LibraryItem } from './Sidebar.types'; 
+export type {
+  SidebarProps,
+  LibraryItem,
+  QueueItem,
+  SidebarVariant,
+  SidebarPosition,
+} from './Sidebar.types'; 

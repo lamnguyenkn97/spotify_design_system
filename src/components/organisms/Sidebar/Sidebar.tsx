@@ -5,26 +5,30 @@ import { Button } from '../../atoms/Button/Button';
 import { Pill } from '../../atoms/Pill';
 import { Icon } from '../../atoms/Icon/Icon';
 import { Input } from '../../atoms/Input';
+import { Image } from '../../atoms/Image';
 import { faSpotify } from '@fortawesome/free-brands-svg-icons';
 import {
   faPlus,
   faExpand,
   faSearch,
+  faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import { ButtonSize, ButtonVariant } from '../../atoms/Button';
 import { HorizontalTileCard } from '../../molecules/HorizontalTileCard';
-import { SidebarProps, LibraryItem } from './Sidebar.types';
+import { SidebarProps, LibraryItem, QueueItem, SidebarPosition } from './Sidebar.types';
 import { colors, spacing } from '../../../styles';
 
 // Sidebar configuration using design tokens
-const SIDEBAR_STYLES = {
+const getSidebarStyles = (position: SidebarPosition = 'left') => ({
   container: {
-    width: '280px',
+    width: '360px',
     height: '100vh',
     backgroundColor: colors.primary.black,
     color: colors.primary.white,
     padding: spacing.md,
-    borderRight: `1px solid ${colors.grey.grey3}`,
+    ...(position === 'left'
+      ? { borderRight: `1px solid ${colors.grey.grey3}` }
+      : { borderLeft: `1px solid ${colors.grey.grey3}` }),
     display: 'flex',
     flexDirection: 'column' as const,
     gap: spacing.md,
@@ -33,19 +37,25 @@ const SIDEBAR_STYLES = {
     padding: spacing.sm,
     borderBottom: `1px solid ${colors.grey.grey3}`,
   },
-  titleSection: {
+  headerSection: {
     padding: `${spacing.sm} 0`,
   },
   filtersSection: {
     flexWrap: 'wrap' as const,
     padding: `${spacing.sm} 0`,
   },
-  librarySection: {
+  contentSection: {
     flex: 1,
     overflowY: 'auto' as const,
     padding: `${spacing.sm} 0`,
   },
-} as const;
+  nowPlayingSection: {
+    padding: spacing.md,
+    backgroundColor: colors.grey.grey0,
+    borderRadius: '8px',
+    marginBottom: spacing.md,
+  },
+});
 
 // Default configuration
 const DEFAULT_FILTERS = ['Playlists', 'Artists', 'Albums', 'Podcasts & Shows'];
@@ -70,7 +80,7 @@ const DEFAULT_LIBRARY_ITEMS: LibraryItem[] = [
 ];
 
 // Logo Section Component
-const LogoSection: React.FC<{ showLogo: boolean }> = ({ showLogo }) => {
+const LogoSection: React.FC<{ showLogo: boolean; styles: any }> = ({ showLogo, styles }) => {
   if (!showLogo) return null;
 
   return (
@@ -78,10 +88,101 @@ const LogoSection: React.FC<{ showLogo: boolean }> = ({ showLogo }) => {
       direction="row"
       align="center"
       spacing="md"
-      style={SIDEBAR_STYLES.logoSection}
+      style={styles.logoSection}
     >
       <Icon icon={faSpotify} size="lg" color="primary" aria-label="Spotify" />
     </Stack>
+  );
+};
+
+// Header Section Component (with optional close button)
+const HeaderSection: React.FC<{
+  title: string;
+  showCloseButton?: boolean;
+  onClose?: () => void;
+  styles: any;
+}> = ({ title, showCloseButton, onClose, styles }) => {
+  return (
+    <Stack
+      direction="row"
+      align="center"
+      justify="space-between"
+      style={styles.headerSection}
+    >
+      <Typography variant="heading" weight="bold" color="primary">
+        {title}
+      </Typography>
+      {showCloseButton && onClose && (
+        <Button
+          icon={<Icon icon={faXmark} size="md" />}
+          size={ButtonSize.Small}
+          variant={ButtonVariant.Text}
+          onClick={onClose}
+          aria-label="Close sidebar"
+        />
+      )}
+    </Stack>
+  );
+};
+
+// Now Playing Section Component (for Queue variant)
+const NowPlayingSection: React.FC<{
+  nowPlaying?: QueueItem;
+  styles: any;
+}> = ({ nowPlaying, styles }) => {
+  if (!nowPlaying) return null;
+
+  return (
+    <div>
+      <Typography
+        variant="body"
+        size="sm"
+        weight="bold"
+        color="primary"
+        style={{ marginBottom: spacing.sm }}
+      >
+        Now playing
+      </Typography>
+      <Stack
+        direction="row"
+        spacing="md"
+        align="center"
+        style={styles.nowPlayingSection}
+      >
+        <Image
+          src={nowPlaying.image}
+          alt={nowPlaying.title}
+          size="md"
+          shape="square"
+        />
+        <Stack direction="column" spacing="xs" style={{ flex: 1, minWidth: 0 }}>
+          <Typography
+            variant="body"
+            size="sm"
+            weight="bold"
+            color="primary"
+            style={{
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {nowPlaying.title}
+          </Typography>
+          <Typography
+            variant="caption"
+            color="secondary"
+            style={{
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {nowPlaying.artist}
+          </Typography>
+        </Stack>
+      </Stack>
+    </div>
   );
 };
 
@@ -92,12 +193,13 @@ const FilterControls: React.FC<{
   onFilterClick?: (filter: string) => void;
   onAddClick?: () => void;
   onExpandClick?: () => void;
-}> = ({ filters, activeFilter, onFilterClick, onAddClick, onExpandClick }) => {
+  styles: any;
+}> = ({ filters, activeFilter, onFilterClick, onAddClick, onExpandClick, styles }) => {
   return (
     <Stack
       direction="row"
       spacing="xs"
-      style={SIDEBAR_STYLES.filtersSection}
+      style={styles.filtersSection}
     >
       {filters.map((filter) => (
         <Pill
@@ -161,7 +263,8 @@ const LibraryList: React.FC<{
   libraryItems: LibraryItem[];
   activeItemId?: string;
   onLibraryItemClick?: (item: LibraryItem) => void;
-}> = ({ libraryItems, activeItemId, onLibraryItemClick }) => {
+  styles: any;
+}> = ({ libraryItems, activeItemId, onLibraryItemClick, styles }) => {
   const handleItemClick = useCallback(
     (item: LibraryItem) => {
       onLibraryItemClick?.(item);
@@ -171,7 +274,7 @@ const LibraryList: React.FC<{
 
   if (libraryItems.length === 0) {
     return (
-      <Stack style={SIDEBAR_STYLES.librarySection}>
+      <Stack style={styles.contentSection}>
         <Typography variant="body" color="secondary">
           No items in your library
         </Typography>
@@ -180,7 +283,7 @@ const LibraryList: React.FC<{
   }
 
   return (
-    <Stack direction="column" spacing="xs" style={SIDEBAR_STYLES.librarySection}>
+    <Stack direction="column" spacing="xs" style={styles.contentSection}>
       {libraryItems.map((item) => (
         <HorizontalTileCard
           key={item.id || item.title}
@@ -197,27 +300,99 @@ const LibraryList: React.FC<{
   );
 };
 
+// Queue List Component
+const QueueList: React.FC<{
+  queueItems: QueueItem[];
+  activeItemId?: string;
+  onQueueItemClick?: (item: QueueItem) => void;
+  styles: any;
+}> = ({ queueItems, activeItemId, onQueueItemClick, styles }) => {
+  const handleItemClick = useCallback(
+    (item: QueueItem) => {
+      onQueueItemClick?.(item);
+    },
+    [onQueueItemClick]
+  );
+
+  if (queueItems.length === 0) {
+    return (
+      <Stack style={styles.contentSection}>
+        <Typography variant="body" color="secondary">
+          No songs in queue
+        </Typography>
+      </Stack>
+    );
+  }
+
+  return (
+    <div>
+      <Typography
+        variant="body"
+        size="sm"
+        weight="bold"
+        color="primary"
+        style={{ marginBottom: spacing.sm }}
+      >
+        Next in queue
+      </Typography>
+      <Stack direction="column" spacing="xs" style={styles.contentSection}>
+        {queueItems.map((item) => (
+          <HorizontalTileCard
+            key={item.id}
+            image={item.image}
+            title={item.title}
+            subtitle={item.artist}
+            width="100%"
+            onClick={() => handleItemClick(item)}
+            size="small"
+            isActive={activeItemId === item.id}
+          />
+        ))}
+      </Stack>
+    </div>
+  );
+};
+
 // Main Sidebar Component
 export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
   (
     {
+      variant = 'library',
+      position = 'left',
+      title,
       libraryItems = DEFAULT_LIBRARY_ITEMS,
+      queueItems = [],
+      nowPlaying,
       filters = DEFAULT_FILTERS,
+      showSearch = true,
+      showFilters = true,
+      showLogo = true,
+      showCloseButton = false,
       onFilterClick,
       onAddClick,
       onExpandClick,
       onSearch,
       onLibraryItemClick,
-      showLogo = true,
+      onQueueItemClick,
+      onClose,
       className,
       style,
       ...props
     },
     ref
   ) => {
-    // State to track active filter and library item
+    // State to track active filter and active item
     const [activeFilter, setActiveFilter] = useState<string | undefined>();
     const [activeItemId, setActiveItemId] = useState<string | undefined>();
+
+    // Get styles based on position
+    const sidebarStyles = useMemo(() => getSidebarStyles(position), [position]);
+
+    // Determine title based on variant
+    const sidebarTitle = useMemo(() => {
+      if (title) return title;
+      return variant === 'library' ? 'Your Library' : 'Queue';
+    }, [title, variant]);
 
     // Memoized default handlers to prevent unnecessary re-renders
     const defaultHandlers = useMemo(
@@ -227,6 +402,8 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
         onExpandClick: () => {},
         onSearch: () => {},
         onLibraryItemClick: () => {},
+        onQueueItemClick: () => {},
+        onClose: () => {},
       }),
       []
     );
@@ -234,10 +411,10 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
     // Memoized merged styles
     const mergedStyles = useMemo(
       () => ({
-        ...SIDEBAR_STYLES.container,
+        ...sidebarStyles.container,
         ...style,
       }),
-      [style]
+      [sidebarStyles.container, style]
     );
 
     // Memoized event handlers
@@ -272,53 +449,105 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
       [onLibraryItemClick, defaultHandlers.onLibraryItemClick]
     );
 
+    const handleQueueItemClick = useCallback(
+      (item: QueueItem) => {
+        setActiveItemId(item.id);
+        (onQueueItemClick || defaultHandlers.onQueueItemClick)(item);
+      },
+      [onQueueItemClick, defaultHandlers.onQueueItemClick]
+    );
+
+    const handleClose = useCallback(() => {
+      (onClose || defaultHandlers.onClose)();
+    }, [onClose, defaultHandlers.onClose]);
 
     // Memoized sections for performance
     const logoSection = useMemo(
-      () => <LogoSection showLogo={showLogo} />,
-      [showLogo]
+      () => showLogo && variant === 'library' ? (
+        <LogoSection showLogo={showLogo} styles={sidebarStyles} />
+      ) : null,
+      [showLogo, variant, sidebarStyles]
     );
 
-    const titleSection = useMemo(
+    const headerSection = useMemo(
       () => (
-        <Stack style={SIDEBAR_STYLES.titleSection}>
-          <Typography variant="heading" weight="bold" color="primary">
-            Your Library
-          </Typography>
-        </Stack>
+        <HeaderSection
+          title={sidebarTitle}
+          showCloseButton={showCloseButton}
+          onClose={handleClose}
+          styles={sidebarStyles}
+        />
       ),
-      []
+      [sidebarTitle, showCloseButton, handleClose, sidebarStyles]
     );
 
     const filterSection = useMemo(
-      () => (
-        <FilterControls
-          filters={filters}
-          activeFilter={activeFilter}
-          onFilterClick={handleFilterClick}
-          onAddClick={handleAddClick}
-          onExpandClick={handleExpandClick}
-        />
-      ),
-      [filters, activeFilter, handleFilterClick, handleAddClick, handleExpandClick]
+      () =>
+        showFilters && variant === 'library' ? (
+          <FilterControls
+            filters={filters}
+            activeFilter={activeFilter}
+            onFilterClick={handleFilterClick}
+            onAddClick={handleAddClick}
+            onExpandClick={handleExpandClick}
+            styles={sidebarStyles}
+          />
+        ) : null,
+      [
+        showFilters,
+        variant,
+        filters,
+        activeFilter,
+        handleFilterClick,
+        handleAddClick,
+        handleExpandClick,
+        sidebarStyles,
+      ]
     );
 
     const searchSection = useMemo(
-      () => <SearchSection onSearch={handleSearch} />,
-      [handleSearch]
+      () => showSearch && variant === 'library' ? <SearchSection onSearch={handleSearch} /> : null,
+      [showSearch, variant, handleSearch]
     );
 
-
-    const librarySection = useMemo(
-      () => (
-        <LibraryList
-          libraryItems={libraryItems}
-          activeItemId={activeItemId}
-          onLibraryItemClick={handleLibraryItemClick}
-        />
-      ),
-      [libraryItems, activeItemId, handleLibraryItemClick]
+    const nowPlayingSection = useMemo(
+      () =>
+        variant === 'queue' ? (
+          <NowPlayingSection nowPlaying={nowPlaying} styles={sidebarStyles} />
+        ) : null,
+      [variant, nowPlaying, sidebarStyles]
     );
+
+    const contentSection = useMemo(() => {
+      if (variant === 'library') {
+        return (
+          <LibraryList
+            libraryItems={libraryItems}
+            activeItemId={activeItemId}
+            onLibraryItemClick={handleLibraryItemClick}
+            styles={sidebarStyles}
+          />
+        );
+      } else if (variant === 'queue') {
+        return (
+          <QueueList
+            queueItems={queueItems}
+            activeItemId={activeItemId}
+            onQueueItemClick={handleQueueItemClick}
+            styles={sidebarStyles}
+          />
+        );
+      }
+      return null;
+    }, [
+      variant,
+      libraryItems,
+      queueItems,
+      activeItemId,
+      handleLibraryItemClick,
+      handleQueueItemClick,
+      sidebarStyles,
+    ]);
 
     return (
       <nav
@@ -326,14 +555,15 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
         className={className}
         style={mergedStyles}
         role="navigation"
-        aria-label="Library navigation"
+        aria-label={`${sidebarTitle} navigation`}
         {...props}
       >
-            {logoSection}
-            {titleSection}
-            {filterSection}
-            {searchSection}
-            {librarySection}
+        {logoSection}
+        {headerSection}
+        {filterSection}
+        {searchSection}
+        {nowPlayingSection}
+        {contentSection}
       </nav>
     );
   }
