@@ -251,7 +251,7 @@ npm publish               # Publish to NPM (after build)
 
 | Metric | Value |
 |--------|-------|
-| **Version** | 1.0.53 |
+| **Version** | 1.0.54 |
 | **Components** | 23 (15 Atoms, 5 Molecules, 3 Organisms) |
 | **NPM Downloads** | 1,000+ |
 | **Test Cases** | 70+ (Jest + React Testing Library) |
@@ -308,4 +308,4 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ---
 
-**Built by [Lam Nguyen](https://github.com/lamnguyenkn97)** • Version 1.0.53
+**Built by [Lam Nguyen](https://github.com/lamnguyenkn97)** • Version 1.0.54
