@@ -1,6 +1,6 @@
 {
   "name": "spotify-design-system",
-  "version": "1.0.51",
+  "version": "1.0.52",
   "description": "Spotify Design System is a robust, reusable component library built with React and TypeScript. It is designed to provide a consistent and scalable foundation for building Spotify-themed user interfaces, while also demonstrating advanced frontend development skills.",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
