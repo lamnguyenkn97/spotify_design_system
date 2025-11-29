@@ -15,47 +15,31 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { ButtonSize, ButtonVariant } from '../../atoms/Button';
 import { HorizontalTileCard } from '../../molecules/HorizontalTileCard';
-import { SidebarProps, LibraryItem, QueueItem, SidebarPosition, SidebarItem } from './Sidebar.types';
-import { colors, spacing } from '../../../styles';
-
-// Sidebar configuration using design tokens
-const getSidebarStyles = (position: SidebarPosition = 'left') => ({
-  container: {
-    width: '360px',
-    height: '100vh',
-    backgroundColor: colors.primary.black,
-    color: colors.primary.white,
-    padding: spacing.md,
-    ...(position === 'left'
-      ? { borderRight: `1px solid ${colors.grey.grey3}` }
-      : { borderLeft: `1px solid ${colors.grey.grey3}` }),
-    display: 'flex',
-    flexDirection: 'column' as const,
-    gap: spacing.md,
-  },
-  logoSection: {
-    padding: spacing.sm,
-    borderBottom: `1px solid ${colors.grey.grey3}`,
-  },
-  headerSection: {
-    padding: `${spacing.sm} 0`,
-  },
-  filtersSection: {
-    flexWrap: 'wrap' as const,
-    padding: `${spacing.sm} 0`,
-  },
-  contentSection: {
-    flex: 1,
-    overflowY: 'auto' as const,
-    padding: `${spacing.sm} 0`,
-  },
-  nowPlayingSection: {
-    padding: spacing.md,
-    backgroundColor: colors.grey.grey0,
-    borderRadius: '8px',
-    marginBottom: spacing.md,
-  },
-});
+import {
+  SidebarProps,
+  LibraryItem,
+  LibraryItemType,
+  QueueItem,
+  SidebarItem,
+  SidebarVariant,
+  SidebarPosition,
+} from './Sidebar.types';
+import {
+  SidebarContainer,
+  LogoSection as LogoSectionStyled,
+  HeaderSection as HeaderSectionStyled,
+  FiltersSection as FiltersSectionStyled,
+  ContentSection as ContentSectionStyled,
+  NowPlayingSection as NowPlayingSectionStyled,
+  QueueSectionTitle,
+  DraggableItem,
+  ItemListContainer,
+  EmptyStateContainer,
+  TruncatedText,
+  FlexContainer,
+  DragState,
+} from './Sidebar.style';
+import { spacing } from '../../../styles';
 
 // Default configuration
 const DEFAULT_FILTERS = ['Playlists', 'Artists', 'Albums', 'Podcasts & Shows'];
@@ -66,7 +50,7 @@ const DEFAULT_LIBRARY_ITEMS: LibraryItem[] = [
     image: 'https://misc.scdn.co/liked-songs/liked-songs-640.png',
     title: 'Liked Songs',
     subtitle: 'Playlist • 213 songs',
-    type: 'playlist',
+    type: LibraryItemType.PLAYLIST,
     pinned: true,
   },
   {
@@ -74,24 +58,21 @@ const DEFAULT_LIBRARY_ITEMS: LibraryItem[] = [
     image: 'https://i.scdn.co/image/ab67616d0000b273e5e2e5e2e5e2e5e2e5e2e5e2',
     title: 'Daily Mix 2',
     subtitle: 'Playlist • Spotify',
-    type: 'playlist',
+    type: LibraryItemType.PLAYLIST,
     pinned: true,
   },
 ];
 
 // Logo Section Component
-const LogoSection: React.FC<{ showLogo: boolean; styles: any }> = ({ showLogo, styles }) => {
+const LogoSection: React.FC<{ showLogo: boolean }> = ({ showLogo }) => {
   if (!showLogo) return null;
 
   return (
-    <Stack
-      direction="row"
-      align="center"
-      spacing="md"
-      style={styles.logoSection}
-    >
-      <Icon icon={faSpotify} size="lg" color="primary" aria-label="Spotify" />
-    </Stack>
+    <LogoSectionStyled>
+      <Stack direction="row" align="center" spacing="md">
+        <Icon icon={faSpotify} size="lg" color="primary" aria-label="Spotify" />
+      </Stack>
+    </LogoSectionStyled>
   );
 };
 
@@ -100,88 +81,64 @@ const HeaderSection: React.FC<{
   title: string;
   showCloseButton?: boolean;
   onClose?: () => void;
-  styles: any;
-}> = ({ title, showCloseButton, onClose, styles }) => {
+}> = ({ title, showCloseButton, onClose }) => {
   return (
-    <Stack
-      direction="row"
-      align="center"
-      justify="space-between"
-      style={styles.headerSection}
-    >
-      <Typography variant="heading" weight="bold" color="primary">
-        {title}
-      </Typography>
-      {showCloseButton && onClose && (
-        <Button
-          icon={<Icon icon={faXmark} size="md" />}
-          size={ButtonSize.Small}
-          variant={ButtonVariant.Text}
-          onClick={onClose}
-          aria-label="Close sidebar"
-        />
-      )}
-    </Stack>
+    <HeaderSectionStyled>
+      <Stack direction="row" align="center" justify="space-between">
+        <Typography variant="heading" weight="bold" color="primary">
+          {title}
+        </Typography>
+        {showCloseButton && onClose && (
+          <Button
+            icon={<Icon icon={faXmark} size="md" />}
+            size={ButtonSize.Small}
+            variant={ButtonVariant.Text}
+            onClick={onClose}
+            aria-label="Close sidebar"
+          />
+        )}
+      </Stack>
+    </HeaderSectionStyled>
   );
 };
 
 // Now Playing Section Component (for Queue variant)
 const NowPlayingSection: React.FC<{
   nowPlaying?: QueueItem;
-  styles: any;
-}> = ({ nowPlaying, styles }) => {
+}> = ({ nowPlaying }) => {
   if (!nowPlaying) return null;
 
   return (
     <div>
-      <Typography
-        variant="body"
-        size="sm"
-        weight="bold"
-        color="primary"
-        style={{ marginBottom: spacing.sm }}
-      >
-        Now playing
-      </Typography>
-      <Stack
-        direction="row"
-        spacing="md"
-        align="center"
-        style={styles.nowPlayingSection}
-      >
-        <Image
-          src={nowPlaying.image}
-          alt={nowPlaying.title}
-          size="md"
-          shape="square"
-        />
-        <Stack direction="column" spacing="xs" style={{ flex: 1, minWidth: 0 }}>
-          <Typography
-            variant="body"
-            size="sm"
-            weight="bold"
-            color="primary"
-            style={{
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            {nowPlaying.title}
-          </Typography>
-          <Typography
-            variant="caption"
-            color="secondary"
-            style={{
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            {nowPlaying.artist}
-          </Typography>
+      <QueueSectionTitle>
+        <Typography variant="body" size="sm" weight="bold" color="primary">
+          Now playing
+        </Typography>
+      </QueueSectionTitle>
+      <NowPlayingSectionStyled>
+        <Stack direction="row" spacing="md" align="center">
+          <Image
+            src={nowPlaying.image}
+            alt={nowPlaying.title}
+            size="md"
+            shape="square"
+          />
+          <FlexContainer>
+            <Stack direction="column" spacing="xs">
+              <TruncatedText>
+                <Typography variant="body" size="sm" weight="bold" color="primary">
+                  {nowPlaying.title}
+                </Typography>
+              </TruncatedText>
+              <TruncatedText>
+                <Typography variant="caption" color="secondary">
+                  {nowPlaying.artist}
+                </Typography>
+              </TruncatedText>
+            </Stack>
+          </FlexContainer>
         </Stack>
-      </Stack>
+      </NowPlayingSectionStyled>
     </div>
   );
 };
@@ -193,40 +150,37 @@ const FilterControls: React.FC<{
   onFilterClick?: (filter: string) => void;
   onAddClick?: () => void;
   onExpandClick?: () => void;
-  styles: any;
-}> = ({ filters, activeFilter, onFilterClick, onAddClick, onExpandClick, styles }) => {
+}> = ({ filters, activeFilter, onFilterClick, onAddClick, onExpandClick }) => {
   return (
-    <Stack
-      direction="row"
-      spacing="xs"
-      style={styles.filtersSection}
-    >
-      {filters.map((filter) => (
-        <Pill
-          key={filter}
-          label={filter}
-          size="sm"
-          variant="filter"
-          selected={activeFilter === filter}
-          onClick={() => onFilterClick?.(filter)}
-          aria-label={`Filter by ${filter}`}
+    <FiltersSectionStyled>
+      <Stack direction="row" spacing="xs" style={{ flexWrap: 'wrap' }}>
+        {filters.map((filter) => (
+          <Pill
+            key={filter}
+            label={filter}
+            size="sm"
+            variant="filter"
+            selected={activeFilter === filter}
+            onClick={() => onFilterClick?.(filter)}
+            aria-label={`Filter by ${filter}`}
+          />
+        ))}
+        <Button
+          icon={<Icon icon={faPlus} size="sm" />}
+          size={ButtonSize.Small}
+          variant={ButtonVariant.Secondary}
+          onClick={() => onAddClick?.()}
+          aria-label="Add new content"
         />
-      ))}
-      <Button
-        icon={<Icon icon={faPlus} size="sm" />}
-        size={ButtonSize.Small}
-        variant={ButtonVariant.Secondary}
-        onClick={() => onAddClick?.()}
-        aria-label="Add new content"
-      />
-      <Button
-        icon={<Icon icon={faExpand} size="sm" />}
-        size={ButtonSize.Small}
-        variant={ButtonVariant.Secondary}
-        onClick={() => onExpandClick?.()}
-        aria-label="Expand sidebar"
-      />
-    </Stack>
+        <Button
+          icon={<Icon icon={faExpand} size="sm" />}
+          size={ButtonSize.Small}
+          variant={ButtonVariant.Secondary}
+          onClick={() => onExpandClick?.()}
+          aria-label="Expand sidebar"
+        />
+      </Stack>
+    </FiltersSectionStyled>
   );
 };
 
@@ -267,8 +221,7 @@ const ItemList: React.FC<{
   enableDragDrop?: boolean;
   onItemReorder?: (fromIndex: number, toIndex: number) => void;
   emptyMessage?: string;
-  styles: any;
-}> = ({ items, activeItemId, onItemClick, enableDragDrop, onItemReorder, emptyMessage, styles }) => {
+}> = ({ items, activeItemId, onItemClick, enableDragDrop, onItemReorder, emptyMessage }) => {
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [dropTargetIndex, setDropTargetIndex] = useState<number | null>(null);
 
@@ -284,10 +237,6 @@ const ItemList: React.FC<{
     setDraggedIndex(index);
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', index.toString());
-    // Add drag image styling
-    if (e.currentTarget instanceof HTMLElement) {
-      e.currentTarget.style.cursor = 'grabbing';
-    }
   }, [enableDragDrop]);
 
   const handleDragOver = useCallback((e: React.DragEvent, index: number) => {
@@ -319,59 +268,61 @@ const ItemList: React.FC<{
     setDropTargetIndex(null);
   }, [enableDragDrop, draggedIndex, onItemReorder]);
 
-  const handleDragEnd = useCallback((e: React.DragEvent) => {
+  const handleDragEnd = useCallback(() => {
     if (!enableDragDrop) return;
-    if (e.currentTarget instanceof HTMLElement) {
-      e.currentTarget.style.cursor = 'grab';
-    }
     setDraggedIndex(null);
     setDropTargetIndex(null);
   }, [enableDragDrop]);
 
+  const getDragState = useCallback((index: number): DragState => {
+    if (draggedIndex === index) return DragState.DRAGGING;
+    if (dropTargetIndex === index && draggedIndex !== index) return DragState.DROP_TARGET;
+    return DragState.IDLE;
+  }, [draggedIndex, dropTargetIndex]);
+
   if (items.length === 0) {
     return (
-      <Stack style={styles.contentSection}>
-        <Typography variant="body" color="secondary">
-          {emptyMessage || 'No items'}
-        </Typography>
-      </Stack>
+      <ContentSectionStyled>
+        <EmptyStateContainer>
+          <Typography variant="body" color="secondary">
+            {emptyMessage || 'No items'}
+          </Typography>
+        </EmptyStateContainer>
+      </ContentSectionStyled>
     );
   }
 
   return (
-    <Stack direction="column" spacing="xs" style={styles.contentSection}>
-      {items.map((item, index) => (
-        <div
-          key={item.id}
-          draggable={enableDragDrop}
-          onDragStart={(e) => handleDragStart(e, index)}
-          onDragOver={(e) => handleDragOver(e, index)}
-          onDragLeave={handleDragLeave}
-          onDrop={(e) => handleDrop(e, index)}
-          onDragEnd={handleDragEnd}
-          style={{
-            opacity: draggedIndex === index ? 0.5 : 1,
-            cursor: enableDragDrop ? 'grab' : 'pointer',
-            transition: 'opacity 0.2s ease, transform 0.2s ease',
-            borderTop: dropTargetIndex === index && draggedIndex !== index 
-              ? `2px solid ${colors.primary.brand}` 
-              : 'none',
-            paddingTop: dropTargetIndex === index && draggedIndex !== index ? '4px' : '0',
-            transform: draggedIndex === index ? 'scale(0.98)' : 'scale(1)',
-          }}
-        >
-          <HorizontalTileCard
-            image={item.image}
-            title={item.title}
-            subtitle={item.subtitle}
-            width="100%"
-            onClick={() => handleItemClick(item, index)}
-            size="small"
-            isActive={activeItemId === item.id}
-          />
-        </div>
-      ))}
-    </Stack>
+    <ContentSectionStyled>
+      <ItemListContainer>
+        {items.map((item, index) => {
+          const dragState = getDragState(index);
+          return (
+            <DraggableItem
+              key={item.id}
+              draggable={enableDragDrop}
+              onDragStart={(e) => handleDragStart(e, index)}
+              onDragOver={(e) => handleDragOver(e, index)}
+              onDragLeave={handleDragLeave}
+              onDrop={(e) => handleDrop(e, index)}
+              onDragEnd={handleDragEnd}
+              $dragState={dragState}
+              $isDraggable={!!enableDragDrop}
+            >
+              <HorizontalTileCard
+                image={item.image}
+                title={item.title}
+                subtitle={item.subtitle}
+                width="100%"
+                onClick={() => handleItemClick(item, index)}
+                size="small"
+                isActive={activeItemId === item.id}
+              />
+            </DraggableItem>
+          );
+        })}
+      </ItemListContainer>
+    </ContentSectionStyled>
   );
 };
 
@@ -380,8 +331,8 @@ const ItemList: React.FC<{
 export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
   (
     {
-      variant = 'library',
-      position = 'left',
+      variant = SidebarVariant.LIBRARY,
+      position = SidebarPosition.LEFT,
       title,
       items,
       nowPlaying,
@@ -423,10 +374,15 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
       (item: SidebarItem, index: number) => {
         if (onItemClick) {
           onItemClick(item, index);
-        } else if (onLibraryItemClick && variant === 'library') {
-          onLibraryItemClick(item as LibraryItem);
-        } else if (onQueueItemClick && variant === 'queue') {
-          onQueueItemClick(item as QueueItem);
+        } else {
+          // Convert variant to string for comparison (enum values are strings)
+          const variantStr = String(variant);
+          
+          if (onLibraryItemClick && variantStr === 'library') {
+            onLibraryItemClick(item as LibraryItem);
+          } else if (onQueueItemClick && variantStr === 'queue') {
+            onQueueItemClick(item as QueueItem);
+          }
         }
       },
       [onItemClick, onLibraryItemClick, onQueueItemClick, variant]
@@ -434,17 +390,15 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
 
     const resolvedOnItemReorder = onItemReorder || onQueueReorder;
     const resolvedEnableDragDrop = enableDragDrop || enableQueueDragDrop || false;
+    
     // State to track active filter and active item
     const [activeFilter, setActiveFilter] = useState<string | undefined>();
     const [activeItemId, setActiveItemId] = useState<string | undefined>();
 
-    // Get styles based on position
-    const sidebarStyles = useMemo(() => getSidebarStyles(position), [position]);
-
     // Determine title based on variant
     const sidebarTitle = useMemo(() => {
       if (title) return title;
-      return variant === 'library' ? 'Your Library' : 'Queue';
+      return variant === SidebarVariant.LIBRARY ? 'Your Library' : 'Queue';
     }, [title, variant]);
 
     // Memoized default handlers to prevent unnecessary re-renders
@@ -458,15 +412,6 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
         onClose: () => {},
       }),
       []
-    );
-
-    // Memoized merged styles
-    const mergedStyles = useMemo(
-      () => ({
-        ...sidebarStyles.container,
-        ...style,
-      }),
-      [sidebarStyles.container, style]
     );
 
     // Memoized event handlers
@@ -507,10 +452,10 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
 
     // Memoized sections for performance
     const logoSection = useMemo(
-      () => showLogo && variant === 'library' ? (
-        <LogoSection showLogo={showLogo} styles={sidebarStyles} />
+      () => showLogo && variant === SidebarVariant.LIBRARY ? (
+        <LogoSection showLogo={showLogo} />
       ) : null,
-      [showLogo, variant, sidebarStyles]
+      [showLogo, variant]
     );
 
     const headerSection = useMemo(
@@ -519,22 +464,20 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
           title={sidebarTitle}
           showCloseButton={showCloseButton}
           onClose={handleClose}
-          styles={sidebarStyles}
         />
       ),
-      [sidebarTitle, showCloseButton, handleClose, sidebarStyles]
+      [sidebarTitle, showCloseButton, handleClose]
     );
 
     const filterSection = useMemo(
       () =>
-        showFilters && variant === 'library' ? (
+        showFilters && variant === SidebarVariant.LIBRARY ? (
           <FilterControls
             filters={filters}
             activeFilter={activeFilter}
             onFilterClick={handleFilterClick}
             onAddClick={handleAddClick}
             onExpandClick={handleExpandClick}
-            styles={sidebarStyles}
           />
         ) : null,
       [
@@ -545,12 +488,11 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
         handleFilterClick,
         handleAddClick,
         handleExpandClick,
-        sidebarStyles,
       ]
     );
 
     const searchSection = useMemo(() => {
-      if (!showSearch || variant !== 'library') return null;
+      if (!showSearch || variant !== SidebarVariant.LIBRARY) return null;
       return (
         <SearchSection 
           onSearch={handleSearch}
@@ -561,31 +503,27 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
 
     const nowPlayingSection = useMemo(
       () =>
-        variant === 'queue' ? (
-          <NowPlayingSection nowPlaying={nowPlaying} styles={sidebarStyles} />
+        variant === SidebarVariant.QUEUE ? (
+          <NowPlayingSection nowPlaying={nowPlaying} />
         ) : null,
-      [variant, nowPlaying, sidebarStyles]
+      [variant, nowPlaying]
     );
 
     const contentSection = useMemo(() => {
-      const emptyMessage = variant === 'library' 
+      const emptyMessage = variant === SidebarVariant.LIBRARY
         ? 'No items in your library' 
         : 'No songs in queue';
 
-      const showSectionTitle = variant === 'queue';
+      const showSectionTitle = variant === SidebarVariant.QUEUE;
 
       return (
-        <div>
+        <>
           {showSectionTitle && (
-            <Typography
-              variant="body"
-              size="sm"
-              weight="bold"
-              color="primary"
-              style={{ marginBottom: spacing.sm, padding: `0 ${spacing.sm}` }}
-            >
-              Next in queue
-            </Typography>
+            <QueueSectionTitle>
+              <Typography variant="body" size="sm" weight="bold" color="primary">
+                Next in queue
+              </Typography>
+            </QueueSectionTitle>
           )}
           <ItemList
             items={resolvedItems}
@@ -594,9 +532,8 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
             enableDragDrop={resolvedEnableDragDrop}
             onItemReorder={resolvedOnItemReorder}
             emptyMessage={emptyMessage}
-            styles={sidebarStyles}
           />
-        </div>
+        </>
       );
     }, [
       variant,
@@ -605,16 +542,16 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
       handleItemClick,
       resolvedEnableDragDrop,
       resolvedOnItemReorder,
-      sidebarStyles,
     ]);
 
     return (
-      <nav
+      <SidebarContainer
         ref={ref}
         className={className}
-        style={mergedStyles}
+        style={style}
         role="navigation"
         aria-label={`${sidebarTitle} navigation`}
+        $position={position as SidebarPosition}
         {...props}
       >
         {logoSection}
@@ -623,7 +560,7 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
         {searchSection}
         {nowPlayingSection}
         {contentSection}
-      </nav>
+      </SidebarContainer>
     );
   }
 );

@@ -1,5 +1,16 @@
-export type SidebarVariant = 'library' | 'queue';
-export type SidebarPosition = 'left' | 'right';
+export enum SidebarVariant {
+  LIBRARY = 'library',
+  QUEUE = 'queue',
+}
+
+export enum SidebarPosition {
+  LEFT = 'left',
+  RIGHT = 'right',
+}
+
+// Type aliases for backward compatibility
+export type SidebarVariantType = `${SidebarVariant}`;
+export type SidebarPositionType = `${SidebarPosition}`;
 
 // Base item interface that both Library and Queue items extend
 export interface SidebarItem {
@@ -11,9 +22,16 @@ export interface SidebarItem {
   metadata?: Record<string, any>;
 }
 
+export enum LibraryItemType {
+  PLAYLIST = 'playlist',
+  ARTIST = 'artist',
+  ALBUM = 'album',
+  PODCAST = 'podcast',
+}
+
 // Library-specific item (extends base)
 export interface LibraryItem extends SidebarItem {
-  type: 'playlist' | 'artist' | 'album' | 'podcast';
+  type: LibraryItemType | `${LibraryItemType}`;
   pinned?: boolean;
 }
 
@@ -26,9 +44,9 @@ export interface QueueItem extends SidebarItem {
 
 export interface SidebarProps extends React.HTMLAttributes<HTMLElement> {
   /** Sidebar variant: library or queue */
-  variant?: SidebarVariant;
+  variant?: SidebarVariant | SidebarVariantType;
   /** Sidebar position: left or right */
-  position?: SidebarPosition;
+  position?: SidebarPosition | SidebarPositionType;
   /** Custom title for the sidebar */
   title?: string;
   /** Generic items to display - can be LibraryItem[] or QueueItem[] */
