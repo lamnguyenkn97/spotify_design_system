@@ -36,35 +36,31 @@ npm install spotify-design-system
 
 ## ⚡ Key Features
 
+### 🧩 Component Library (23 Components)
+
+**Atoms (15)** - Building Blocks  
+`Button` • `Icon` • `Image` • `Input` • `Progress` • `Slider` • `Stack` • `Typography` • `TextLink` • `Tooltip` • `Divider` • `MessageText` • `Pill` • `Skeleton` • `Table`
+
+**Molecules (5)** - Composite Components  
+`Banner` • `Card` • `Drawer` • `Footer` • `HorizontalTileCard`
+
+**Organisms (3)** - Complex Features  
+`AppHeader` • `MusicPlayer` • `Sidebar`
+
+**[→ Explore all components in Storybook](https://spotify-storybook.vercel.app)**
+
+### 🎯 Technical Excellence
+
 | Feature | Implementation |
 |---------|----------------|
 | **🎭 Portal Rendering** | Drawer/Modal components with proper z-index layering |
 | **🎯 Drag & Drop** | Queue reordering with HTML5 API + smooth visual feedback |
-| **🧩 Composable Architecture** | Generic Sidebar supporting multiple variants (Library, Queue) |
 | **♿ WCAG AA Compliant** | Full keyboard navigation, ARIA labels, screen reader support |
 | **🎨 100% Design Tokens** | Zero hardcoded values, consistent theming system |
 | **📦 Tree-Shakeable** | Import only what you need, optimized bundle size |
 | **🔷 TypeScript First** | Comprehensive type definitions with enums & interfaces |
 | **🧪 Fully Tested** | Jest + React Testing Library, 70+ test cases |
 | **📚 Living Documentation** | Interactive Storybook with real-world examples |
-| **🎵 Production-Ready** | Powers live application, published to NPM |
-
----
-
-## 📦 Component Library (23 Components)
-
-Following **Atomic Design** methodology for scalability and maintainability.
-
-### Atoms (15)
-`Button` • `Icon` • `Image` • `Input` • `Progress` • `Slider` • `Stack` • `Typography` • `TextLink` • `Tooltip` • `Divider` • `MessageText` • `Pill` • `Skeleton` • `Table`
-
-### Molecules (5)
-`Banner` • `Card` • `Drawer` • `Footer` • `HorizontalTileCard`
-
-### Organisms (3)
-`AppHeader` • `MusicPlayer` • `Sidebar`
-
-**Explore all components:** [Interactive Storybook →](https://spotify-storybook.vercel.app)
 
 ---
 
@@ -161,12 +157,12 @@ function App() {
 import { colors, spacing, borderRadius } from 'spotify-design-system';
 
 <div style={{
-  backgroundColor: colors.primary.black,
-  padding: spacing.lg,
-  borderRadius: borderRadius.md,
+        backgroundColor: colors.primary.black,
+        padding: spacing.lg,
+        borderRadius: borderRadius.md,
 }}>
   <h2 style={{ color: colors.primary.brand }}>Using Tokens</h2>
-</div>
+    </div>
 ```
 
 **Available Tokens:**  
@@ -218,12 +214,12 @@ Button/
 
 ### Local Setup
 
-```bash
-git clone https://github.com/lamnguyenkn97/spotify_design_system.git
-cd spotify_design_system
-npm install
-npm run storybook
-```
+   ```bash
+   git clone https://github.com/lamnguyenkn97/spotify_design_system.git
+   cd spotify_design_system
+   npm install
+   npm run storybook
+   ```
 
 ### Key Scripts
 
