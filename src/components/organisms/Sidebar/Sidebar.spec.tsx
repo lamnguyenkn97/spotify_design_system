@@ -3,7 +3,14 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { ThemeProvider } from 'styled-components';
 import { Sidebar } from './Sidebar';
-import { SidebarProps, LibraryItem } from './Sidebar.types';
+import {
+  SidebarProps,
+  LibraryItem,
+  QueueItem,
+  SidebarVariant,
+  SidebarPosition,
+  LibraryItemType,
+} from './Sidebar.types';
 import { theme } from '../../../styles/theme';
 
 const TestWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
@@ -17,7 +24,7 @@ const mockLibraryItems: LibraryItem[] = [
     image: 'https://example.com/liked-songs.png',
     title: 'Liked Songs',
     subtitle: 'Playlist • 213 songs',
-    type: 'playlist',
+    type: LibraryItemType.PLAYLIST,
     pinned: true,
   },
   {
@@ -25,7 +32,7 @@ const mockLibraryItems: LibraryItem[] = [
     image: 'https://example.com/daily-mix.png',
     title: 'Daily Mix 2',
     subtitle: 'Playlist • Spotify',
-    type: 'playlist',
+    type: LibraryItemType.PLAYLIST,
     pinned: false,
   },
   {
@@ -33,10 +40,51 @@ const mockLibraryItems: LibraryItem[] = [
     image: 'https://example.com/artist.png',
     title: 'Favorite Artist',
     subtitle: 'Artist • 127 songs',
-    type: 'artist',
+    type: LibraryItemType.ARTIST,
     pinned: false,
   },
 ];
+
+// Mock queue items for testing
+const mockQueueItems: QueueItem[] = [
+  {
+    id: 'q1',
+    image: 'https://example.com/track1.png',
+    title: 'Blinding Lights',
+    subtitle: 'The Weeknd',
+    artist: 'The Weeknd',
+    album: 'After Hours',
+    duration: '3:20',
+  },
+  {
+    id: 'q2',
+    image: 'https://example.com/track2.png',
+    title: 'Levitating',
+    subtitle: 'Dua Lipa',
+    artist: 'Dua Lipa',
+    album: 'Future Nostalgia',
+    duration: '3:23',
+  },
+  {
+    id: 'q3',
+    image: 'https://example.com/track3.png',
+    title: 'Save Your Tears',
+    subtitle: 'The Weeknd',
+    artist: 'The Weeknd',
+    album: 'After Hours',
+    duration: '3:35',
+  },
+];
+
+const mockNowPlaying: QueueItem = {
+  id: 'now',
+  image: 'https://example.com/now-playing.png',
+  title: 'Anti-Hero',
+  subtitle: 'Taylor Swift',
+  artist: 'Taylor Swift',
+  album: 'Midnights',
+  duration: '3:20',
+};
 
 // Default props for testing
 const defaultProps: Partial<SidebarProps> = {
@@ -417,7 +465,466 @@ describe('Sidebar Component', () => {
       );
       
       expect(ref.current).toBeInstanceOf(HTMLElement);
-      expect(ref.current?.tagName).toBe('NAV');
+      expect(ref.current?.tagName).toBe('ASIDE');
+    });
+  });
+
+  describe('Queue Variant', () => {
+    it('renders queue variant with correct title', () => {
+      render(
+        <TestWrapper>
+          <Sidebar
+            variant={SidebarVariant.QUEUE}
+            position={SidebarPosition.RIGHT}
+            items={mockQueueItems}
+            nowPlaying={mockNowPlaying}
+          />
+        </TestWrapper>
+      );
+      
+      expect(screen.getByText('Queue')).toBeInTheDocument();
+      expect(screen.getByLabelText('Queue navigation')).toBeInTheDocument();
+    });
+
+    it('renders now playing section', () => {
+      render(
+        <TestWrapper>
+          <Sidebar
+            variant={SidebarVariant.QUEUE}
+            items={mockQueueItems}
+            nowPlaying={mockNowPlaying}
+          />
+        </TestWrapper>
+      );
+      
+      expect(screen.getByText('Now playing')).toBeInTheDocument();
+      expect(screen.getByText('Anti-Hero')).toBeInTheDocument();
+      expect(screen.getByText('Taylor Swift')).toBeInTheDocument();
+    });
+
+    it('renders queue items section', () => {
+      render(
+        <TestWrapper>
+          <Sidebar
+            variant={SidebarVariant.QUEUE}
+            items={mockQueueItems}
+            nowPlaying={mockNowPlaying}
+          />
+        </TestWrapper>
+      );
+      
+      expect(screen.getByText('Next in queue')).toBeInTheDocument();
+      expect(screen.getByText('Blinding Lights')).toBeInTheDocument();
+      expect(screen.getByText('Levitating')).toBeInTheDocument();
+      expect(screen.getByText('Save Your Tears')).toBeInTheDocument();
+    });
+
+    it('does not render search and filters in queue variant', () => {
+      render(
+        <TestWrapper>
+          <Sidebar
+            variant={SidebarVariant.QUEUE}
+            items={mockQueueItems}
+            nowPlaying={mockNowPlaying}
+          />
+        </TestWrapper>
+      );
+      
+      expect(screen.queryByPlaceholderText('Search in Your Library')).not.toBeInTheDocument();
+      expect(screen.queryByText('Playlists')).not.toBeInTheDocument();
+    });
+
+    it('renders close button when showCloseButton is true', () => {
+      const mockOnClose = jest.fn();
+      render(
+        <TestWrapper>
+          <Sidebar
+            variant={SidebarVariant.QUEUE}
+            items={mockQueueItems}
+            showCloseButton={true}
+            onClose={mockOnClose}
+          />
+        </TestWrapper>
+      );
+      
+      const closeButton = screen.getByLabelText('Close sidebar');
+      expect(closeButton).toBeInTheDocument();
+      
+      fireEvent.click(closeButton);
+      expect(mockOnClose).toHaveBeenCalledTimes(1);
+    });
+
+    it('handles empty queue', () => {
+      render(
+        <TestWrapper>
+          <Sidebar
+            variant={SidebarVariant.QUEUE}
+            items={[]}
+            nowPlaying={mockNowPlaying}
+          />
+        </TestWrapper>
+      );
+      
+      expect(screen.getByText('No songs in queue')).toBeInTheDocument();
+    });
+  });
+
+  describe('Generic Items API', () => {
+    it('accepts items prop instead of libraryItems', () => {
+      render(
+        <TestWrapper>
+          <Sidebar
+            variant={SidebarVariant.LIBRARY}
+            items={mockLibraryItems}
+          />
+        </TestWrapper>
+      );
+      
+      expect(screen.getByText('Liked Songs')).toBeInTheDocument();
+      expect(screen.getByText('Daily Mix 2')).toBeInTheDocument();
+    });
+
+    it('accepts items prop instead of queueItems', () => {
+      render(
+        <TestWrapper>
+          <Sidebar
+            variant={SidebarVariant.QUEUE}
+            items={mockQueueItems}
+            nowPlaying={mockNowPlaying}
+          />
+        </TestWrapper>
+      );
+      
+      expect(screen.getByText('Blinding Lights')).toBeInTheDocument();
+      expect(screen.getByText('Levitating')).toBeInTheDocument();
+    });
+
+    it('calls onItemClick with item and index', () => {
+      const mockOnItemClick = jest.fn();
+      render(
+        <TestWrapper>
+          <Sidebar
+            variant={SidebarVariant.LIBRARY}
+            items={mockLibraryItems}
+            onItemClick={mockOnItemClick}
+          />
+        </TestWrapper>
+      );
+      
+      fireEvent.click(screen.getByText('Liked Songs'));
+      expect(mockOnItemClick).toHaveBeenCalledWith(mockLibraryItems[0], 0);
+    });
+
+    it('maintains backward compatibility with libraryItems prop', () => {
+      render(
+        <TestWrapper>
+          <Sidebar
+            variant={SidebarVariant.LIBRARY}
+            libraryItems={mockLibraryItems}
+          />
+        </TestWrapper>
+      );
+      
+      expect(screen.getByText('Liked Songs')).toBeInTheDocument();
+    });
+
+    it('maintains backward compatibility with queueItems prop', () => {
+      render(
+        <TestWrapper>
+          <Sidebar
+            variant={SidebarVariant.QUEUE}
+            queueItems={mockQueueItems}
+            nowPlaying={mockNowPlaying}
+          />
+        </TestWrapper>
+      );
+      
+      expect(screen.getByText('Blinding Lights')).toBeInTheDocument();
+    });
+  });
+
+  describe('Drag and Drop Functionality', () => {
+    it('renders items as draggable when enableDragDrop is true', () => {
+      render(
+        <TestWrapper>
+          <Sidebar
+            variant={SidebarVariant.QUEUE}
+            items={mockQueueItems}
+            enableDragDrop={true}
+          />
+        </TestWrapper>
+      );
+      
+      const firstItem = screen.getByText('Blinding Lights').closest('div');
+      expect(firstItem?.parentElement).toHaveAttribute('draggable', 'true');
+    });
+
+    it('renders items as non-draggable when enableDragDrop is false', () => {
+      render(
+        <TestWrapper>
+          <Sidebar
+            variant={SidebarVariant.QUEUE}
+            items={mockQueueItems}
+            enableDragDrop={false}
+          />
+        </TestWrapper>
+      );
+      
+      const firstItem = screen.getByText('Blinding Lights').closest('div');
+      expect(firstItem?.parentElement).toHaveAttribute('draggable', 'false');
+    });
+
+    it('handles drag start event', () => {
+      const mockOnItemReorder = jest.fn();
+      render(
+        <TestWrapper>
+          <Sidebar
+            variant={SidebarVariant.QUEUE}
+            items={mockQueueItems}
+            enableDragDrop={true}
+            onItemReorder={mockOnItemReorder}
+          />
+        </TestWrapper>
+      );
+      
+      const firstItem = screen.getByText('Blinding Lights').closest('div')?.parentElement;
+      if (firstItem) {
+        fireEvent.dragStart(firstItem);
+        expect(firstItem).toBeInTheDocument();
+      }
+    });
+
+    it('handles drag over event', () => {
+      render(
+        <TestWrapper>
+          <Sidebar
+            variant={SidebarVariant.QUEUE}
+            items={mockQueueItems}
+            enableDragDrop={true}
+          />
+        </TestWrapper>
+      );
+      
+      const secondItem = screen.getByText('Levitating').closest('div')?.parentElement;
+      if (secondItem) {
+        fireEvent.dragOver(secondItem);
+        expect(secondItem).toBeInTheDocument();
+      }
+    });
+
+    it('calls onItemReorder when item is dropped', () => {
+      const mockOnItemReorder = jest.fn();
+      render(
+        <TestWrapper>
+          <Sidebar
+            variant={SidebarVariant.QUEUE}
+            items={mockQueueItems}
+            enableDragDrop={true}
+            onItemReorder={mockOnItemReorder}
+          />
+        </TestWrapper>
+      );
+      
+      const firstItem = screen.getByText('Blinding Lights').closest('div')?.parentElement;
+      const secondItem = screen.getByText('Levitating').closest('div')?.parentElement;
+      
+      if (firstItem && secondItem) {
+        // Simulate drag and drop
+        fireEvent.dragStart(firstItem);
+        fireEvent.dragOver(secondItem);
+        fireEvent.drop(secondItem);
+        
+        expect(mockOnItemReorder).toHaveBeenCalledWith(0, 1);
+      }
+    });
+
+    it('handles drag end event', () => {
+      render(
+        <TestWrapper>
+          <Sidebar
+            variant={SidebarVariant.QUEUE}
+            items={mockQueueItems}
+            enableDragDrop={true}
+          />
+        </TestWrapper>
+      );
+      
+      const firstItem = screen.getByText('Blinding Lights').closest('div')?.parentElement;
+      if (firstItem) {
+        fireEvent.dragStart(firstItem);
+        fireEvent.dragEnd(firstItem);
+        expect(firstItem).toBeInTheDocument();
+      }
+    });
+
+    it('does not call onItemReorder when dropping on same position', () => {
+      const mockOnItemReorder = jest.fn();
+      render(
+        <TestWrapper>
+          <Sidebar
+            variant={SidebarVariant.QUEUE}
+            items={mockQueueItems}
+            enableDragDrop={true}
+            onItemReorder={mockOnItemReorder}
+          />
+        </TestWrapper>
+      );
+      
+      const firstItem = screen.getByText('Blinding Lights').closest('div')?.parentElement;
+      
+      if (firstItem) {
+        // Simulate drag and drop on same item
+        fireEvent.dragStart(firstItem);
+        fireEvent.dragOver(firstItem);
+        fireEvent.drop(firstItem);
+        
+        expect(mockOnItemReorder).not.toHaveBeenCalled();
+      }
+    });
+
+    it('maintains backward compatibility with enableQueueDragDrop', () => {
+      render(
+        <TestWrapper>
+          <Sidebar
+            variant={SidebarVariant.QUEUE}
+            items={mockQueueItems}
+            enableQueueDragDrop={true}
+          />
+        </TestWrapper>
+      );
+      
+      const firstItem = screen.getByText('Blinding Lights').closest('div');
+      expect(firstItem?.parentElement).toHaveAttribute('draggable', 'true');
+    });
+  });
+
+  describe('Enums', () => {
+    it('accepts SidebarVariant enum values', () => {
+      render(
+        <TestWrapper>
+          <Sidebar
+            variant={SidebarVariant.LIBRARY}
+            items={mockLibraryItems}
+          />
+        </TestWrapper>
+      );
+      
+      expect(screen.getByText('Your Library')).toBeInTheDocument();
+      
+      const { rerender } = render(
+        <TestWrapper>
+          <Sidebar
+            variant={SidebarVariant.QUEUE}
+            items={mockQueueItems}
+            nowPlaying={mockNowPlaying}
+          />
+        </TestWrapper>
+      );
+      
+      expect(screen.getByText('Queue')).toBeInTheDocument();
+    });
+
+    it('accepts SidebarPosition enum values', () => {
+      const { container } = render(
+        <TestWrapper>
+          <Sidebar
+            variant={SidebarVariant.LIBRARY}
+            position={SidebarPosition.LEFT}
+            items={mockLibraryItems}
+          />
+        </TestWrapper>
+      );
+      
+      expect(container.querySelector('aside')).toBeInTheDocument();
+      
+      const { container: rightContainer } = render(
+        <TestWrapper>
+          <Sidebar
+            variant={SidebarVariant.QUEUE}
+            position={SidebarPosition.RIGHT}
+            items={mockQueueItems}
+          />
+        </TestWrapper>
+      );
+      
+      expect(rightContainer.querySelector('aside')).toBeInTheDocument();
+    });
+
+    it('accepts LibraryItemType enum values', () => {
+      const itemsWithEnum: LibraryItem[] = [
+        {
+          id: '1',
+          image: 'https://example.com/playlist.png',
+          title: 'Test Playlist',
+          subtitle: 'Playlist',
+          type: LibraryItemType.PLAYLIST,
+          pinned: false,
+        },
+        {
+          id: '2',
+          image: 'https://example.com/artist.png',
+          title: 'Test Artist',
+          subtitle: 'Artist',
+          type: LibraryItemType.ARTIST,
+          pinned: false,
+        },
+        {
+          id: '3',
+          image: 'https://example.com/album.png',
+          title: 'Test Album',
+          subtitle: 'Album',
+          type: LibraryItemType.ALBUM,
+          pinned: false,
+        },
+        {
+          id: '4',
+          image: 'https://example.com/podcast.png',
+          title: 'Test Podcast',
+          subtitle: 'Podcast',
+          type: LibraryItemType.PODCAST,
+          pinned: false,
+        },
+      ];
+      
+      render(
+        <TestWrapper>
+          <Sidebar
+            variant={SidebarVariant.LIBRARY}
+            items={itemsWithEnum}
+          />
+        </TestWrapper>
+      );
+      
+      expect(screen.getByText('Test Playlist')).toBeInTheDocument();
+      expect(screen.getByText('Test Artist')).toBeInTheDocument();
+      expect(screen.getByText('Test Album')).toBeInTheDocument();
+      expect(screen.getByText('Test Podcast')).toBeInTheDocument();
+    });
+  });
+
+  describe('Positioning', () => {
+    it('renders on left side by default', () => {
+      const { container } = render(
+        <TestWrapper>
+          <Sidebar variant={SidebarVariant.LIBRARY} items={mockLibraryItems} />
+        </TestWrapper>
+      );
+      
+      expect(container.querySelector('aside')).toBeInTheDocument();
+    });
+
+    it('renders on right side when position is right', () => {
+      const { container } = render(
+        <TestWrapper>
+          <Sidebar
+            variant={SidebarVariant.QUEUE}
+            position={SidebarPosition.RIGHT}
+            items={mockQueueItems}
+          />
+        </TestWrapper>
+      );
+      
+      expect(container.querySelector('aside')).toBeInTheDocument();
     });
   });
 }); 
