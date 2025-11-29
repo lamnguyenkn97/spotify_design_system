@@ -15,7 +15,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { ButtonSize, ButtonVariant } from '../../atoms/Button';
 import { HorizontalTileCard } from '../../molecules/HorizontalTileCard';
-import { SidebarProps, LibraryItem, QueueItem, SidebarPosition } from './Sidebar.types';
+import { SidebarProps, LibraryItem, QueueItem, SidebarPosition, SidebarItem } from './Sidebar.types';
 import { colors, spacing } from '../../../styles';
 
 // Sidebar configuration using design tokens
@@ -233,7 +233,8 @@ const FilterControls: React.FC<{
 // Search Section Component
 const SearchSection: React.FC<{
   onSearch?: (query: string) => void;
-}> = ({ onSearch }) => {
+  placeholder?: string;
+}> = ({ onSearch, placeholder = 'Search in Your Library' }) => {
   const [searchValue, setSearchValue] = useState('');
 
   const handleSearchChange = useCallback(
@@ -248,35 +249,90 @@ const SearchSection: React.FC<{
     <Stack>
       <Input
         type="search"
-        placeholder="Search in Your Library"
+        placeholder={placeholder}
         value={searchValue}
         onChange={(e) => handleSearchChange(e.target.value)}
         leftIcon={<Icon icon={faSearch} size="sm" />}
-        aria-label="Search your library"
+        aria-label={placeholder}
       />
     </Stack>
   );
 };
 
-// Library List Component
-const LibraryList: React.FC<{
-  libraryItems: LibraryItem[];
+// Generic Item List Component
+const ItemList: React.FC<{
+  items: SidebarItem[];
   activeItemId?: string;
-  onLibraryItemClick?: (item: LibraryItem) => void;
+  onItemClick?: (item: SidebarItem, index: number) => void;
+  enableDragDrop?: boolean;
+  onItemReorder?: (fromIndex: number, toIndex: number) => void;
+  emptyMessage?: string;
   styles: any;
-}> = ({ libraryItems, activeItemId, onLibraryItemClick, styles }) => {
+}> = ({ items, activeItemId, onItemClick, enableDragDrop, onItemReorder, emptyMessage, styles }) => {
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+  const [dropTargetIndex, setDropTargetIndex] = useState<number | null>(null);
+
   const handleItemClick = useCallback(
-    (item: LibraryItem) => {
-      onLibraryItemClick?.(item);
+    (item: SidebarItem, index: number) => {
+      onItemClick?.(item, index);
     },
-    [onLibraryItemClick]
+    [onItemClick]
   );
 
-  if (libraryItems.length === 0) {
+  const handleDragStart = useCallback((e: React.DragEvent, index: number) => {
+    if (!enableDragDrop) return;
+    setDraggedIndex(index);
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', index.toString());
+    // Add drag image styling
+    if (e.currentTarget instanceof HTMLElement) {
+      e.currentTarget.style.cursor = 'grabbing';
+    }
+  }, [enableDragDrop]);
+
+  const handleDragOver = useCallback((e: React.DragEvent, index: number) => {
+    if (!enableDragDrop || draggedIndex === null) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    if (index !== draggedIndex) {
+      setDropTargetIndex(index);
+    }
+  }, [enableDragDrop, draggedIndex]);
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
+    if (!enableDragDrop) return;
+    // Only clear if leaving the entire drag container
+    if (e.currentTarget === e.target) {
+      setDropTargetIndex(null);
+    }
+  }, [enableDragDrop]);
+
+  const handleDrop = useCallback((e: React.DragEvent, dropIndex: number) => {
+    if (!enableDragDrop || draggedIndex === null) return;
+    e.preventDefault();
+    
+    if (draggedIndex !== dropIndex) {
+      onItemReorder?.(draggedIndex, dropIndex);
+    }
+    
+    setDraggedIndex(null);
+    setDropTargetIndex(null);
+  }, [enableDragDrop, draggedIndex, onItemReorder]);
+
+  const handleDragEnd = useCallback((e: React.DragEvent) => {
+    if (!enableDragDrop) return;
+    if (e.currentTarget instanceof HTMLElement) {
+      e.currentTarget.style.cursor = 'grab';
+    }
+    setDraggedIndex(null);
+    setDropTargetIndex(null);
+  }, [enableDragDrop]);
+
+  if (items.length === 0) {
     return (
       <Stack style={styles.contentSection}>
         <Typography variant="body" color="secondary">
-          No items in your library
+          {emptyMessage || 'No items'}
         </Typography>
       </Stack>
     );
@@ -284,74 +340,41 @@ const LibraryList: React.FC<{
 
   return (
     <Stack direction="column" spacing="xs" style={styles.contentSection}>
-      {libraryItems.map((item) => (
-        <HorizontalTileCard
-          key={item.id || item.title}
-          image={item.image}
-          title={item.title}
-          subtitle={item.subtitle}
-          width="100%"
-          onClick={() => handleItemClick(item)}
-          size="small"
-          isActive={activeItemId === (item.id || item.title)}
-        />
+      {items.map((item, index) => (
+        <div
+          key={item.id}
+          draggable={enableDragDrop}
+          onDragStart={(e) => handleDragStart(e, index)}
+          onDragOver={(e) => handleDragOver(e, index)}
+          onDragLeave={handleDragLeave}
+          onDrop={(e) => handleDrop(e, index)}
+          onDragEnd={handleDragEnd}
+          style={{
+            opacity: draggedIndex === index ? 0.5 : 1,
+            cursor: enableDragDrop ? 'grab' : 'pointer',
+            transition: 'opacity 0.2s ease, transform 0.2s ease',
+            borderTop: dropTargetIndex === index && draggedIndex !== index 
+              ? `2px solid ${colors.primary.brand}` 
+              : 'none',
+            paddingTop: dropTargetIndex === index && draggedIndex !== index ? '4px' : '0',
+            transform: draggedIndex === index ? 'scale(0.98)' : 'scale(1)',
+          }}
+        >
+          <HorizontalTileCard
+            image={item.image}
+            title={item.title}
+            subtitle={item.subtitle}
+            width="100%"
+            onClick={() => handleItemClick(item, index)}
+            size="small"
+            isActive={activeItemId === item.id}
+          />
+        </div>
       ))}
     </Stack>
   );
 };
 
-// Queue List Component
-const QueueList: React.FC<{
-  queueItems: QueueItem[];
-  activeItemId?: string;
-  onQueueItemClick?: (item: QueueItem) => void;
-  styles: any;
-}> = ({ queueItems, activeItemId, onQueueItemClick, styles }) => {
-  const handleItemClick = useCallback(
-    (item: QueueItem) => {
-      onQueueItemClick?.(item);
-    },
-    [onQueueItemClick]
-  );
-
-  if (queueItems.length === 0) {
-    return (
-      <Stack style={styles.contentSection}>
-        <Typography variant="body" color="secondary">
-          No songs in queue
-        </Typography>
-      </Stack>
-    );
-  }
-
-  return (
-    <div>
-      <Typography
-        variant="body"
-        size="sm"
-        weight="bold"
-        color="primary"
-        style={{ marginBottom: spacing.sm }}
-      >
-        Next in queue
-      </Typography>
-      <Stack direction="column" spacing="xs" style={styles.contentSection}>
-        {queueItems.map((item) => (
-          <HorizontalTileCard
-            key={item.id}
-            image={item.image}
-            title={item.title}
-            subtitle={item.artist}
-            width="100%"
-            onClick={() => handleItemClick(item)}
-            size="small"
-            isActive={activeItemId === item.id}
-          />
-        ))}
-      </Stack>
-    </div>
-  );
-};
 
 // Main Sidebar Component
 export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
@@ -360,27 +383,57 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
       variant = 'library',
       position = 'left',
       title,
-      libraryItems = DEFAULT_LIBRARY_ITEMS,
-      queueItems = [],
+      items,
       nowPlaying,
       filters = DEFAULT_FILTERS,
       showSearch = true,
       showFilters = true,
       showLogo = true,
       showCloseButton = false,
+      enableDragDrop = false,
       onFilterClick,
       onAddClick,
       onExpandClick,
       onSearch,
+      onItemClick,
+      onItemReorder,
+      onClose,
+      // Deprecated props for backward compatibility
+      libraryItems,
+      queueItems,
       onLibraryItemClick,
       onQueueItemClick,
-      onClose,
+      onQueueReorder,
+      enableQueueDragDrop,
       className,
       style,
       ...props
     },
     ref
   ) => {
+    // Backward compatibility: merge deprecated props with new generic props
+    const resolvedItems = useMemo(() => {
+      if (items) return items;
+      if (libraryItems) return libraryItems;
+      if (queueItems) return queueItems;
+      return DEFAULT_LIBRARY_ITEMS;
+    }, [items, libraryItems, queueItems]);
+
+    const resolvedOnItemClick = useCallback(
+      (item: SidebarItem, index: number) => {
+        if (onItemClick) {
+          onItemClick(item, index);
+        } else if (onLibraryItemClick && variant === 'library') {
+          onLibraryItemClick(item as LibraryItem);
+        } else if (onQueueItemClick && variant === 'queue') {
+          onQueueItemClick(item as QueueItem);
+        }
+      },
+      [onItemClick, onLibraryItemClick, onQueueItemClick, variant]
+    );
+
+    const resolvedOnItemReorder = onItemReorder || onQueueReorder;
+    const resolvedEnableDragDrop = enableDragDrop || enableQueueDragDrop || false;
     // State to track active filter and active item
     const [activeFilter, setActiveFilter] = useState<string | undefined>();
     const [activeItemId, setActiveItemId] = useState<string | undefined>();
@@ -401,8 +454,7 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
         onAddClick: () => {},
         onExpandClick: () => {},
         onSearch: () => {},
-        onLibraryItemClick: () => {},
-        onQueueItemClick: () => {},
+        onItemClick: () => {},
         onClose: () => {},
       }),
       []
@@ -441,20 +493,12 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
       [onSearch, defaultHandlers.onSearch]
     );
 
-    const handleLibraryItemClick = useCallback(
-      (item: LibraryItem) => {
-        setActiveItemId(item.id || item.title);
-        (onLibraryItemClick || defaultHandlers.onLibraryItemClick)(item);
-      },
-      [onLibraryItemClick, defaultHandlers.onLibraryItemClick]
-    );
-
-    const handleQueueItemClick = useCallback(
-      (item: QueueItem) => {
+    const handleItemClick = useCallback(
+      (item: SidebarItem, index: number) => {
         setActiveItemId(item.id);
-        (onQueueItemClick || defaultHandlers.onQueueItemClick)(item);
+        resolvedOnItemClick(item, index);
       },
-      [onQueueItemClick, defaultHandlers.onQueueItemClick]
+      [resolvedOnItemClick]
     );
 
     const handleClose = useCallback(() => {
@@ -505,10 +549,15 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
       ]
     );
 
-    const searchSection = useMemo(
-      () => showSearch && variant === 'library' ? <SearchSection onSearch={handleSearch} /> : null,
-      [showSearch, variant, handleSearch]
-    );
+    const searchSection = useMemo(() => {
+      if (!showSearch || variant !== 'library') return null;
+      return (
+        <SearchSection 
+          onSearch={handleSearch}
+          placeholder="Search in Your Library"
+        />
+      );
+    }, [showSearch, variant, handleSearch]);
 
     const nowPlayingSection = useMemo(
       () =>
@@ -519,33 +568,43 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
     );
 
     const contentSection = useMemo(() => {
-      if (variant === 'library') {
-        return (
-          <LibraryList
-            libraryItems={libraryItems}
+      const emptyMessage = variant === 'library' 
+        ? 'No items in your library' 
+        : 'No songs in queue';
+
+      const showSectionTitle = variant === 'queue';
+
+      return (
+        <div>
+          {showSectionTitle && (
+            <Typography
+              variant="body"
+              size="sm"
+              weight="bold"
+              color="primary"
+              style={{ marginBottom: spacing.sm, padding: `0 ${spacing.sm}` }}
+            >
+              Next in queue
+            </Typography>
+          )}
+          <ItemList
+            items={resolvedItems}
             activeItemId={activeItemId}
-            onLibraryItemClick={handleLibraryItemClick}
+            onItemClick={handleItemClick}
+            enableDragDrop={resolvedEnableDragDrop}
+            onItemReorder={resolvedOnItemReorder}
+            emptyMessage={emptyMessage}
             styles={sidebarStyles}
           />
-        );
-      } else if (variant === 'queue') {
-        return (
-          <QueueList
-            queueItems={queueItems}
-            activeItemId={activeItemId}
-            onQueueItemClick={handleQueueItemClick}
-            styles={sidebarStyles}
-          />
-        );
-      }
-      return null;
+        </div>
+      );
     }, [
       variant,
-      libraryItems,
-      queueItems,
+      resolvedItems,
       activeItemId,
-      handleLibraryItemClick,
-      handleQueueItemClick,
+      handleItemClick,
+      resolvedEnableDragDrop,
+      resolvedOnItemReorder,
       sidebarStyles,
     ]);
 

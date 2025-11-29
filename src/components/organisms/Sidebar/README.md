@@ -27,46 +27,79 @@ A versatile sidebar navigation component supporting both **Library** and **Queue
 | `variant` | `'library' \| 'queue'` | `'library'` | Sidebar variant type |
 | `position` | `'left' \| 'right'` | `'left'` | Sidebar position on screen |
 | `title` | `string` | Auto | Custom sidebar title (defaults based on variant) |
-| `libraryItems` | `LibraryItem[]` | `[]` | Array of library items (library variant) |
-| `queueItems` | `QueueItem[]` | `[]` | Array of queue items (queue variant) |
+| `items` | `SidebarItem[]` | `[]` | **Generic items array** - use this for both library and queue items |
 | `nowPlaying` | `QueueItem` | - | Currently playing track (queue variant) |
 | `filters` | `string[]` | `['Playlists', 'Artists', ...]` | Available filter options (library variant) |
 | `showSearch` | `boolean` | `true` | Show search input (library variant) |
 | `showFilters` | `boolean` | `true` | Show filter buttons (library variant) |
 | `showLogo` | `boolean` | `true` | Show Spotify logo (library variant) |
 | `showCloseButton` | `boolean` | `false` | Show close button in header |
+| `enableDragDrop` | `boolean` | `false` | Enable drag-and-drop for item reordering (useful for queue) |
 | `onFilterClick` | `(filter: string) => void` | - | Handler for filter button clicks |
 | `onAddClick` | `() => void` | - | Handler for add button click |
 | `onExpandClick` | `() => void` | - | Handler for expand button click |
 | `onSearch` | `(query: string) => void` | - | Handler for search input changes |
-| `onLibraryItemClick` | `(item: LibraryItem) => void` | - | Handler for library item clicks |
-| `onQueueItemClick` | `(item: QueueItem) => void` | - | Handler for queue item clicks |
+| `onItemClick` | `(item: SidebarItem, index: number) => void` | - | **Generic handler** for item clicks (preferred) |
+| `onItemReorder` | `(fromIndex: number, toIndex: number) => void` | - | Handler for drag-and-drop reordering |
 | `onClose` | `() => void` | - | Handler for close button click |
 | `className` | `string` | - | Custom CSS class name |
 | `style` | `React.CSSProperties` | - | Custom inline styles |
+| `libraryItems` | `LibraryItem[]` | `[]` | **Deprecated:** Use `items` prop instead |
+| `queueItems` | `QueueItem[]` | `[]` | **Deprecated:** Use `items` prop instead |
+| `onLibraryItemClick` | `(item: LibraryItem) => void` | - | **Deprecated:** Use `onItemClick` instead |
+| `onQueueItemClick` | `(item: QueueItem) => void` | - | **Deprecated:** Use `onItemClick` instead |
+| `onQueueReorder` | `(fromIndex: number, toIndex: number) => void` | - | **Deprecated:** Use `onItemReorder` instead |
+| `enableQueueDragDrop` | `boolean` | `false` | **Deprecated:** Use `enableDragDrop` instead |
 
-### LibraryItem Type
+### SidebarItem Type (Base Generic Type)
 ```tsx
-interface LibraryItem {
-  id?: string;
-  image: string;         // Item cover image URL
-  title: string;         // Item title/name
-  subtitle: string;      // Item description (e.g., "Playlist • 213 songs")
-  type: 'playlist' | 'artist' | 'album' | 'podcast';  // Content type
-  pinned?: boolean;      // Whether item is pinned to top
+interface SidebarItem {
+  id: string;           // Unique identifier (required)
+  image: string;        // Item cover image URL
+  title: string;        // Item title/name
+  subtitle: string;     // Item description
+  metadata?: Record<string, any>;  // Optional metadata for custom data
 }
 ```
 
-### QueueItem Type
+### LibraryItem Type (Extends SidebarItem)
 ```tsx
-interface QueueItem {
-  id: string;           // Unique identifier
-  image: string;        // Track cover image URL
-  title: string;        // Track title
+interface LibraryItem extends SidebarItem {
+  type: 'playlist' | 'artist' | 'album' | 'podcast';  // Content type
+  pinned?: boolean;     // Whether item is pinned to top
+}
+```
+
+### QueueItem Type (Extends SidebarItem)
+```tsx
+interface QueueItem extends SidebarItem {
   artist: string;       // Artist name
   album?: string;       // Album name (optional)
   duration?: string;    // Track duration (e.g., "3:20")
 }
+```
+
+## Generic API Design
+
+The Sidebar component now supports a **generic `items` prop** for better flexibility and code reuse. Both `LibraryItem` and `QueueItem` extend the base `SidebarItem` interface, allowing you to use a consistent API regardless of variant.
+
+### Why Use the Generic API?
+
+1. **Consistent Interface**: Single prop (`items`) works for both variants
+2. **Type Safety**: Full TypeScript support with proper type inference
+3. **Easier Refactoring**: Change variants without changing prop names
+4. **Future-Proof**: Easy to extend for new sidebar types
+
+### Backward Compatibility
+
+The component maintains full backward compatibility with the old `libraryItems` and `queueItems` props. Use whichever API suits your needs:
+
+```tsx
+// New generic API (recommended)
+<Sidebar variant="library" items={myLibraryItems} />
+
+// Old specific API (still supported)
+<Sidebar variant="library" libraryItems={myLibraryItems} />
 ```
 
 ## Variants
@@ -140,6 +173,45 @@ searchWrapper: {
 }
 ```
 
+## Drag and Drop Support
+
+The Sidebar supports drag-and-drop for reordering items, particularly useful for queue management.
+
+### Enabling Drag and Drop
+
+```tsx
+const [queueItems, setQueueItems] = useState(initialQueue);
+
+const handleReorder = (fromIndex: number, toIndex: number) => {
+  const newQueue = [...queueItems];
+  const [movedItem] = newQueue.splice(fromIndex, 1);
+  newQueue.splice(toIndex, 0, movedItem);
+  setQueueItems(newQueue);
+};
+
+<Sidebar
+  variant="queue"
+  position="right"
+  items={queueItems}
+  enableDragDrop={true}
+  onItemReorder={handleReorder}
+/>
+```
+
+### Drag and Drop Features
+
+- **Visual Feedback**: Items show opacity change when dragged
+- **Drop Target Indicator**: Blue line indicates where item will be dropped
+- **Cursor Changes**: Cursor changes to "grab" when hovering draggable items
+- **Smooth Transitions**: Animated transitions for better UX
+- **Touch Support**: Works with both mouse and touch inputs
+
+### Use Cases
+
+1. **Queue Reordering**: Let users rearrange upcoming tracks
+2. **Playlist Management**: Reorder songs in a playlist
+3. **Priority Lists**: Organize items by priority
+
 ## Usage Patterns
 
 ### Library Sidebar (Default)
@@ -152,28 +224,43 @@ searchWrapper: {
 
 ### Queue Sidebar (Right Side)
 ```tsx
+// Using generic API
 <Sidebar
   variant="queue"
   position="right"
-  queueItems={upcomingTracks}
+  items={upcomingTracks}
   nowPlaying={currentTrack}
   showCloseButton={true}
   onClose={() => setQueueOpen(false)}
-  onQueueItemClick={(item) => playTrack(item)}
+  onItemClick={(item, index) => playTrack(item, index)}
+/>
+
+// With drag-and-drop
+<Sidebar
+  variant="queue"
+  position="right"
+  items={upcomingTracks}
+  nowPlaying={currentTrack}
+  showCloseButton={true}
+  enableDragDrop={true}
+  onItemReorder={(from, to) => handleQueueReorder(from, to)}
+  onClose={() => setQueueOpen(false)}
+  onItemClick={(item, index) => playTrack(item, index)}
 />
 ```
 
 ### Library Sidebar with Customization
 ```tsx
+// Using generic API (recommended)
 <Sidebar
   variant="library"
-  libraryItems={userLibrary}
+  items={userLibrary}
   filters={['Playlists', 'Albums', 'Artists']}
   onFilterClick={(filter) => handleFilterChange(filter)}
   onAddClick={() => handleAddContent()}
   onExpandClick={() => toggleSidebarExpansion()}
   onSearch={(query) => handleLibrarySearch(query)}
-  onLibraryItemClick={(item) => navigateToItem(item)}
+  onItemClick={(item, index) => navigateToItem(item, index)}
   showLogo={true}
 />
 ```
@@ -185,14 +272,22 @@ function SpotifyApp() {
   const [currentTrack, setCurrentTrack] = useState(tracks[0]);
   const [queue, setQueue] = useState(tracks.slice(1));
 
+  // Handle queue reordering
+  const handleQueueReorder = (fromIndex: number, toIndex: number) => {
+    const newQueue = [...queue];
+    const [movedItem] = newQueue.splice(fromIndex, 1);
+    newQueue.splice(toIndex, 0, movedItem);
+    setQueue(newQueue);
+  };
+
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
       {/* Library Sidebar - Left */}
       <Sidebar
         variant="library"
         position="left"
-        libraryItems={myLibrary}
-        onLibraryItemClick={(item) => playPlaylist(item)}
+        items={myLibrary}
+        onItemClick={(item) => playPlaylist(item)}
       />
       
       {/* Main Content Area */}
@@ -209,21 +304,25 @@ function SpotifyApp() {
             id: currentTrack.id,
             image: currentTrack.coverUrl,
             title: currentTrack.title,
+            subtitle: currentTrack.artist,
             artist: currentTrack.artist,
             album: currentTrack.album,
             duration: currentTrack.duration,
           }}
-          queueItems={queue.map(track => ({
+          items={queue.map(track => ({
             id: track.id,
             image: track.coverUrl,
             title: track.title,
+            subtitle: track.artist,
             artist: track.artist,
             album: track.album,
             duration: track.duration,
           }))}
           showCloseButton={true}
+          enableDragDrop={true}
           onClose={() => setIsQueueOpen(false)}
-          onQueueItemClick={(item) => playTrack(item.id)}
+          onItemClick={(item) => playTrack(item.id)}
+          onItemReorder={handleQueueReorder}
         />
       )}
       
@@ -249,29 +348,33 @@ function SpotifyApp() {
     id: '1',
     image: 'https://example.com/cover.jpg',
     title: 'Anti-Hero',
+    subtitle: 'Taylor Swift',
     artist: 'Taylor Swift',
     album: 'Midnights',
     duration: '3:20',
   }}
-  queueItems={[
+  items={[
     {
       id: '2',
       image: 'https://example.com/track2.jpg',
       title: 'Lavender Haze',
+      subtitle: 'Taylor Swift',
       artist: 'Taylor Swift',
       duration: '3:22',
     },
     // ... more tracks
   ]}
   showCloseButton={true}
+  enableDragDrop={true}
   onClose={() => console.log('Close queue')}
-  onQueueItemClick={(item) => console.log('Play:', item.title)}
+  onItemClick={(item, index) => console.log('Play:', item.title, 'at index', index)}
+  onItemReorder={(from, to) => console.log('Reorder:', from, '->', to)}
 />
 ```
 
 ### Sidebar with Custom Library Items
 ```tsx
-const customLibraryItems = [
+const customLibraryItems: LibraryItem[] = [
   {
     id: '1',
     image: 'https://example.com/playlist-cover.jpg',
@@ -290,9 +393,11 @@ const customLibraryItems = [
   },
 ];
 
+// Using generic API (recommended)
 <Sidebar
-  libraryItems={customLibraryItems}
-  onLibraryItemClick={(item) => playContent(item)}
+  variant="library"
+  items={customLibraryItems}
+  onItemClick={(item, index) => playContent(item, index)}
 />
 ```
 
@@ -445,4 +550,5 @@ The Sidebar component is designed to work seamlessly with:
 - **AppHeader**: For consistent navigation experience
 - **MusicPlayer**: For playback controls and now playing display
 - **Content Views**: For displaying selected library items
+- **Search Results**: For library-specific search functionality 
 - **Search Results**: For library-specific search functionality 

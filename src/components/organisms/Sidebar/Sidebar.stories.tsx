@@ -61,6 +61,7 @@ const sampleQueueItems: QueueItem[] = [
     id: 'q1',
     image: 'https://i.scdn.co/image/ab67616d0000b273e319bbc6c28b28e8e17e0478',
     title: 'Blinding Lights',
+    subtitle: 'The Weeknd',
     artist: 'The Weeknd',
     album: 'After Hours',
     duration: '3:20',
@@ -69,6 +70,7 @@ const sampleQueueItems: QueueItem[] = [
     id: 'q2',
     image: 'https://i.scdn.co/image/ab67616d0000b273a935e4689f15953311772cc4',
     title: 'Levitating',
+    subtitle: 'Dua Lipa',
     artist: 'Dua Lipa',
     album: 'Future Nostalgia',
     duration: '3:23',
@@ -77,6 +79,7 @@ const sampleQueueItems: QueueItem[] = [
     id: 'q3',
     image: 'https://i.scdn.co/image/ab67616d0000b273e5e2e5e2e5e2e5e2e5e2e5e2',
     title: 'Save Your Tears',
+    subtitle: 'The Weeknd',
     artist: 'The Weeknd',
     album: 'After Hours',
     duration: '3:35',
@@ -85,6 +88,7 @@ const sampleQueueItems: QueueItem[] = [
     id: 'q4',
     image: 'https://i.scdn.co/image/ab67616d0000b273f5e2e5e2e5e2e5e2e5e2e5e2',
     title: 'Good 4 U',
+    subtitle: 'Olivia Rodrigo',
     artist: 'Olivia Rodrigo',
     album: 'SOUR',
     duration: '2:58',
@@ -95,6 +99,7 @@ const sampleNowPlaying: QueueItem = {
   id: 'now',
   image: 'https://i.scdn.co/image/ab67616d0000b273bb54dde68cd23e2a268ae0f5',
   title: 'Anti-Hero',
+  subtitle: 'Taylor Swift',
   artist: 'Taylor Swift',
   album: 'Midnights',
   duration: '3:20',
@@ -450,6 +455,7 @@ export const QueueLarge: Story = {
       id: `q-${index}`,
       image: `https://picsum.photos/64/64?random=${index}`,
       title: `Track ${index + 1}`,
+      subtitle: `Artist ${index + 1}`,
       artist: `Artist ${index + 1}`,
       album: `Album ${index + 1}`,
       duration: `${Math.floor(Math.random() * 3) + 2}:${String(Math.floor(Math.random() * 60)).padStart(2, '0')}`,
@@ -506,6 +512,137 @@ export const QueueWithoutClose: Story = {
     docs: {
       description: {
         story: 'Queue sidebar without close button for persistent display.',
+      },
+    },
+  },
+  decorators: [
+    (Story) => (
+      <div
+        style={{
+          display: 'flex',
+          height: '100vh',
+          backgroundColor: '#121212',
+        }}
+      >
+        <div
+          style={{
+            flex: 1,
+            padding: '2rem',
+            backgroundColor: '#1e1e1e',
+            color: 'white',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <h2>Main Content Area</h2>
+        </div>
+        <Story />
+      </div>
+    ),
+  ],
+};
+
+// Queue variant with drag and drop
+const QueueWithDragDrop: React.FC<SidebarProps> = (args) => {
+  const [queueItems, setQueueItems] = useState(sampleQueueItems);
+
+  const handleReorder = (fromIndex: number, toIndex: number) => {
+    console.log(`Reordering: ${fromIndex} → ${toIndex}`);
+    const newQueue = [...queueItems];
+    const [movedItem] = newQueue.splice(fromIndex, 1);
+    newQueue.splice(toIndex, 0, movedItem);
+    setQueueItems(newQueue);
+  };
+
+  return (
+    <Sidebar
+      {...args}
+      items={queueItems}
+      onItemReorder={handleReorder}
+      onItemClick={(item, index) => console.log('Clicked:', item.title, 'at index', index)}
+    />
+  );
+};
+
+export const QueueDragDrop: Story = {
+  render: (args) => <QueueWithDragDrop {...args} />,
+  args: {
+    variant: 'queue',
+    position: 'right',
+    nowPlaying: sampleNowPlaying,
+    showCloseButton: true,
+    enableDragDrop: true,
+    onClose: () => console.log('Close queue'),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Queue sidebar with drag-and-drop enabled for reordering tracks. Try dragging items to reorder them!',
+      },
+    },
+  },
+  decorators: [
+    (Story) => (
+      <div
+        style={{
+          display: 'flex',
+          height: '100vh',
+          backgroundColor: '#121212',
+        }}
+      >
+        <div
+          style={{
+            flex: 1,
+            padding: '2rem',
+            backgroundColor: '#1e1e1e',
+            color: 'white',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <h2>Try dragging queue items to reorder!</h2>
+        </div>
+        <Story />
+      </div>
+    ),
+  ],
+};
+
+// Generic items prop example - Library
+export const GenericLibraryItems: Story = {
+  args: {
+    variant: 'library',
+    position: 'left',
+    items: sampleLibraryItems,
+    showLogo: true,
+    onItemClick: (item, index) => console.log('Item clicked:', item.title, 'at index', index),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Using the generic items prop instead of libraryItems for better flexibility.',
+      },
+    },
+  },
+};
+
+// Generic items prop example - Queue
+export const GenericQueueItems: Story = {
+  args: {
+    variant: 'queue',
+    position: 'right',
+    items: sampleQueueItems,
+    nowPlaying: sampleNowPlaying,
+    showCloseButton: true,
+    onItemClick: (item, index) => console.log('Item clicked:', item.title, 'at index', index),
+    onClose: () => console.log('Close queue'),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Using the generic items prop instead of queueItems for consistent API.',
       },
     },
   },
