@@ -4,3 +4,4 @@ export * from './HorizontalTileCard';
 export * from './Modal';
 export * from './CategoryCard';
 export * from './Drawer';
+export * from './Toast';
