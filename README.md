@@ -41,8 +41,8 @@ npm install spotify-design-system
 **Atoms (15)** - Building Blocks  
 `Button` • `Icon` • `Image` • `Input` • `Progress` • `Slider` • `Stack` • `Typography` • `TextLink` • `Tooltip` • `Divider` • `MessageText` • `Pill` • `Skeleton` • `Table`
 
-**Molecules (5)** - Composite Components  
-`Banner` • `Card` • `Drawer` • `Footer` • `HorizontalTileCard`
+**Molecules (6)** - Composite Components  
+`Banner` • `Card` • `Drawer` • `Footer` • `HorizontalTileCard` • `Toast`
 
 **Organisms (3)** - Complex Features  
 `AppHeader` • `MusicPlayer` • `Sidebar`
@@ -184,7 +184,7 @@ Features drag-drop queue management, playlist creation, and music playback using
 src/
 ├── components/
 │   ├── atoms/        # Button, Icon, Input, Typography (15 components)
-│   ├── molecules/    # Card, Drawer, Banner (5 components)
+│   ├── molecules/    # Card, Drawer, Banner, Toast (6 components)
 │   └── organisms/    # Sidebar, MusicPlayer, AppHeader (2 components)
 ├── styles/
 │   ├── tokens/       # colors, spacing, typography, shadows
@@ -247,8 +247,8 @@ npm publish               # Publish to NPM (after build)
 
 | Metric | Value |
 |--------|-------|
-| **Version** | 1.0.56 |
-| **Components** | 23 (15 Atoms, 5 Molecules, 3 Organisms) |
+| **Version** | 1.1.0 |
+| **Components** | 24 (15 Atoms, 6 Molecules, 3 Organisms) |
 | **Published to NPM** | ✅ Active deployment & versioning |
 | **Test Cases** | 70+ (Jest + React Testing Library) |
 | **Storybook Stories** | 100% component coverage |
@@ -304,4 +304,4 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ---
 
-**Built by [Lam Nguyen](https://github.com/lamnguyenkn97)** • Version 1.0.56
+**Built by [Lam Nguyen](https://github.com/lamnguyenkn97)** • Version 1.1.0
