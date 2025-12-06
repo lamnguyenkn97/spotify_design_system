@@ -3,6 +3,9 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Footer } from './Footer';
 import { FooterLinkItem, SocialLinkItem } from './Footer.types';
 import { Icon } from '../../atoms';
+import { Typography } from '../../atoms/Typography/Text/Typography';
+import { Button, ButtonVariant, ButtonSize } from '../../atoms/Button';
+import { Stack } from '../../atoms/Stack';
 import { faInstagram, faTwitter, faFacebook, faLinkedin, faGithub } from '@fortawesome/free-brands-svg-icons';
 
 const meta: Meta<typeof Footer> = {
@@ -282,6 +285,166 @@ export const TechCompanyFooter: Story = {
     docs: {
       description: {
         story: 'Complete custom footer for a tech company with API-focused links.',
+      },
+    },
+  },
+};
+
+// Custom Content Stories
+export const WithCustomContentTop: Story = {
+  args: {
+    customContentPosition: 'top',
+    children: (
+      <Stack direction="column" spacing="md" align="center" style={{ padding: '24px 0', borderBottom: '1px solid #333' }}>
+        <Typography variant="heading" color="primary">
+          🎵 Join the Music Revolution
+        </Typography>
+        <Typography variant="body" color="secondary" style={{ textAlign: 'center', maxWidth: '600px' }}>
+          Get exclusive access to new releases, artist interviews, and behind-the-scenes content.
+        </Typography>
+        <Stack direction="row" spacing="md">
+          <Button variant={ButtonVariant.Primary} size={ButtonSize.Medium}>
+            Sign Up Free
+          </Button>
+          <Button variant={ButtonVariant.Secondary} size={ButtonSize.Medium}>
+            Learn More
+          </Button>
+        </Stack>
+      </Stack>
+    ),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Footer with custom content (CTA banner) positioned at the top, before default links.',
+      },
+    },
+  },
+};
+
+export const WithCustomContentBottom: Story = {
+  args: {
+    customContentPosition: 'bottom',
+    children: (
+      <Stack direction="column" spacing="sm" align="center" style={{ paddingTop: '24px', borderTop: '1px solid #333' }}>
+        <Typography variant="body" color="secondary" style={{ fontSize: '0.875rem' }}>
+          🌍 Available in 180+ countries
+        </Typography>
+        <Stack direction="row" spacing="sm" style={{ flexWrap: 'wrap', justifyContent: 'center' }}>
+          <Typography variant="caption" color="secondary">USA</Typography>
+          <Typography variant="caption" color="secondary">•</Typography>
+          <Typography variant="caption" color="secondary">UK</Typography>
+          <Typography variant="caption" color="secondary">•</Typography>
+          <Typography variant="caption" color="secondary">Canada</Typography>
+          <Typography variant="caption" color="secondary">•</Typography>
+          <Typography variant="caption" color="secondary">Australia</Typography>
+          <Typography variant="caption" color="secondary">•</Typography>
+          <Typography variant="caption" color="secondary">Germany</Typography>
+          <Typography variant="caption" color="secondary">•</Typography>
+          <Typography variant="caption" color="secondary">Japan</Typography>
+        </Stack>
+      </Stack>
+    ),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Footer with custom content (country list) positioned at the bottom, after default links but before copyright.',
+      },
+    },
+  },
+};
+
+export const WithCustomContentReplace: Story = {
+  args: {
+    customContentPosition: 'replace',
+    children: (
+      <Stack direction="column" spacing="lg" align="center" style={{ padding: '48px 24px' }}>
+        <Typography variant="heading" color="primary" style={{ fontSize: '2rem' }}>
+          🎧 Coming Soon
+        </Typography>
+        <Typography variant="body" color="secondary" style={{ textAlign: 'center', maxWidth: '500px' }}>
+          We're working on something amazing. Sign up to be the first to know when we launch!
+        </Typography>
+        <Stack direction="row" spacing="md" style={{ width: '100%', maxWidth: '500px' }}>
+          <input
+            type="email"
+            placeholder="Enter your email"
+            style={{
+              flex: 1,
+              padding: '12px 16px',
+              borderRadius: '24px',
+              border: '1px solid #333',
+              backgroundColor: '#121212',
+              color: '#fff',
+              fontSize: '1rem',
+            }}
+          />
+          <Button variant={ButtonVariant.Primary} size={ButtonSize.Medium}>
+            Notify Me
+          </Button>
+        </Stack>
+        <Stack direction="row" spacing="md">
+          <Icon icon={faInstagram} size="sm" color="primary" clickable />
+          <Icon icon={faTwitter} size="sm" color="primary" clickable />
+          <Icon icon={faFacebook} size="sm" color="primary" clickable />
+        </Stack>
+        <Typography variant="caption" color="secondary">
+          © 2024 Future Music App
+        </Typography>
+      </Stack>
+    ),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Footer with completely custom content that replaces all default sections. Perfect for landing pages or coming soon pages.',
+      },
+    },
+  },
+};
+
+export const NewsletterSignup: Story = {
+  args: {
+    customContentPosition: 'top',
+    children: (
+      <div style={{ 
+        backgroundColor: '#1DB954', 
+        padding: '32px', 
+        borderRadius: '8px', 
+        marginBottom: '24px' 
+      }}>
+        <Stack direction="column" spacing="md" align="center">
+          <Typography variant="heading" color="primary" style={{ color: '#000' }}>
+            📬 Stay in the Loop
+          </Typography>
+          <Typography variant="body" style={{ color: '#000', textAlign: 'center' }}>
+            Subscribe to our newsletter for weekly playlists and music news.
+          </Typography>
+          <Stack direction="row" spacing="sm" style={{ width: '100%', maxWidth: '400px' }}>
+            <input
+              type="email"
+              placeholder="Your email"
+              style={{
+                flex: 1,
+                padding: '10px 16px',
+                borderRadius: '20px',
+                border: 'none',
+                fontSize: '0.875rem',
+              }}
+            />
+            <Button variant={ButtonVariant.Primary} size={ButtonSize.Small} style={{ backgroundColor: '#000', color: '#fff' }}>
+              Subscribe
+            </Button>
+          </Stack>
+        </Stack>
+      </div>
+    ),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Footer with a styled newsletter signup form as custom content at the top.',
       },
     },
   },

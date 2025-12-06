@@ -175,11 +175,80 @@ export const Footer = forwardRef<HTMLDivElement, FooterProps>(
     showLinks = true,
     copyrightText = '© 2024 Spotify AB',
     showCopyright = true,
+    children,
+    customContentPosition = 'bottom',
     ...props 
   }, ref) => {
     // Use custom data or fallback to defaults
     const linksToShow = customLinks || DEFAULT_FOOTER_LINKS;
     const socialLinksToShow = customSocialLinks || DEFAULT_SOCIAL_LINKS;
+
+    // If 'replace' mode, render only custom content
+    if (customContentPosition === 'replace' && children) {
+      return (
+        <div
+          ref={ref}
+          role="contentinfo"
+          className={className}
+          style={FOOTER_STYLES.container}
+          {...props}
+        >
+          {children}
+        </div>
+      );
+    }
+
+    // Default footer content
+    const defaultContent = (
+      <>
+        {/* Main Footer Content */}
+        <Stack
+          direction="row"
+          spacing="lg"
+          align="start"
+          justify="space-between"
+          style={FOOTER_STYLES.content}
+        >
+          {/* Footer Links Columns */}
+          {showLinks && linksToShow.map((column, index) => (
+            <Stack key={index} direction="column" spacing="sm" align="start">
+              <Typography
+                variant="body"
+                weight="bold"
+                color="primary"
+                component="h4"
+              >
+                {column.title}
+              </Typography>
+              <Stack direction="column" spacing="sm">
+                {column.links.map((link, linkIndex) => (
+                  <FooterLink 
+                    key={linkIndex} 
+                    name={link.name} 
+                    url={link.url} 
+                    onClick={link.onClick}
+                  />
+                ))}
+              </Stack>
+            </Stack>
+          ))}
+
+          {/* Social Icons */}
+          {showSocialLinks && (
+            <Stack
+              direction="row"
+              spacing="md"
+              align="center"
+              style={FOOTER_STYLES.socialContainer}
+            >
+              {socialLinksToShow.map((social, index) => (
+                <SocialIcon key={index} social={social} />
+              ))}
+            </Stack>
+          )}
+        </Stack>
+      </>
+    );
 
     return (
       <div
@@ -190,52 +259,14 @@ export const Footer = forwardRef<HTMLDivElement, FooterProps>(
         {...props}
       >
         <Stack direction="column" spacing="lg">
-          {/* Main Footer Content */}
-          <Stack
-            direction="row"
-            spacing="lg"
-            align="start"
-            justify="space-between"
-            style={FOOTER_STYLES.content}
-          >
-            {/* Footer Links Columns */}
-            {showLinks && linksToShow.map((column, index) => (
-              <Stack key={index} direction="column" spacing="sm" align="start">
-                <Typography
-                  variant="body"
-                  weight="bold"
-                  color="primary"
-                  component="h4"
-                >
-                  {column.title}
-                </Typography>
-                <Stack direction="column" spacing="sm">
-                  {column.links.map((link, linkIndex) => (
-                    <FooterLink 
-                      key={linkIndex} 
-                      name={link.name} 
-                      url={link.url} 
-                      onClick={link.onClick}
-                    />
-                  ))}
-                </Stack>
-              </Stack>
-            ))}
+          {/* Custom content at top */}
+          {children && customContentPosition === 'top' && children}
 
-            {/* Social Icons */}
-            {showSocialLinks && (
-              <Stack
-                direction="row"
-                spacing="md"
-                align="center"
-                style={FOOTER_STYLES.socialContainer}
-              >
-                {socialLinksToShow.map((social, index) => (
-                  <SocialIcon key={index} social={social} />
-                ))}
-              </Stack>
-            )}
-          </Stack>
+          {/* Default footer content */}
+          {defaultContent}
+
+          {/* Custom content at bottom (before copyright) */}
+          {children && customContentPosition === 'bottom' && children}
 
           {/* Copyright */}
           {showCopyright && (

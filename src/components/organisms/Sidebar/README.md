@@ -32,6 +32,8 @@ A versatile sidebar navigation component supporting both **Library** and **Queue
 | `filters` | `string[]` | `['Playlists', 'Artists', ...]` | Available filter options (library variant) |
 | `showSearch` | `boolean` | `true` | Show search input (library variant) |
 | `showFilters` | `boolean` | `true` | Show filter buttons (library variant) |
+| `showAddButton` | `boolean` | `true` | Show add button in filters section (library variant) |
+| `showExpandButton` | `boolean` | `true` | Show expand button in filters section (library variant) |
 | `showLogo` | `boolean` | `true` | Show Spotify logo (library variant) |
 | `showCloseButton` | `boolean` | `false` | Show close button in header |
 | `enableDragDrop` | `boolean` | `false` | Enable drag-and-drop for item reordering (useful for queue) |
@@ -552,3 +554,27 @@ The Sidebar component is designed to work seamlessly with:
 - **Content Views**: For displaying selected library items
 - **Search Results**: For library-specific search functionality 
 - **Search Results**: For library-specific search functionality 
+### Minimal Sidebar (No Search, No Action Buttons)
+```tsx
+// Perfect for apps that don't need search or add/expand functionality
+<Sidebar
+  variant="library"
+  items={myLibraryItems}
+  showSearch={false}
+  showAddButton={false}
+  showExpandButton={false}
+  onItemClick={(item) => handleItemClick(item)}
+/>
+```
+
+### Hide Specific Controls
+```tsx
+// Hide only search
+<Sidebar items={items} showSearch={false} />
+
+// Hide only add button
+<Sidebar items={items} showAddButton={false} />
+
+// Hide only expand button
+<Sidebar items={items} showExpandButton={false} />
+```

@@ -59,6 +59,10 @@ export interface SidebarProps extends React.HTMLAttributes<HTMLElement> {
   showSearch?: boolean;
   /** Show filters section */
   showFilters?: boolean;
+  /** Show add button (in library variant) */
+  showAddButton?: boolean;
+  /** Show expand button (in library variant) */
+  showExpandButton?: boolean;
   /** Show logo */
   showLogo?: boolean;
   /** Show close button */

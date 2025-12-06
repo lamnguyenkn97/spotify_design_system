@@ -22,4 +22,8 @@ export interface FooterProps {
   showLinks?: boolean;
   copyrightText?: string;
   showCopyright?: boolean;
+  
+  // Custom content support
+  children?: React.ReactNode;
+  customContentPosition?: 'top' | 'bottom' | 'replace';
 }

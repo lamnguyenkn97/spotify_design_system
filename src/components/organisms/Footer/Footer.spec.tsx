@@ -337,5 +337,125 @@ describe('Footer Component', () => {
         expect(screen.queryByLabelText('Visit our Instagram page')).not.toBeInTheDocument();
       });
     });
+
+    describe('Custom Content', () => {
+      it('should render custom content at the top position', () => {
+        renderWithTheme(
+          <Footer customContentPosition="top">
+            <div data-testid="custom-content">Custom CTA Banner</div>
+          </Footer>
+        );
+
+        const customContent = screen.getByTestId('custom-content');
+        const footer = screen.getByRole('contentinfo');
+        
+        expect(customContent).toBeInTheDocument();
+        expect(customContent.textContent).toBe('Custom CTA Banner');
+        
+        // Default content should still be present
+        expect(screen.getByRole('heading', { name: 'Company' })).toBeInTheDocument();
+      });
+
+      it('should render custom content at the bottom position', () => {
+        renderWithTheme(
+          <Footer customContentPosition="bottom">
+            <div data-testid="custom-content">Country List</div>
+          </Footer>
+        );
+
+        const customContent = screen.getByTestId('custom-content');
+        
+        expect(customContent).toBeInTheDocument();
+        expect(customContent.textContent).toBe('Country List');
+        
+        // Default content should still be present
+        expect(screen.getByRole('heading', { name: 'Company' })).toBeInTheDocument();
+        
+        // Copyright should be after custom content
+        expect(screen.getByText('© 2024 Spotify AB')).toBeInTheDocument();
+      });
+
+      it('should replace all default content when customContentPosition is "replace"', () => {
+        renderWithTheme(
+          <Footer customContentPosition="replace">
+            <div data-testid="custom-content">Coming Soon Page</div>
+          </Footer>
+        );
+
+        const customContent = screen.getByTestId('custom-content');
+        
+        expect(customContent).toBeInTheDocument();
+        expect(customContent.textContent).toBe('Coming Soon Page');
+        
+        // Default content should NOT be present
+        expect(screen.queryByRole('heading', { name: 'Company' })).not.toBeInTheDocument();
+        expect(screen.queryByRole('heading', { name: 'Communities' })).not.toBeInTheDocument();
+        expect(screen.queryByText('© 2024 Spotify AB')).not.toBeInTheDocument();
+        expect(screen.queryByLabelText(/Visit our .* page/)).toBeNull();
+      });
+
+      it('should default to bottom position when children provided without position', () => {
+        renderWithTheme(
+          <Footer>
+            <div data-testid="custom-content">Default Position</div>
+          </Footer>
+        );
+
+        const customContent = screen.getByTestId('custom-content');
+        
+        expect(customContent).toBeInTheDocument();
+        
+        // Default content should still be present
+        expect(screen.getByRole('heading', { name: 'Company' })).toBeInTheDocument();
+      });
+
+      it('should render complex custom content with React components', () => {
+        renderWithTheme(
+          <Footer customContentPosition="top">
+            <div data-testid="custom-newsletter">
+              <h2>Newsletter</h2>
+              <input type="email" placeholder="Email" />
+              <button>Subscribe</button>
+            </div>
+          </Footer>
+        );
+
+        const newsletter = screen.getByTestId('custom-newsletter');
+        
+        expect(newsletter).toBeInTheDocument();
+        expect(screen.getByRole('heading', { name: 'Newsletter' })).toBeInTheDocument();
+        expect(screen.getByPlaceholderText('Email')).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'Subscribe' })).toBeInTheDocument();
+      });
+
+      it('should not render custom content when children is null', () => {
+        renderWithTheme(<Footer customContentPosition="top">{null}</Footer>);
+
+        // Default content should be present
+        expect(screen.getByRole('heading', { name: 'Company' })).toBeInTheDocument();
+      });
+
+      it('should work with custom content and showCopyright false', () => {
+        renderWithTheme(
+          <Footer customContentPosition="bottom" showCopyright={false}>
+            <div data-testid="custom-content">Custom Footer</div>
+          </Footer>
+        );
+
+        expect(screen.getByTestId('custom-content')).toBeInTheDocument();
+        expect(screen.queryByText('© 2024 Spotify AB')).not.toBeInTheDocument();
+      });
+
+      it('should work with custom content and showLinks false', () => {
+        renderWithTheme(
+          <Footer customContentPosition="top" showLinks={false}>
+            <div data-testid="custom-content">Custom CTA</div>
+          </Footer>
+        );
+
+        expect(screen.getByTestId('custom-content')).toBeInTheDocument();
+        expect(screen.queryByRole('heading', { name: 'Company' })).not.toBeInTheDocument();
+      });
+    });
   });
 }); 
