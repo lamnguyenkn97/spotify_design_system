@@ -3,7 +3,7 @@ import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 import { ThemeProvider } from '../../../styles/ThemeProvider';
 import { Toast } from './Toast';
 import { ToastProvider, useToast } from './index';
-import { ToastType, ToastPosition } from './Toast.types';
+import { ToastType } from './Toast.types';
 
 const renderWithTheme = (component: React.ReactElement) => {
   return render(<ThemeProvider>{component}</ThemeProvider>);
@@ -195,14 +195,6 @@ describe('Toast Component', () => {
 
       expect(screen.getByText('Test')).toBeInTheDocument();
     });
-
-    it('accepts string position value "top-center"', () => {
-      renderWithTheme(
-        <Toast message="Test" position="top-center" duration={0} />
-      );
-
-      expect(screen.getByText('Test')).toBeInTheDocument();
-    });
   });
 });
 
@@ -368,13 +360,10 @@ describe('ToastProvider and useToast', () => {
     expect(screen.getByTestId('toast-count')).toHaveTextContent('2');
   });
 
-  it('uses default position and duration from provider', () => {
+  it('uses default duration from provider', () => {
     render(
       <ThemeProvider>
-        <ToastProvider 
-          defaultPosition={ToastPosition.TOP_RIGHT} 
-          defaultDuration={5000}
-        >
+        <ToastProvider defaultDuration={5000}>
           <TestComponent />
         </ToastProvider>
       </ThemeProvider>

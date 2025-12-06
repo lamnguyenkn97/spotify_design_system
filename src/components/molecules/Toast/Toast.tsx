@@ -8,7 +8,7 @@ import {
   faInfoCircle,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
-import { ToastProps, ToastType, ToastPosition } from './Toast.types';
+import { ToastProps, ToastType } from './Toast.types';
 import {
   ToastWrapper,
   ToastIconWrapper,
@@ -37,7 +37,6 @@ export const Toast: React.FC<ToastProps> = ({
   message,
   type = ToastType.INFO,
   duration = 3000,
-  position = ToastPosition.BOTTOM_CENTER,
   showCloseButton = true,
   icon,
   onClose,
@@ -53,16 +52,6 @@ export const Toast: React.FC<ToastProps> = ({
       ? ToastType[type.toUpperCase() as keyof typeof ToastType] ||
         ToastType.INFO
       : type;
-
-  // Normalize position to enum
-  const toastPosition =
-    typeof position === 'string'
-      ? ToastPosition[
-          position
-            .toUpperCase()
-            .replace(/-/g, '_') as keyof typeof ToastPosition
-        ] || ToastPosition.BOTTOM_CENTER
-      : position;
 
   // Auto-dismiss after duration
   useEffect(() => {
@@ -86,7 +75,6 @@ export const Toast: React.FC<ToastProps> = ({
   return (
     <ToastWrapper
       $type={toastType}
-      $position={toastPosition}
       $isExiting={isExiting}
       className={className}
       style={style}
@@ -101,18 +89,18 @@ export const Toast: React.FC<ToastProps> = ({
       {/* Message */}
       <ToastMessage>{message}</ToastMessage>
 
-       {/* Close Button */}
-       {showCloseButton && (
-         <ToastCloseButtonWrapper>
-           <Button
-             variant={ButtonVariant.Text}
-             size={ButtonSize.Small}
-             icon={<Icon icon={faXmark} size="sm" />}
-             onClick={handleClose}
-             aria-label="Close notification"
-           />
-         </ToastCloseButtonWrapper>
-       )}
+      {/* Close Button */}
+      {showCloseButton && (
+        <ToastCloseButtonWrapper>
+          <Button
+            variant={ButtonVariant.Text}
+            size={ButtonSize.Small}
+            icon={<Icon icon={faXmark} size="sm" color={'white'} />}
+            onClick={handleClose}
+            aria-label="Close notification"
+          />
+        </ToastCloseButtonWrapper>
+      )}
     </ToastWrapper>
   );
 };

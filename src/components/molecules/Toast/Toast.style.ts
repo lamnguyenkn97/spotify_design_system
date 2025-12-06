@@ -1,19 +1,15 @@
 import styled, { keyframes, css } from 'styled-components';
-import { colors, spacing, borderRadius, fontSizes, shadows, animations } from '../../../styles';
-import { ToastType, ToastPosition } from './Toast.types';
+import {
+  colors,
+  spacing,
+  borderRadius,
+  fontSizes,
+  shadows,
+  animations,
+} from '../../../styles';
+import { ToastType } from './Toast.types';
 
-// Slide in animations for different positions
-const slideInFromTop = keyframes`
-  from {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-`;
-
+// Slide in from bottom (bottom-center position)
 const slideInFromBottom = keyframes`
   from {
     transform: translateY(100%);
@@ -25,40 +21,7 @@ const slideInFromBottom = keyframes`
   }
 `;
 
-const slideInFromLeft = keyframes`
-  from {
-    transform: translateX(-100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-`;
-
-const slideInFromRight = keyframes`
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-`;
-
-// Slide out animations
-const slideOutToTop = keyframes`
-  from {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  to {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
-`;
-
+// Slide out to bottom
 const slideOutToBottom = keyframes`
   from {
     transform: translateY(0);
@@ -69,43 +32,6 @@ const slideOutToBottom = keyframes`
     opacity: 0;
   }
 `;
-
-const slideOutToLeft = keyframes`
-  from {
-    transform: translateX(0);
-    opacity: 1;
-  }
-  to {
-    transform: translateX(-100%);
-    opacity: 0;
-  }
-`;
-
-const slideOutToRight = keyframes`
-  from {
-    transform: translateX(0);
-    opacity: 1;
-  }
-  to {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-`;
-
-// Get animation based on position
-const getEnterAnimation = (position: ToastPosition) => {
-  if (position.includes('top')) return slideInFromTop;
-  if (position.includes('bottom')) return slideInFromBottom;
-  if (position.includes('left')) return slideInFromLeft;
-  return slideInFromRight;
-};
-
-const getExitAnimation = (position: ToastPosition) => {
-  if (position.includes('top')) return slideOutToTop;
-  if (position.includes('bottom')) return slideOutToBottom;
-  if (position.includes('left')) return slideOutToLeft;
-  return slideOutToRight;
-};
 
 // Toast type colors
 const getToastColors = (type: ToastType) => {
@@ -143,12 +69,11 @@ const getToastColors = (type: ToastType) => {
   }
 };
 
-interface ToastContainerWrapperProps {
-  $position: ToastPosition;
-}
-
-export const ToastContainerWrapper = styled.div<ToastContainerWrapperProps>`
+export const ToastContainerWrapper = styled.div`
   position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 9999;
   pointer-events: none;
   display: flex;
@@ -156,72 +81,22 @@ export const ToastContainerWrapper = styled.div<ToastContainerWrapperProps>`
   gap: ${spacing.sm};
   width: 100%;
   padding: ${spacing.md};
-
-  ${({ $position }) => {
-    switch ($position) {
-      case ToastPosition.TOP_LEFT:
-        return css`
-          top: 0;
-          left: 0;
-          align-items: flex-start;
-        `;
-      case ToastPosition.TOP_CENTER:
-        return css`
-          top: 0;
-          left: 50%;
-          transform: translateX(-50%);
-          align-items: center;
-        `;
-      case ToastPosition.TOP_RIGHT:
-        return css`
-          top: 0;
-          right: 0;
-          align-items: flex-end;
-        `;
-      case ToastPosition.BOTTOM_LEFT:
-        return css`
-          bottom: 0;
-          left: 0;
-          align-items: flex-start;
-        `;
-      case ToastPosition.BOTTOM_CENTER:
-        return css`
-          bottom: 0;
-          left: 50%;
-          transform: translateX(-50%);
-          align-items: center;
-        `;
-      case ToastPosition.BOTTOM_RIGHT:
-        return css`
-          bottom: 0;
-          right: 0;
-          align-items: flex-end;
-        `;
-      default:
-        return css`
-          bottom: 0;
-          left: 50%;
-          transform: translateX(-50%);
-          align-items: center;
-        `;
-    }
-  }}
+  align-items: center;
 
   @media (min-width: 769px) {
     max-width: 500px;
   }
 
   @media (max-width: 768px) {
-    left: 0 !important;
-    right: 0 !important;
-    transform: none !important;
-    align-items: stretch !important;
+    left: 0;
+    right: 0;
+    transform: none;
+    align-items: stretch;
   }
 `;
 
 interface ToastWrapperProps {
   $type: ToastType;
-  $position: ToastPosition;
   $isExiting?: boolean;
 }
 
@@ -235,7 +110,7 @@ export const ToastWrapper = styled.div<ToastWrapperProps>`
   min-height: 56px;
   width: 100%;
   pointer-events: auto;
-  
+
   ${({ $type }) => {
     const toastColors = getToastColors($type);
     return css`
@@ -244,16 +119,15 @@ export const ToastWrapper = styled.div<ToastWrapperProps>`
     `;
   }}
 
-  ${({ $position, $isExiting }) =>
+  ${({ $isExiting }) =>
     $isExiting
       ? css`
-          animation: ${getExitAnimation($position)} 0.3s ease-out forwards;
+          animation: ${slideOutToBottom} 0.3s ease-out forwards;
         `
       : css`
-          animation: ${getEnterAnimation($position)} 0.3s ease-out;
+          animation: ${slideInFromBottom} 0.3s ease-out;
         `}
 
-  /* Desktop styles - constrained width */
   @media (min-width: 769px) {
     max-width: 500px;
   }
@@ -279,9 +153,4 @@ export const ToastCloseButtonWrapper = styled.div`
   display: flex;
   align-self: center;
   flex-shrink: 0;
-
-  button {
-    min-width: auto;
-    padding: ${spacing.xs};
-  }
 `;

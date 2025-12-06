@@ -1,14 +1,12 @@
 import React, { createContext, useState, useCallback, useMemo } from 'react';
 import { ToastContainer } from './ToastContainer';
-import { Toast, ToastContextType, ToastType, ToastPosition } from './Toast.types';
+import { Toast, ToastContextType, ToastType } from './Toast.types';
 
 // Create context
 export const ToastContext = createContext<ToastContextType | undefined>(undefined);
 
 interface ToastProviderProps {
   children: React.ReactNode;
-  /** Default toast position */
-  defaultPosition?: ToastPosition;
   /** Default toast duration */
   defaultDuration?: number;
   /** Maximum number of toasts to show at once */
@@ -17,7 +15,6 @@ interface ToastProviderProps {
 
 export const ToastProvider: React.FC<ToastProviderProps> = ({
   children,
-  defaultPosition = ToastPosition.BOTTOM_CENTER,
   defaultDuration = 3000,
   maxToasts = 5,
 }) => {
@@ -32,7 +29,6 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({
         ...toast,
         id,
         type: toast.type || ToastType.INFO,
-        position: toast.position || defaultPosition,
         duration: toast.duration !== undefined ? toast.duration : defaultDuration,
         showCloseButton: toast.showCloseButton !== undefined ? toast.showCloseButton : true,
       };
@@ -45,7 +41,7 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({
 
       return id;
     },
-    [defaultPosition, defaultDuration, maxToasts]
+    [defaultDuration, maxToasts]
   );
 
   // Remove a specific toast
@@ -65,7 +61,6 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({
         return addToast({
           message,
           type: ToastType.SUCCESS,
-          position: defaultPosition,
           duration: defaultDuration,
           showCloseButton: true,
           ...options,
@@ -75,7 +70,6 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({
         return addToast({
           message,
           type: ToastType.ERROR,
-          position: defaultPosition,
           duration: defaultDuration,
           showCloseButton: true,
           ...options,
@@ -85,7 +79,6 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({
         return addToast({
           message,
           type: ToastType.WARNING,
-          position: defaultPosition,
           duration: defaultDuration,
           showCloseButton: true,
           ...options,
@@ -95,14 +88,13 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({
         return addToast({
           message,
           type: ToastType.INFO,
-          position: defaultPosition,
           duration: defaultDuration,
           showCloseButton: true,
           ...options,
         });
       },
     }),
-    [addToast, defaultPosition, defaultDuration]
+    [addToast, defaultDuration]
   );
 
   const contextValue: ToastContextType = useMemo(

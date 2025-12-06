@@ -5,15 +5,6 @@ export enum ToastType {
   INFO = 'info',
 }
 
-export enum ToastPosition {
-  TOP_LEFT = 'top-left',
-  TOP_CENTER = 'top-center',
-  TOP_RIGHT = 'top-right',
-  BOTTOM_LEFT = 'bottom-left',
-  BOTTOM_CENTER = 'bottom-center',
-  BOTTOM_RIGHT = 'bottom-right',
-}
-
 export interface ToastProps {
   /** Unique identifier for the toast */
   id?: string;
@@ -23,8 +14,6 @@ export interface ToastProps {
   type?: ToastType | 'success' | 'error' | 'warning' | 'info';
   /** Duration in milliseconds (0 = no auto-dismiss) */
   duration?: number;
-  /** Position on screen */
-  position?: ToastPosition | 'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right';
   /** Show close button */
   showCloseButton?: boolean;
   /** Custom icon component */
@@ -42,7 +31,6 @@ export interface Toast {
   message: string;
   type: ToastType;
   duration: number;
-  position: ToastPosition;
   showCloseButton: boolean;
   icon?: React.ReactNode;
   onClose?: (id?: string) => void;

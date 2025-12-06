@@ -4,7 +4,7 @@ import { Toast } from './Toast';
 import { ToastProvider, useToast } from './index';
 import { Button, ButtonVariant, ButtonSize } from '../../atoms/Button';
 import { Stack } from '../../atoms/Stack';
-import { ToastType, ToastPosition } from './Toast.types';
+import { ToastType } from './Toast.types';
 import { Icon } from '../../atoms/Icon';
 import { faHeart, faMusic, faList } from '@fortawesome/free-solid-svg-icons';
 
@@ -28,11 +28,6 @@ const meta: Meta<typeof Toast> = {
       control: 'number',
       description: 'Duration in milliseconds (0 = no auto-dismiss)',
     },
-    position: {
-      control: 'select',
-      options: ['top-left', 'top-center', 'top-right', 'bottom-left', 'bottom-center', 'bottom-right'],
-      description: 'Position on screen',
-    },
     showCloseButton: {
       control: 'boolean',
       description: 'Show close button',
@@ -50,7 +45,6 @@ export const Success: Story = {
     message: 'Track added to Liked Songs',
     type: ToastType.SUCCESS,
     duration: 3000,
-    position: ToastPosition.BOTTOM_CENTER,
     showCloseButton: true,
   },
 };
@@ -60,7 +54,6 @@ export const Error: Story = {
     message: 'Failed to load playlist',
     type: ToastType.ERROR,
     duration: 3000,
-    position: ToastPosition.BOTTOM_CENTER,
     showCloseButton: true,
   },
 };
@@ -70,7 +63,6 @@ export const Warning: Story = {
     message: 'Feature not implemented yet',
     type: ToastType.WARNING,
     duration: 3000,
-    position: ToastPosition.BOTTOM_CENTER,
     showCloseButton: true,
   },
 };
@@ -80,7 +72,6 @@ export const Info: Story = {
     message: 'Track added to queue',
     type: ToastType.INFO,
     duration: 3000,
-    position: ToastPosition.BOTTOM_CENTER,
     showCloseButton: true,
   },
 };
@@ -91,7 +82,6 @@ export const LongMessage: Story = {
     message: 'This is a very long toast message that wraps to multiple lines. It demonstrates how the toast component handles longer content gracefully.',
     type: ToastType.INFO,
     duration: 5000,
-    position: ToastPosition.BOTTOM_CENTER,
     showCloseButton: true,
   },
 };
@@ -102,7 +92,6 @@ export const NoAutoDismiss: Story = {
     message: 'This toast will stay until you close it',
     type: ToastType.WARNING,
     duration: 0,
-    position: ToastPosition.BOTTOM_CENTER,
     showCloseButton: true,
   },
 };
@@ -113,7 +102,6 @@ export const NoCloseButton: Story = {
     message: 'This toast auto-dismisses without close button',
     type: ToastType.SUCCESS,
     duration: 3000,
-    position: ToastPosition.BOTTOM_CENTER,
     showCloseButton: false,
   },
 };
@@ -124,32 +112,8 @@ export const CustomIcon: Story = {
     message: 'Track liked!',
     type: ToastType.SUCCESS,
     duration: 3000,
-    position: ToastPosition.BOTTOM_CENTER,
     showCloseButton: true,
     icon: <Icon icon={faHeart} size="md" />,
-  },
-};
-
-// Different positions showcase
-export const AllPositions: Story = {
-  render: () => (
-    <div style={{ padding: '20px' }}>
-      <Stack direction="column" spacing="lg">
-        <Toast message="Top Left" type={ToastType.INFO} position={ToastPosition.TOP_LEFT} duration={0} />
-        <Toast message="Top Center" type={ToastType.SUCCESS} position={ToastPosition.TOP_CENTER} duration={0} />
-        <Toast message="Top Right" type={ToastType.WARNING} position={ToastPosition.TOP_RIGHT} duration={0} />
-        <Toast message="Bottom Left" type={ToastType.ERROR} position={ToastPosition.BOTTOM_LEFT} duration={0} />
-        <Toast message="Bottom Center" type={ToastType.INFO} position={ToastPosition.BOTTOM_CENTER} duration={0} />
-        <Toast message="Bottom Right" type={ToastType.SUCCESS} position={ToastPosition.BOTTOM_RIGHT} duration={0} />
-      </Stack>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story: 'Toast component can be positioned in 6 different locations on the screen.',
-      },
-    },
   },
 };
 
@@ -245,14 +209,6 @@ const InteractiveDemo: React.FC = () => {
             <Button
               variant={ButtonVariant.Secondary}
               size={ButtonSize.Medium}
-              onClick={() => toast.info('Top right position', { position: ToastPosition.TOP_RIGHT })}
-            >
-              Top Right
-            </Button>
-            
-            <Button
-              variant={ButtonVariant.Secondary}
-              size={ButtonSize.Medium}
               onClick={() => toast.warning('No auto-dismiss', { duration: 0 })}
             >
               No Auto-Dismiss
@@ -274,7 +230,7 @@ const InteractiveDemo: React.FC = () => {
 
 export const Interactive: Story = {
   render: () => (
-    <ToastProvider defaultPosition={ToastPosition.BOTTOM_CENTER} defaultDuration={3000} maxToasts={5}>
+    <ToastProvider defaultDuration={3000} maxToasts={5}>
       <InteractiveDemo />
     </ToastProvider>
   ),
@@ -282,7 +238,7 @@ export const Interactive: Story = {
     layout: 'fullscreen',
     docs: {
       description: {
-        story: 'Interactive demo with ToastProvider. Click buttons to trigger different toast notifications.',
+        story: 'Interactive demo with ToastProvider. Click buttons to trigger different toast notifications at bottom-center.',
       },
     },
   },
@@ -318,7 +274,7 @@ const MultipleToastsDemo: React.FC = () => {
 
 export const MultipleToasts: Story = {
   render: () => (
-    <ToastProvider defaultPosition={ToastPosition.BOTTOM_RIGHT} maxToasts={10}>
+    <ToastProvider maxToasts={10}>
       <MultipleToastsDemo />
     </ToastProvider>
   ),
@@ -326,7 +282,7 @@ export const MultipleToasts: Story = {
     layout: 'fullscreen',
     docs: {
       description: {
-        story: 'Demonstration of multiple toasts stacking. The provider limits the maximum number of visible toasts.',
+        story: 'Demonstration of multiple toasts stacking at bottom-center. The provider limits the maximum number of visible toasts.',
       },
     },
   },
