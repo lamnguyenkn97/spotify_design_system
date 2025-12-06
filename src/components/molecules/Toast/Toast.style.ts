@@ -154,7 +154,6 @@ export const ToastContainerWrapper = styled.div<ToastContainerWrapperProps>`
   display: flex;
   flex-direction: column;
   gap: ${spacing.sm};
-  max-width: 500px;
   width: 100%;
   padding: ${spacing.md};
 
@@ -208,12 +207,17 @@ export const ToastContainerWrapper = styled.div<ToastContainerWrapperProps>`
     }
   }}
 
+  /* Mobile styles (base) - full width */
   @media (max-width: 768px) {
-    max-width: 100%;
     left: 0;
     right: 0;
     transform: none;
     align-items: stretch;
+  }
+
+  /* Desktop styles - constrained width */
+  @media (min-width: 769px) {
+    max-width: 500px;
   }
 `;
 
@@ -232,7 +236,6 @@ export const ToastWrapper = styled.div<ToastWrapperProps>`
   box-shadow: ${shadows.large};
   min-height: 56px;
   width: 100%;
-  max-width: 500px;
   pointer-events: auto;
   
   ${({ $type }) => {
@@ -252,8 +255,9 @@ export const ToastWrapper = styled.div<ToastWrapperProps>`
           animation: ${getEnterAnimation($position)} 0.3s ease-out;
         `}
 
-  @media (max-width: 768px) {
-    max-width: 100%;
+  /* Desktop styles - constrained width */
+  @media (min-width: 769px) {
+    max-width: 500px;
   }
 `;
 
