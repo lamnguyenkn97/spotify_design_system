@@ -236,10 +236,10 @@ export const ToastWrapper = styled.div<ToastWrapperProps>`
   pointer-events: auto;
   
   ${({ $type }) => {
-    const colors = getToastColors($type);
+    const toastColors = getToastColors($type);
     return css`
-      background-color: ${colors.background};
-      color: ${colors.color};
+      background-color: ${toastColors.background};
+      color: ${toastColors.color};
     `;
   }}
 
@@ -286,9 +286,9 @@ export const ToastCloseButton = styled.button<{ $type: ToastType }>`
   transition: background-color ${animations.transitions.colors};
 
   ${({ $type }) => {
-    const colors = getToastColors($type);
+    const toastColors = getToastColors($type);
     return css`
-      color: ${colors.icon};
+      color: ${toastColors.icon};
     `;
   }}
 
