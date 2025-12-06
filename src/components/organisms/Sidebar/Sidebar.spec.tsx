@@ -928,3 +928,100 @@ describe('Sidebar Component', () => {
     });
   });
 }); 
+  describe('Visibility Controls', () => {
+    it('shows search input by default', () => {
+      render(
+        <TestWrapper>
+          <Sidebar {...defaultProps} />
+        </TestWrapper>
+      );
+      
+      expect(screen.getByPlaceholderText('Search in Your Library')).toBeInTheDocument();
+    });
+
+    it('hides search input when showSearch is false', () => {
+      render(
+        <TestWrapper>
+          <Sidebar {...defaultProps} showSearch={false} />
+        </TestWrapper>
+      );
+      
+      expect(screen.queryByPlaceholderText('Search in Your Library')).not.toBeInTheDocument();
+    });
+
+    it('shows add button by default', () => {
+      render(
+        <TestWrapper>
+          <Sidebar {...defaultProps} />
+        </TestWrapper>
+      );
+      
+      expect(screen.getByLabelText('Add new content')).toBeInTheDocument();
+    });
+
+    it('hides add button when showAddButton is false', () => {
+      render(
+        <TestWrapper>
+          <Sidebar {...defaultProps} showAddButton={false} />
+        </TestWrapper>
+      );
+      
+      expect(screen.queryByLabelText('Add new content')).not.toBeInTheDocument();
+    });
+
+    it('shows expand button by default', () => {
+      render(
+        <TestWrapper>
+          <Sidebar {...defaultProps} />
+        </TestWrapper>
+      );
+      
+      expect(screen.getByLabelText('Expand sidebar')).toBeInTheDocument();
+    });
+
+    it('hides expand button when showExpandButton is false', () => {
+      render(
+        <TestWrapper>
+          <Sidebar {...defaultProps} showExpandButton={false} />
+        </TestWrapper>
+      );
+      
+      expect(screen.queryByLabelText('Expand sidebar')).not.toBeInTheDocument();
+    });
+
+    it('hides all action buttons when showAddButton and showExpandButton are false', () => {
+      render(
+        <TestWrapper>
+          <Sidebar {...defaultProps} showAddButton={false} showExpandButton={false} />
+        </TestWrapper>
+      );
+      
+      expect(screen.queryByLabelText('Add new content')).not.toBeInTheDocument();
+      expect(screen.queryByLabelText('Expand sidebar')).not.toBeInTheDocument();
+    });
+
+    it('renders minimal sidebar with showSearch, showAddButton, and showExpandButton all false', () => {
+      render(
+        <TestWrapper>
+          <Sidebar 
+            {...defaultProps} 
+            showSearch={false}
+            showAddButton={false}
+            showExpandButton={false}
+          />
+        </TestWrapper>
+      );
+      
+      // Verify search is hidden
+      expect(screen.queryByPlaceholderText('Search in Your Library')).not.toBeInTheDocument();
+      
+      // Verify action buttons are hidden
+      expect(screen.queryByLabelText('Add new content')).not.toBeInTheDocument();
+      expect(screen.queryByLabelText('Expand sidebar')).not.toBeInTheDocument();
+      
+      // Verify core functionality still works
+      expect(screen.getByText('Your Library')).toBeInTheDocument();
+      expect(screen.getByText('Playlists')).toBeInTheDocument();
+      expect(screen.getByText('Liked Songs')).toBeInTheDocument();
+    });
+  });

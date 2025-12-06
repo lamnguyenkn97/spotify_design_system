@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Sidebar } from './Sidebar';
-import { LibraryItem, QueueItem, SidebarProps } from './Sidebar.types';
+import { LibraryItem, QueueItem, SidebarProps, SidebarVariant } from './Sidebar.types';
 
 // Sample library items for stories
 const sampleLibraryItems: LibraryItem[] = [
@@ -672,4 +672,70 @@ export const GenericQueueItems: Story = {
       </div>
     ),
   ],
+};
+
+// Without search
+export const WithoutSearch: Story = {
+  args: {
+    variant: SidebarVariant.LIBRARY,
+    items: sampleLibraryItems,
+    showSearch: false,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Sidebar without search functionality.',
+      },
+    },
+  },
+};
+
+// Without add button
+export const WithoutAddButton: Story = {
+  args: {
+    variant: SidebarVariant.LIBRARY,
+    items: sampleLibraryItems,
+    showAddButton: false,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Sidebar without the add button in the filters section.',
+      },
+    },
+  },
+};
+
+// Without expand button
+export const WithoutExpandButton: Story = {
+  args: {
+    variant: SidebarVariant.LIBRARY,
+    items: sampleLibraryItems,
+    showExpandButton: false,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Sidebar without the expand button in the filters section.',
+      },
+    },
+  },
+};
+
+// Minimal sidebar (no search, no add, no expand)
+export const MinimalControls: Story = {
+  args: {
+    variant: SidebarVariant.LIBRARY,
+    items: sampleLibraryItems,
+    showSearch: false,
+    showAddButton: false,
+    showExpandButton: false,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Minimal sidebar with only filters and items, no search or action buttons.',
+      },
+    },
+  },
 };

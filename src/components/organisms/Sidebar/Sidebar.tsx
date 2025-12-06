@@ -150,7 +150,9 @@ const FilterControls: React.FC<{
   onFilterClick?: (filter: string) => void;
   onAddClick?: () => void;
   onExpandClick?: () => void;
-}> = ({ filters, activeFilter, onFilterClick, onAddClick, onExpandClick }) => {
+  showAddButton?: boolean;
+  showExpandButton?: boolean;
+}> = ({ filters, activeFilter, onFilterClick, onAddClick, onExpandClick, showAddButton = true, showExpandButton = true }) => {
   return (
     <FiltersSectionStyled>
       <Stack direction="row" spacing="xs" style={{ flexWrap: 'wrap' }}>
@@ -165,20 +167,24 @@ const FilterControls: React.FC<{
             aria-label={`Filter by ${filter}`}
           />
         ))}
-        <Button
-          icon={<Icon icon={faPlus} size="sm" />}
-          size={ButtonSize.Small}
-          variant={ButtonVariant.Secondary}
-          onClick={() => onAddClick?.()}
-          aria-label="Add new content"
-        />
-        <Button
-          icon={<Icon icon={faExpand} size="sm" />}
-          size={ButtonSize.Small}
-          variant={ButtonVariant.Secondary}
-          onClick={() => onExpandClick?.()}
-          aria-label="Expand sidebar"
-        />
+        {showAddButton && (
+          <Button
+            icon={<Icon icon={faPlus} size="sm" />}
+            size={ButtonSize.Small}
+            variant={ButtonVariant.Secondary}
+            onClick={() => onAddClick?.()}
+            aria-label="Add new content"
+          />
+        )}
+        {showExpandButton && (
+          <Button
+            icon={<Icon icon={faExpand} size="sm" />}
+            size={ButtonSize.Small}
+            variant={ButtonVariant.Secondary}
+            onClick={() => onExpandClick?.()}
+            aria-label="Expand sidebar"
+          />
+        )}
       </Stack>
     </FiltersSectionStyled>
   );
@@ -339,6 +345,8 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
       filters = DEFAULT_FILTERS,
       showSearch = true,
       showFilters = true,
+      showAddButton = true,
+      showExpandButton = true,
       showLogo = true,
       showCloseButton = false,
       enableDragDrop = false,
@@ -478,6 +486,8 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
             onFilterClick={handleFilterClick}
             onAddClick={handleAddClick}
             onExpandClick={handleExpandClick}
+            showAddButton={showAddButton}
+            showExpandButton={showExpandButton}
           />
         ) : null,
       [
@@ -488,6 +498,8 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
         handleFilterClick,
         handleAddClick,
         handleExpandClick,
+        showAddButton,
+        showExpandButton,
       ]
     );
 
