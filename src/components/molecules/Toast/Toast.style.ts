@@ -207,17 +207,15 @@ export const ToastContainerWrapper = styled.div<ToastContainerWrapperProps>`
     }
   }}
 
-  /* Mobile styles (base) - full width */
-  @media (max-width: 768px) {
-    left: 0;
-    right: 0;
-    transform: none;
-    align-items: stretch;
-  }
-
-  /* Desktop styles - constrained width */
   @media (min-width: 769px) {
     max-width: 500px;
+  }
+
+  @media (max-width: 768px) {
+    left: 0 !important;
+    right: 0 !important;
+    transform: none !important;
+    align-items: stretch !important;
   }
 `;
 
