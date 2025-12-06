@@ -274,3 +274,14 @@ export const ToastMessage = styled.div`
   line-height: 1.5;
   word-break: break-word;
 `;
+
+export const ToastCloseButtonWrapper = styled.div`
+  display: flex;
+  align-self: center;
+  flex-shrink: 0;
+
+  button {
+    min-width: auto;
+    padding: ${spacing.xs};
+  }
+`;

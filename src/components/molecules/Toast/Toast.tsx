@@ -9,7 +9,12 @@ import {
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import { ToastProps, ToastType, ToastPosition } from './Toast.types';
-import { ToastWrapper, ToastIconWrapper, ToastMessage } from './Toast.style';
+import {
+  ToastWrapper,
+  ToastIconWrapper,
+  ToastMessage,
+  ToastCloseButtonWrapper,
+} from './Toast.style';
 
 // Default icons for each toast type
 const getDefaultIcon = (type: ToastType) => {
@@ -98,19 +103,15 @@ export const Toast: React.FC<ToastProps> = ({
 
        {/* Close Button */}
        {showCloseButton && (
-         <Button
-           variant={ButtonVariant.Text}
-           size={ButtonSize.Small}
-           icon={<Icon icon={faXmark} size="sm" />}
-           onClick={handleClose}
-           aria-label="Close notification"
-           style={{
-             minWidth: 'auto',
-             padding: '4px',
-             flexShrink: 0,
-             alignSelf: 'center',
-           }}
-         />
+         <ToastCloseButtonWrapper>
+           <Button
+             variant={ButtonVariant.Text}
+             size={ButtonSize.Small}
+             icon={<Icon icon={faXmark} size="sm" />}
+             onClick={handleClose}
+             aria-label="Close notification"
+           />
+         </ToastCloseButtonWrapper>
        )}
     </ToastWrapper>
   );
