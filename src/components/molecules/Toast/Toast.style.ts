@@ -301,4 +301,3 @@ export const ToastCloseButton = styled.button<{ $type: ToastType }>`
     outline-offset: 2px;
   }
 `;
-
