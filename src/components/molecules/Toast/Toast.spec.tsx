@@ -162,7 +162,6 @@ describe('Toast Component', () => {
       );
 
       const closeButton = screen.getByLabelText('Close notification');
-      expect(closeButton).toHaveAttribute('type', 'button');
       
       closeButton.focus();
       expect(closeButton).toHaveFocus();

@@ -1,12 +1,12 @@
 import React, { useEffect, useState, forwardRef } from 'react';
 import { Icon } from '../../atoms/Icon';
+import { Button, ButtonVariant, ButtonSize } from '../../atoms/Button';
 import { faCheckCircle, faExclamationCircle, faExclamationTriangle, faInfoCircle, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { ToastProps, ToastType, ToastPosition } from './Toast.types';
 import {
   ToastWrapper,
   ToastIconWrapper,
   ToastMessage,
-  ToastCloseButton,
 } from './Toast.style';
 
 // Default icons for each toast type
@@ -96,14 +96,18 @@ export const Toast = forwardRef<HTMLDivElement, ToastProps>(
 
         {/* Close Button */}
         {showCloseButton && (
-          <ToastCloseButton
+          <Button
+            variant={ButtonVariant.Text}
+            size={ButtonSize.Small}
+            icon={<Icon icon={faXmark} size="sm" />}
             onClick={handleClose}
-            $type={toastType}
             aria-label="Close notification"
-            type="button"
-          >
-            <Icon icon={faXmark} size="sm" />
-          </ToastCloseButton>
+            style={{ 
+              minWidth: 'auto', 
+              padding: '4px',
+              flexShrink: 0
+            }}
+          />
         )}
       </ToastWrapper>
     );

@@ -276,32 +276,3 @@ export const ToastMessage = styled.div`
   line-height: 1.5;
   word-break: break-word;
 `;
-
-export const ToastCloseButton = styled.button<{ $type: ToastType }>`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: ${spacing.xs};
-  border-radius: ${borderRadius.sm};
-  flex-shrink: 0;
-  transition: background-color ${animations.transitions.colors};
-
-  ${({ $type }) => {
-    const toastColors = getToastColors($type);
-    return css`
-      color: ${toastColors.icon};
-    `;
-  }}
-
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-  }
-
-  &:focus-visible {
-    outline: 2px solid ${colors.primary.white};
-    outline-offset: 2px;
-  }
-`;
