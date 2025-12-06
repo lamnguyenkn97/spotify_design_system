@@ -185,15 +185,6 @@ describe('Toast Component', () => {
 
       expect(screen.getByRole('alert')).toHaveStyle('opacity: 0.8');
     });
-
-    it('forwards ref correctly', () => {
-      const ref = React.createRef<HTMLDivElement>();
-      renderWithTheme(
-        <Toast ref={ref} message="Test" duration={0} />
-      );
-
-      expect(ref.current).toBeInstanceOf(HTMLDivElement);
-    });
   });
 
   describe('String type values', () => {

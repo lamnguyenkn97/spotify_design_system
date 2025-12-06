@@ -1,4 +1,4 @@
-import React, { useEffect, useState, forwardRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Icon } from '../../atoms/Icon';
 import { Button, ButtonVariant, ButtonSize } from '../../atoms/Button';
 import { faCheckCircle, faExclamationCircle, faExclamationTriangle, faInfoCircle, faXmark } from '@fortawesome/free-solid-svg-icons';
@@ -25,23 +25,19 @@ const getDefaultIcon = (type: ToastType) => {
   }
 };
 
-export const Toast = forwardRef<HTMLDivElement, ToastProps>(
-  (
-    {
-      id,
-      message,
-      type = ToastType.INFO,
-      duration = 3000,
-      position = ToastPosition.BOTTOM_CENTER,
-      showCloseButton = true,
-      icon,
-      onClose,
-      className,
-      style,
-      ...props
-    },
-    ref
-  ) => {
+export const Toast: React.FC<ToastProps> = ({
+  id,
+  message,
+  type = ToastType.INFO,
+  duration = 3000,
+  position = ToastPosition.BOTTOM_CENTER,
+  showCloseButton = true,
+  icon,
+  onClose,
+  className,
+  style,
+  ...props
+}) => {
     const [isExiting, setIsExiting] = useState(false);
 
     // Normalize type to enum
@@ -73,19 +69,18 @@ export const Toast = forwardRef<HTMLDivElement, ToastProps>(
       }, 300); // Match animation duration
     };
 
-    return (
-      <ToastWrapper
-        ref={ref}
-        $type={toastType}
-        $position={toastPosition}
-        $isExiting={isExiting}
-        className={className}
-        style={style}
-        role="alert"
-        aria-live="polite"
-        aria-atomic="true"
-        {...props}
-      >
+  return (
+    <ToastWrapper
+      $type={toastType}
+      $position={toastPosition}
+      $isExiting={isExiting}
+      className={className}
+      style={style}
+      role="alert"
+      aria-live="polite"
+      aria-atomic="true"
+      {...props}
+    >
         {/* Icon */}
         <ToastIconWrapper>
           {icon || getDefaultIcon(toastType)}
@@ -109,10 +104,7 @@ export const Toast = forwardRef<HTMLDivElement, ToastProps>(
             }}
           />
         )}
-      </ToastWrapper>
-    );
-  }
-);
-
-Toast.displayName = 'Toast';
+    </ToastWrapper>
+  );
+};
 
