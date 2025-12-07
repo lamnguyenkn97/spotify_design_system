@@ -11,5 +11,6 @@ export * from './Skeleton';
 export * from './Slider';
 export * from './Stack';
 export * from './Table';
+export * from './TextArea';
 export * from './Tooltip';
 export * from './Typography';
