@@ -247,7 +247,7 @@ npm publish               # Publish to NPM (after build)
 
 | Metric | Value |
 |--------|-------|
-| **Version** | 1.2.0 |
+| **Version** | 1.2.1 |
 | **Components** | 24 (16 Atoms, 6 Molecules, 3 Organisms) |
 | **Published to NPM** | ✅ Active deployment & versioning |
 | **Test Cases** | 70+ (Jest + React Testing Library) |
