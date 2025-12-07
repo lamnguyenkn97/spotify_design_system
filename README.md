@@ -6,7 +6,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-100%25-blue.svg)](https://www.typescriptlang.org/)
 [![Storybook](https://img.shields.io/badge/Storybook-Docs-ff4785.svg)](https://spotify-storybook.vercel.app)
 
-> A production-ready React component library with **23 components**, featuring drag-and-drop functionality, portal-rendered modals, and comprehensive accessibility support. Built with TypeScript, Styled Components, and published to NPM.
+> A production-ready React component library with **24 components**, featuring drag-and-drop functionality, portal-rendered modals, and comprehensive accessibility support. Built with TypeScript, Styled Components, and published to NPM.
 
 ## 🎯 What Is This?
 
@@ -36,10 +36,10 @@ npm install spotify-design-system
 
 ## ⚡ Key Features
 
-### 🧩 Component Library (23 Components)
+### 🧩 Component Library (24 Components)
 
-**Atoms (15)** - Building Blocks  
-`Button` • `Icon` • `Image` • `Input` • `Progress` • `Slider` • `Stack` • `Typography` • `TextLink` • `Tooltip` • `Divider` • `MessageText` • `Pill` • `Skeleton` • `Table`
+**Atoms (16)** - Building Blocks  
+`Button` • `Icon` • `Image` • `Input` • `TextArea` • `Progress` • `Slider` • `Stack` • `Typography` • `TextLink` • `Tooltip` • `Divider` • `MessageText` • `Pill` • `Skeleton` • `Table`
 
 **Molecules (6)** - Composite Components  
 `Banner` • `Card` • `Drawer` • `Footer` • `HorizontalTileCard` • `Toast`
@@ -247,8 +247,8 @@ npm publish               # Publish to NPM (after build)
 
 | Metric | Value |
 |--------|-------|
-| **Version** | 1.1.0 |
-| **Components** | 24 (15 Atoms, 6 Molecules, 3 Organisms) |
+| **Version** | 1.2.0 |
+| **Components** | 24 (16 Atoms, 6 Molecules, 3 Organisms) |
 | **Published to NPM** | ✅ Active deployment & versioning |
 | **Test Cases** | 70+ (Jest + React Testing Library) |
 | **Storybook Stories** | 100% component coverage |
