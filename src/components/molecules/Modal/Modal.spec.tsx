@@ -171,6 +171,77 @@ describe('Modal', () => {
         expect(screen.getByLabelText('Close modal')).toHaveFocus();
       });
     });
+
+    it('preserves focus on input fields during re-render', async () => {
+      const TestComponent = () => {
+        const [value, setValue] = React.useState('');
+        return (
+          <Modal {...defaultProps}>
+            <input
+              data-testid="test-input"
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              placeholder="Type here"
+            />
+          </Modal>
+        );
+      };
+
+      render(<TestComponent />);
+
+      const input = screen.getByTestId('test-input');
+      
+      // Focus the input
+      input.focus();
+      expect(input).toHaveFocus();
+
+      // Type into the input (causes parent re-render)
+      fireEvent.change(input, { target: { value: 'a' } });
+      
+      // Focus should remain on the input after state update
+      await waitFor(() => {
+        expect(input).toHaveFocus();
+      });
+
+      // Type more characters
+      fireEvent.change(input, { target: { value: 'abc' } });
+      
+      // Focus should still be on the input
+      await waitFor(() => {
+        expect(input).toHaveFocus();
+      });
+    });
+
+    it('does not re-focus first element on every re-render', async () => {
+      const TestComponent = () => {
+        const [count, setCount] = React.useState(0);
+        return (
+          <Modal {...defaultProps}>
+            <button data-testid="counter-btn" onClick={() => setCount(count + 1)}>
+              Count: {count}
+            </button>
+            <input data-testid="test-input" placeholder="Focus test" />
+          </Modal>
+        );
+      };
+
+      render(<TestComponent />);
+
+      const counterBtn = screen.getByTestId('counter-btn');
+      const input = screen.getByTestId('test-input');
+      
+      // Focus the input manually
+      input.focus();
+      expect(input).toHaveFocus();
+
+      // Click counter button (causes re-render)
+      fireEvent.click(counterBtn);
+      
+      // Input should still have focus (not stolen by close button)
+      await waitFor(() => {
+        expect(input).toHaveFocus();
+      });
+    });
   });
 
   describe('Custom props', () => {

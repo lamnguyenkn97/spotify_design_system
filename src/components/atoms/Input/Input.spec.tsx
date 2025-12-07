@@ -144,4 +144,93 @@ describe('Input', () => {
     // The fullWidth prop affects the container styling
     expect(input.closest('div')).toBeInTheDocument();
   });
+
+  it('preserves focus during typing', () => {
+    const handleChange = jest.fn();
+    
+    renderWithTheme(
+      <Input 
+        placeholder="Focus test"
+        onChange={handleChange}
+      />
+    );
+    
+    const input = screen.getByPlaceholderText('Focus test');
+    
+    // Focus the input
+    input.focus();
+    expect(input).toHaveFocus();
+    
+    // Type multiple characters
+    fireEvent.change(input, { target: { value: 'a' } });
+    expect(input).toHaveFocus();
+    
+    fireEvent.change(input, { target: { value: 'ab' } });
+    expect(input).toHaveFocus();
+    
+    fireEvent.change(input, { target: { value: 'abc' } });
+    expect(input).toHaveFocus();
+    
+    // onChange should be called for each change
+    expect(handleChange).toHaveBeenCalledTimes(3);
+  });
+
+  it('calls both onChange and onValueChange', () => {
+    const handleChange = jest.fn();
+    const handleValueChange = jest.fn();
+    
+    renderWithTheme(
+      <Input 
+        placeholder="Multiple handlers"
+        onChange={handleChange}
+        onValueChange={handleValueChange}
+      />
+    );
+    
+    const input = screen.getByPlaceholderText('Multiple handlers');
+    fireEvent.change(input, { target: { value: 'test' } });
+    
+    expect(handleChange).toHaveBeenCalledTimes(1);
+    expect(handleValueChange).toHaveBeenCalledWith('test');
+  });
+
+  it('maintains stable event handlers across re-renders', () => {
+    const handleChange = jest.fn();
+    const handleKeyDown = jest.fn();
+    
+    const { rerender } = renderWithTheme(
+      <Input 
+        placeholder="Stable handlers"
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
+      />
+    );
+    
+    const input = screen.getByPlaceholderText('Stable handlers');
+    
+    // First interaction
+    fireEvent.change(input, { target: { value: 'a' } });
+    fireEvent.keyDown(input, { key: 'Enter' });
+    
+    expect(handleChange).toHaveBeenCalledTimes(1);
+    expect(handleKeyDown).toHaveBeenCalledTimes(1);
+    
+    // Re-render with same handlers
+    rerender(
+      <ThemeProvider>
+        <Input 
+          placeholder="Stable handlers"
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
+        />
+      </ThemeProvider>
+    );
+    
+    // Handlers should still work after re-render
+    fireEvent.change(input, { target: { value: 'b' } });
+    fireEvent.keyDown(input, { key: 'Enter' });
+    
+    expect(handleChange).toHaveBeenCalledTimes(2);
+    expect(handleKeyDown).toHaveBeenCalledTimes(2);
+  });
 }); 

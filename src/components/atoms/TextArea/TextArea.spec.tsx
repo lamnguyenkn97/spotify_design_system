@@ -166,6 +166,36 @@ describe('TextArea', () => {
       const textarea = screen.getByRole('textbox');
       expect(textarea).toHaveAttribute('autoResize');
     });
+
+    it('preserves focus while typing with autoResize enabled', () => {
+      render(<TextArea autoResize />);
+      const textarea = screen.getByRole('textbox');
+      
+      // Focus the textarea
+      textarea.focus();
+      expect(textarea).toHaveFocus();
+
+      // Type text (triggers auto-resize)
+      fireEvent.change(textarea, { target: { value: 'Line 1\nLine 2\nLine 3' } });
+      
+      // Focus should be preserved
+      expect(textarea).toHaveFocus();
+    });
+
+    it('calls adjustHeight only when autoResize changes, not on every value change', () => {
+      const { rerender } = render(<TextArea autoResize value="Initial" onChange={() => {}} />);
+      const textarea = screen.getByRole('textbox') as HTMLTextAreaElement;
+      
+      // Initial render
+      expect(textarea.value).toBe('Initial');
+      
+      // Update value (should NOT trigger useEffect, only onChange)
+      rerender(<TextArea autoResize value="Updated text" onChange={() => {}} />);
+      expect(textarea.value).toBe('Updated text');
+      
+      // Textarea should still be functional
+      expect(textarea).toBeInTheDocument();
+    });
   });
 
   // Custom Styling

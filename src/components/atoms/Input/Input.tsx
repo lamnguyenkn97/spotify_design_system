@@ -1,5 +1,5 @@
 // SIMPLIFIED INPUT with left icon support
-import React, { forwardRef, useId } from 'react';
+import React, { forwardRef, useId, useCallback } from 'react';
 import { MessageText } from '../MessageText';
 import { InputProps } from './Input.types';
 import {
@@ -25,8 +25,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({
 }, ref) => {
   const inputId = useId();
 
-  // Handle input change events
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  // Handle input change events - memoized to prevent unnecessary recreations
+  const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     
     // Call the original onChange if provided
@@ -34,10 +34,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({
     
     // Call our custom onValueChange if provided
     onValueChange?.(value);
-  };
+  }, [onChange, onValueChange]);
 
-  // Handle key down events (especially Enter for search)
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  // Handle key down events (especially Enter for search) - memoized
+  const handleKeyDown = useCallback((event: React.KeyboardEvent<HTMLInputElement>) => {
     // Call the original onKeyDown if provided
     onKeyDown?.(event);
     
@@ -46,7 +46,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({
       const value = (event.target as HTMLInputElement).value;
       onSearch(value);
     }
-  };
+  }, [onKeyDown, onSearch]);
 
   return (
     <InputContainer fullWidth={fullWidth} className={className}>

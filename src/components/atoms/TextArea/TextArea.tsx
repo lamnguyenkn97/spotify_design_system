@@ -1,4 +1,4 @@
-import React, { forwardRef, useId, useEffect, useRef, useImperativeHandle } from 'react';
+import React, { forwardRef, useId, useEffect, useRef, useImperativeHandle, useCallback } from 'react';
 import { MessageText } from '../MessageText';
 import { TextAreaProps } from './TextArea.types';
 import {
@@ -27,8 +27,8 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(({
   // Expose the internal ref to parent via forwardRef
   useImperativeHandle(ref, () => internalRef.current as HTMLTextAreaElement);
 
-  // Auto-resize logic
-  const adjustHeight = () => {
+  // Auto-resize logic - memoized to prevent unnecessary recreations
+  const adjustHeight = useCallback(() => {
     const textArea = internalRef.current;
     if (!textArea || !autoResize) return;
 
@@ -36,12 +36,12 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(({
     textArea.style.height = 'auto';
     
     const lineHeight = parseInt(getComputedStyle(textArea).lineHeight);
-    const minHeight = lineHeight * (rows || 3);
+    const minHeight = lineHeight * rows;
     const maxHeight = maxRows ? lineHeight * maxRows : Infinity;
     
     const newHeight = Math.min(Math.max(textArea.scrollHeight, minHeight), maxHeight);
     textArea.style.height = `${newHeight}px`;
-  };
+  }, [autoResize, rows, maxRows]);
 
   // Handle input change events
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -59,12 +59,12 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(({
     onValueChange?.(value);
   };
 
-  // Initial height adjustment on mount
+  // Initial height adjustment on mount only
   useEffect(() => {
-    if (autoResize && props.value) {
+    if (autoResize) {
       adjustHeight();
     }
-  }, [autoResize, props.value]);
+  }, [autoResize, adjustHeight]);
 
   return (
     <TextAreaContainer fullWidth={fullWidth} className={className}>

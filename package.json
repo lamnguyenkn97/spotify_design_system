@@ -1,6 +1,6 @@
 {
   "name": "spotify-design-system",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Production-ready React component library with 24 components. TypeScript, Storybook, and design tokens for Spotify-themed UIs.",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",

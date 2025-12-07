@@ -89,33 +89,42 @@ export const Modal: React.FC<ModalProps> = ({
     };
   }, [media]);
 
-  // Focus management
+  // Focus management - only on mount/open change
   useEffect(() => {
-    if (open) {
-      // Store currently focused element
-      previousFocusRef.current = document.activeElement as HTMLElement;
+    if (!open) return;
 
-      // Focus the modal
-      if (modalRef.current) {
-        const focusableElement = modalRef.current.querySelector<HTMLElement>(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-        );
-        focusableElement?.focus();
-      }
+    // Store currently focused element (only when modal opens)
+    previousFocusRef.current = document.activeElement as HTMLElement;
 
-      // Add ESC listener
-      document.addEventListener('keydown', handleKeyDown);
-      // Prevent body scroll
-      document.body.style.overflow = 'hidden';
+    // Focus the modal only on initial open
+    if (modalRef.current) {
+      const focusableElement = modalRef.current.querySelector<HTMLElement>(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      focusableElement?.focus();
     }
 
+    // Prevent body scroll
+    document.body.style.overflow = 'hidden';
+
+    // Cleanup when modal closes
     return () => {
-      document.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = '';
-      // Restore focus
+      // Restore focus when modal closes
       if (previousFocusRef.current) {
         previousFocusRef.current.focus();
       }
+    };
+  }, [open]); // Only depend on 'open' state
+
+  // ESC key listener - separate effect to avoid focus issues
+  useEffect(() => {
+    if (!open) return;
+
+    document.addEventListener('keydown', handleKeyDown);
+    
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
     };
   }, [open, handleKeyDown]);
 
