@@ -12,8 +12,45 @@ const meta: Meta<typeof Drawer> = {
     layout: 'centered',
     docs: {
       description: {
-        component:
-          'Drawer component for displaying side panels. Drawers slide in from the edges of the screen and can contain navigation, forms, or other content.',
+        component: `
+# Drawer Component
+
+Sliding side panel for navigation, settings, or additional content.
+
+## Features
+- 4 positions (left, right, top, bottom)
+- Customizable width/height
+- Optional backdrop overlay
+- ESC key to close
+- Click outside to close
+- Smooth slide animations
+- Uses React Portal
+
+## Usage
+
+\`\`\`tsx
+import { Drawer } from 'spotify-design-system';
+
+const [open, setOpen] = useState(false);
+
+<Drawer
+  open={open}
+  onClose={() => setOpen(false)}
+  position="right"
+  width="300px"
+  title="Settings"
+>
+  <SettingsContent />
+</Drawer>
+\`\`\`
+
+## Use Cases
+- Mobile navigation menu
+- Filter panels
+- Settings/preferences
+- User profile sidebar
+- Queue view (right drawer)
+        `,
       },
     },
   },

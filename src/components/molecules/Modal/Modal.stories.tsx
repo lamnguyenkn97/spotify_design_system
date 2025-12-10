@@ -13,8 +13,56 @@ const meta: Meta<typeof Modal> = {
     layout: 'centered',
     docs: {
       description: {
-        component:
-          'Modal component for displaying overlay dialogs. Modal overlays block interaction with the rest of the page until dismissed.',
+        component: `
+# Modal Component
+
+Overlay dialog that blocks interaction with the rest of the page.
+
+## Features
+- 3 sizes (sm, md, lg)
+- Focus trap (Tab cycles within modal)
+- ESC key to close
+- Click outside backdrop to close
+- Auto-focus first interactive element
+- Focus restoration on close
+- Body scroll lock when open
+
+## Usage
+
+\`\`\`tsx
+import { Modal } from 'spotify-design-system';
+
+const [open, setOpen] = useState(false);
+
+<Modal 
+  open={open} 
+  onClose={() => setOpen(false)}
+  title="Delete Playlist?"
+  description="This action cannot be undone."
+>
+  <Button onClick={handleDelete}>Delete</Button>
+  <Button onClick={() => setOpen(false)}>Cancel</Button>
+</Modal>
+\`\`\`
+
+## Critical Bug Fix (v1.2.1)
+**Problem**: Typing in Input/TextArea inside Modal caused focus to jump to close button.
+
+**Root Cause**: Focus management \`useEffect\` depended on \`handleKeyDown\`, which changed on every re-render, causing the focus logic to re-run and steal focus.
+
+**Solution**: Split into 2 separate \`useEffect\` hooks:
+1. Focus management - depends only on \`open\` (runs once when modal opens)
+2. ESC key listener - depends on \`open\` + \`handleKeyDown\` (doesn't touch focus)
+
+This ensures focus is only set on initial modal open, not on every keystroke.
+
+## Accessibility
+- ✅ \`role="dialog"\` + \`aria-modal="true"\`
+- ✅ Keyboard navigation (Tab, ESC)
+- ✅ Focus trap
+- ✅ Focus restoration
+- ✅ Body scroll lock
+        `,
       },
     },
   },

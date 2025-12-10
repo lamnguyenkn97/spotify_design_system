@@ -12,6 +12,49 @@ const meta: Meta<typeof Banner> = {
   component: Banner,
   parameters: {
     layout: 'padded',
+    docs: {
+      description: {
+        component: `
+# Banner Component
+
+Large header banner for albums, playlists, podcasts, and artist pages.
+
+## Features
+- 4 types (album, playlist, podcast, artist)
+- Large cover image (square for albums/playlists, circular for artists)
+- Title, subtitle, and description text
+- Gradient background effect
+- Responsive layout
+
+## Usage
+
+\`\`\`tsx
+import { Banner } from 'spotify-design-system';
+
+// Album banner
+<Banner
+  type="album"
+  title="Midnights"
+  subtitle="Taylor Swift • 2022 • 13 songs, 44 min"
+  image="/album-cover.jpg"
+/>
+
+// Artist banner
+<Banner
+  type="artist"
+  title="Taylor Swift"
+  description="78.5M monthly listeners"
+  image="/artist-photo.jpg"
+/>
+\`\`\`
+
+## Design
+- Gradient from image colors to black background
+- Large image (200-240px)
+- Typography hierarchy (title, subtitle, description)
+        `,
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {

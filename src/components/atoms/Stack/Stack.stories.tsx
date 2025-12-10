@@ -41,8 +41,49 @@ const meta: Meta<typeof Stack> = {
     layout: 'padded',
     docs: {
       description: {
-        component:
-          'A simplified layout component for creating consistent spacing and alignment patterns in Spotify interfaces.',
+        component: `
+# Stack Component
+
+Flexbox layout component for consistent spacing and alignment.
+
+## Features
+- 2 directions (row, column)
+- 3 spacing options (sm, md, lg) using design tokens
+- 4 alignment options (start, center, end, stretch)
+- 4 justify options (start, center, end, space-between)
+
+## Usage
+
+\`\`\`tsx
+import { Stack } from 'spotify-design-system';
+
+// Vertical list
+<Stack direction="column" spacing="md">
+  <Track />
+  <Track />
+  <Track />
+</Stack>
+
+// Horizontal controls
+<Stack direction="row" spacing="sm" justify="center">
+  <Button>Previous</Button>
+  <Button>Play</Button>
+  <Button>Next</Button>
+</Stack>
+
+// Space between items
+<Stack direction="row" justify="space-between">
+  <Logo />
+  <NavItems />
+  <UserMenu />
+</Stack>
+\`\`\`
+
+## Design Tokens
+- sm: 8px
+- md: 16px
+- lg: 24px
+        `,
       },
     },
   },

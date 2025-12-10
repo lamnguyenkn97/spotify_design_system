@@ -13,6 +13,55 @@ const meta: Meta<typeof Footer> = {
   component: Footer,
   parameters: {
     layout: 'fullscreen',
+    docs: {
+      description: {
+        component: `
+# Footer Component
+
+Site footer with links, social media icons, and custom content support.
+
+## Features
+- Multiple link columns with headings
+- Social media icons (Instagram, Twitter, Facebook, etc.)
+- Copyright text
+- Custom content injection (top, bottom, or replace)
+- Toggle visibility of sections
+
+## Usage
+
+\`\`\`tsx
+import { Footer } from 'spotify-design-system';
+
+// Default footer
+<Footer />
+
+// With custom links
+<Footer
+  customLinks={[
+    {
+      heading: 'Company',
+      links: [
+        { label: 'About', href: '/about' },
+        { label: 'Careers', href: '/careers' },
+      ],
+    },
+  ]}
+  copyrightText="© 2025 My Company"
+/>
+
+// With custom content
+<Footer customContentPosition="top">
+  <Newsletter />
+</Footer>
+\`\`\`
+
+## Custom Content
+- \`top\`: Renders above footer links
+- \`bottom\`: Renders below copyright
+- \`replace\`: Replaces entire footer with custom content
+        `,
+      },
+    },
   },
   argTypes: {
     className: {

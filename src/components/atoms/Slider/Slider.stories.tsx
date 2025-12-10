@@ -8,6 +8,54 @@ import { Typography } from '../Typography/Text/Typography';
 export default {
   title: 'Atoms/Slider',
   component: Slider,
+  parameters: {
+    docs: {
+      description: {
+        component: `
+# Slider Component
+
+Range input slider for volume control, progress bars, and settings.
+
+## Features
+- Customizable min, max, step values
+- Smooth drag interaction with circular marker
+- Hover and active states with visual feedback
+- Disabled state support
+- Accessible with keyboard navigation
+
+## Usage
+
+\`\`\`tsx
+import { Slider } from 'spotify-design-system';
+
+// Volume control
+const [volume, setVolume] = useState(75);
+<Slider 
+  value={volume} 
+  onChange={setVolume}
+  min={0}
+  max={100}
+  aria-label="Volume control"
+/>
+
+// Track progress
+<Slider 
+  value={currentTime}
+  min={0}
+  max={duration}
+  onChange={seek}
+  aria-label="Track progress"
+/>
+\`\`\`
+
+## Design Features
+- Circular marker scales on hover (1.2x)
+- Green progress bar matches Spotify brand
+- Smooth transitions (0.15s)
+        `,
+      },
+    },
+  },
   argTypes: {
     value: {
       control: { type: 'number', min: 0, max: 100, step: 1 },

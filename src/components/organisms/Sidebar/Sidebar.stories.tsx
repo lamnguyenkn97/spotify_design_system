@@ -3,6 +3,8 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Sidebar } from './Sidebar';
 import { LibraryItem, QueueItem, SidebarProps, SidebarVariant } from './Sidebar.types';
 
+// Documentation added inline below
+
 // Sample library items for stories
 const sampleLibraryItems: LibraryItem[] = [
   {
@@ -110,6 +112,78 @@ const meta: Meta<typeof Sidebar> = {
   component: Sidebar,
   parameters: {
     layout: 'fullscreen',
+    docs: {
+      description: {
+        component: `
+# Sidebar Component
+
+Navigation sidebar for library and queue management with drag-and-drop reordering.
+
+## Features
+- 2 variants (Library, Queue)
+- Search functionality
+- Filter pills (Playlists, Albums, Artists, Podcasts)
+- **Drag-and-drop reordering** with visual feedback
+- Collapsible/expandable
+- Conditional controls (search, add, expand buttons)
+
+## Usage
+
+\`\`\`tsx
+import { Sidebar, SidebarVariant } from 'spotify-design-system';
+
+<Sidebar
+  variant={SidebarVariant.LIBRARY}
+  items={libraryItems}
+  onItemClick={(item) => openItem(item)}
+  onSearch={(query) => searchLibrary(query)}
+  onAddClick={() => createPlaylist()}
+  onReorder={(reordered) => saveNewOrder(reordered)}
+/>
+\`\`\`
+
+## Drag-and-Drop Implementation (Signature Feature!)
+
+### Three-State System
+1. **IDLE**: Normal state
+2. **DRAGGING**: Item being dragged (reduced opacity, scale 1.05)
+3. **DROP_TARGET**: Potential drop zone (green border, slight scale)
+
+### Visual Feedback
+- Dragging item: 50% opacity, cursor shows "grabbing"
+- Drop target: Green border (\`colors.primary.brand\`), scale 1.02
+- Smooth transitions (0.2s) for all state changes
+
+### Implementation
+\`\`\`tsx
+// HTML5 Drag & Drop API
+onDragStart={(e) => {
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', item.id);
+  setDraggedItemId(item.id);
+}}
+
+onDrop={(e) => {
+  e.preventDefault();
+  // Reorder items array
+  const newItems = reorderArray(items, draggedId, dropTargetId);
+  onReorder?.(newItems);
+}}
+\`\`\`
+
+## Props Control
+- \`showSearch\`: Toggle search input
+- \`showAddButton\`: Toggle add button
+- \`showExpandButton\`: Toggle expand button
+
+## Use Cases
+- Left sidebar navigation in Spotify
+- Library management (playlists, albums, artists)
+- Queue view with reordering
+- Custom item ordering via drag-and-drop
+        `,
+      },
+    },
   },
   decorators: [
     (Story) => (

@@ -17,6 +17,66 @@ const meta: Meta<typeof Button> = {
   component: Button,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component: `
+# Button Component
+
+A versatile button component with multiple variants and sizes for Spotify-themed interfaces.
+
+## Features
+- 6 variants (Primary, Secondary, White, Circular, FlatWhite, Text)
+- 3 sizes (Small, Medium, Large)
+- Icon support with FontAwesome
+- Loading states with animated spinner
+- Full keyboard and screen reader accessibility
+
+## Usage
+
+\`\`\`tsx
+import { Button, ButtonVariant } from 'spotify-design-system';
+
+// Basic button
+<Button variant={ButtonVariant.Primary}>
+  Play
+</Button>
+
+// With icon
+<Button 
+  variant={ButtonVariant.Primary}
+  icon={<Icon icon={faPlay} size="sm" />}
+>
+  Play Song
+</Button>
+
+// Loading state
+<Button loading variant={ButtonVariant.Primary}>
+  Saving...
+</Button>
+
+// Icon-only (must include aria-label!)
+<Button 
+  variant={ButtonVariant.Circular}
+  icon={<Icon icon={faPlay} />}
+  aria-label="Play song"
+/>
+\`\`\`
+
+## Design Tokens
+- Uses \`colors.primary.brand\` (#1DB954) for Primary variant
+- Min heights: Small (32px), Medium (40px), Large (48px)
+- Spacing from design token system (\`spacing.xs\`, \`spacing.md\`, etc.)
+- Circular font family with bold at Large size
+
+## Accessibility
+- ✅ Keyboard navigation (Tab, Enter, Space)
+- ✅ Focus visible outline (2px brand color)
+- ✅ Disabled state properly announced
+- ✅ Loading state blocks interaction
+- ⚠️ Icon-only buttons require \`aria-label\` prop
+        `,
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {
@@ -94,8 +154,6 @@ export const WithIcon: Story = {
   },
 };
 
-
-
 // Sizes
 export const Sizes: Story = {
   render: () => (
@@ -152,8 +210,6 @@ const PlayPauseComponent = () => {
 export const PlayPause: Story = {
   render: () => <PlayPauseComponent />,
 };
-
-
 
 export const AllVariants: Story = {
   render: () => (

@@ -8,6 +8,58 @@ const meta: Meta<typeof MusicPlayer> = {
   component: MusicPlayer,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component: `
+# Music Player Component
+
+Full-featured music player bar with playback controls, track info, and volume control.
+
+## Features
+- Play/pause, previous, next, shuffle, repeat controls
+- Track progress slider with time display
+- Volume control slider
+- Track information (title, artist, album cover)
+- Like button
+- Queue/devices buttons
+- Responsive layout
+
+## Usage
+
+\`\`\`tsx
+import { MusicPlayer } from 'spotify-design-system';
+
+const track = {
+  id: '1',
+  title: 'Anti-Hero',
+  artist: 'Taylor Swift',
+  album: 'Midnights',
+  duration: 200,
+  coverArt: '/album-cover.jpg',
+};
+
+<MusicPlayer
+  currentTrack={track}
+  isPlaying={isPlaying}
+  currentTime={120}
+  volume={75}
+  onPlayPause={() => togglePlay()}
+  onNext={() => nextTrack()}
+  onPrevious={() => previousTrack()}
+  onSeek={(time) => seekTo(time)}
+  onVolumeChange={(vol) => setVolume(vol)}
+/>
+\`\`\`
+
+## Layout
+- Left: Track info + album cover
+- Center: Playback controls + progress bar
+- Right: Volume + additional controls
+
+## Common at bottom of Spotify app
+        `,
+      },
+    },
   },
   decorators: [
     (Story) => (
