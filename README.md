@@ -6,13 +6,15 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-100%25-blue.svg)](https://www.typescriptlang.org/)
 [![Storybook](https://img.shields.io/badge/Storybook-Docs-ff4785.svg)](https://spotify-storybook.vercel.app)
 
-> A production-ready React component library with **24 components**, featuring drag-and-drop functionality, portal-rendered modals, and comprehensive accessibility support. Built with TypeScript, Styled Components, and published to NPM.
+> A production-ready fanmade Spotify Design System with *27 components* , featuring ATOMIC DESIGN PATTERN with Accessibility Support. Built with TypeScript, Styled Components, and published to NPM.
 
-## 🎯 What Is This?
+## 🎯 Why do I build this project ?
 
-A professional-grade design system demonstrating **modern component library architecture**, built to showcase advanced frontend engineering skills. This library powers a [full Spotify Clone application](https://github.com/lamnguyenkn97) with real-world features like queue management, playlist creation, and music playback.
+This is the project I built to showcase frontend engineering skills (through 6 years of working as a Software Engineer) and pave a way a project to re-implement [Spotify project](https://spotify-fanmade.vercel.app/).  
 
-**Built to demonstrate:**
+This library powers a [full Spotify Clone application](https://github.com/lamnguyenkn97) with real-world features like queue management, playlist creation, and music playback.
+
+**What I've learnt through this project:**
 - Component library architecture & API design
 - Design tokens & theming systems
 - Accessibility-first development (WCAG AA)
@@ -25,8 +27,10 @@ A professional-grade design system demonstrating **modern component library arch
 |----------|-------------|
 | **[📚 Interactive Docs](https://spotify-storybook.vercel.app)** | Storybook with live component examples |
 | **[📦 NPM Package](https://www.npmjs.com/package/spotify-design-system)** | Published & actively maintained library |
-| **[🎵 Live Application](https://github.com/lamnguyenkn97)** | Full Spotify clone built with this system |
+| **[🎵 Live Application](https://spotify-fanmade.vercel.app/)** | Full Spotify clone built with this system |
 | **[💻 Source Code](https://github.com/lamnguyenkn97/spotify_design_system)** | GitHub repository |
+
+
 
 ```bash
 npm install spotify-design-system
@@ -36,16 +40,30 @@ npm install spotify-design-system
 
 ## ⚡ Key Features
 
-### 🧩 Component Library (24 Components)
+### 🧩 Component Library (29 Components)
 
-**Atoms (16)** - Building Blocks  
-`Button` • `Icon` • `Image` • `Input` • `TextArea` • `Progress` • `Slider` • `Stack` • `Typography` • `TextLink` • `Tooltip` • `Divider` • `MessageText` • `Pill` • `Skeleton` • `Table`
 
-**Molecules (6)** - Composite Components  
-`Banner` • `Card` • `Drawer` • `Footer` • `HorizontalTileCard` • `Toast`
+| Atoms         | Molecules              | Organisms   |
+|---------------|------------------------|-------------|
+| Button        | Banner                 | AppHeader   |
+| Icon          | Card                   | Footer      |
+| Divider       | CategoryCard           | MusicPlayer |
+| Icon          | Drawer                 | Sidebar     |
+| **Equalizer** | **HorizontalTileCard** |             |
+| Image         | Modal                  |             |
+| Input         | Toast                  |             |
+| MessageText   |                        |             |
+| Pill          |                        |             |
+| Progress      |                        |             |
+| Skeleton      |                        |             |
+| Slider        |                        |             |
+| Stack         |                        |             |
+| **Table**     |                        |             |
+| TextArea      |                        |             |
+| Tooltip       |                        |             |
+| Typography    |                        |             |
+| Pill          |                        |             |
 
-**Organisms (3)** - Complex Features  
-`AppHeader` • `MusicPlayer` • `Sidebar`
 
 **[→ Explore all components in Storybook](https://spotify-storybook.vercel.app)**
 
