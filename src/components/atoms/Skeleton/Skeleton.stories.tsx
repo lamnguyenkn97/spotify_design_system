@@ -10,7 +10,40 @@ const meta: Meta<typeof Skeleton> = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Skeleton component for displaying loading placeholders while content is being fetched.',
+        component: `
+# Skeleton Component
+
+Loading placeholder that mimics the shape of content being loaded.
+
+## Features
+- 4 shape variants (text, rectangular, circular, rounded)
+- 3 animations (pulse, wave, none)
+- Can wrap children and toggle between skeleton/content
+- Customizable width and height
+
+## Usage
+
+\`\`\`tsx
+import { Skeleton } from 'spotify-design-system';
+
+// Basic skeleton
+<Skeleton variant="text" width="200px" />
+
+// Album card loading
+<Skeleton variant="rounded" width="160px" height="160px" animation="pulse" />
+
+// Toggle skeleton/content
+const [loading, setLoading] = useState(true);
+<Skeleton loading={loading} variant="circular" width="80px" height="80px">
+  <img src={avatar} alt="User" />
+</Skeleton>
+\`\`\`
+
+## Animations
+- **Pulse**: Gentle fade in/out (1.5s)
+- **Wave**: Shimmer effect across skeleton
+- **None**: Static placeholder
+        `,
       },
     },
   },

@@ -7,6 +7,50 @@ import { Stack } from '../Stack';
 export default {
   title: 'Atoms/Pill',
   component: Pill,
+  parameters: {
+    docs: {
+      description: {
+        component: `
+# Pill Component
+
+Small, rounded button-like elements for tags, filters, and categories.
+
+## Features
+- 3 sizes (sm, md, lg)
+- 3 variants (default, selected, filter)
+- Selected state with visual feedback
+- Dismissible option (X button for filters)
+- Keyboard accessible
+
+## Usage
+
+\`\`\`tsx
+import { Pill } from 'spotify-design-system';
+
+// Genre tag
+<Pill label="Pop" onClick={() => selectGenre('Pop')} />
+
+// Selected state
+<Pill label="Rock" selected onClick={() => deselectGenre('Rock')} />
+
+// Filter with dismiss
+<Pill 
+  label="2020s" 
+  variant="filter"
+  dismissible
+  onDismiss={() => removeFilter('2020s')}
+/>
+\`\`\`
+
+## Use Cases
+- Genre selection in search/browse
+- Active filters (dismissible)
+- Playlist categories/moods
+- Quick filter chips
+        `,
+      },
+    },
+  },
   tags: ['autodocs'],
   argTypes: {
     label: {

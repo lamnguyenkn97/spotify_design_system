@@ -13,6 +13,65 @@ const meta: Meta<typeof Toast> = {
   component: Toast,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component: `
+# Toast Component
+
+Temporary notification messages that appear at the bottom center of the screen.
+
+## Features
+- 4 types (success, error, warning, info) with color coding
+- Auto-dismiss with configurable duration
+- Manual dismiss with close button
+- Smooth slide-in/out animations
+- Queue management (max 5 toasts)
+- Uses React Context + Provider pattern
+
+## Usage
+
+\`\`\`tsx
+import { ToastProvider, useToast } from 'spotify-design-system';
+
+// Wrap app with provider
+function App() {
+  return (
+    <ToastProvider>
+      <YourApp />
+    </ToastProvider>
+  );
+}
+
+// Use in components
+function LikeButton() {
+  const { success, error } = useToast();
+  
+  const handleLike = async () => {
+    try {
+      await likeSong();
+      success('Added to Liked Songs');
+    } catch (err) {
+      error('Failed to like song');
+    }
+  };
+  
+  return <Button onClick={handleLike}>Like</Button>;
+}
+\`\`\`
+
+## Technical Details
+- **Context API**: Global toast state across app
+- **Portal**: Renders outside parent DOM for proper z-index
+- **Animation**: CSS keyframes (slideInFromBottom, slideOutToBottom)
+- **Position**: Fixed bottom-center only (simplified for consistency)
+
+## Design Decisions
+- Max 5 toasts to avoid screen clutter
+- 3s default duration (tested for readability)
+- Bottom-center position (less intrusive than top)
+        `,
+      },
+    },
   },
   argTypes: {
     message: {

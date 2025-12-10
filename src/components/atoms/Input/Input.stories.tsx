@@ -9,6 +9,54 @@ const meta: Meta<typeof Input> = {
   component: Input,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component: `
+# Input Component
+
+Text input field with label, error states, and icon support.
+
+## Features
+- Optional label and helper message
+- Error state with red styling
+- Left icon support (e.g., search icon)
+- Full width option
+- Search functionality with \`onSearch\` callback (fires on Enter)
+- Optimized with \`useCallback\` to prevent focus loss
+
+## Usage
+
+\`\`\`tsx
+import { Input } from 'spotify-design-system';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+
+// Basic input
+<Input 
+  label="Username" 
+  placeholder="Enter username"
+  onChange={(e) => setValue(e.target.value)}
+/>
+
+// Search input
+<Input 
+  placeholder="Search songs..."
+  leftIcon={<Icon icon={faSearch} />}
+  onSearch={(value) => searchTracks(value)}
+/>
+
+// Error state
+<Input 
+  label="Email"
+  error
+  message="Invalid email format"
+/>
+\`\`\`
+
+## Bug Fix (v1.2.1)
+Event handlers wrapped in \`useCallback\` to prevent focus loss during re-renders (especially when inside Modal).
+        `,
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {

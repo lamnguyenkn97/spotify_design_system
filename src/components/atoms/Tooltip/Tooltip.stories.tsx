@@ -12,7 +12,45 @@ const meta: Meta<typeof Tooltip> = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Tooltip component for providing contextual information and help text on hover, focus, or click.',
+        component: `
+# Tooltip Component
+
+Contextual information that appears on hover, focus, or click.
+
+## Features
+- 4 positions (top, bottom, left, right)
+- 3 trigger modes (hover, click, focus)
+- Configurable delay before showing
+- Customizable max-width
+- Accessible with keyboard focus
+
+## Usage
+
+\`\`\`tsx
+import { Tooltip } from 'spotify-design-system';
+
+// Basic tooltip
+<Tooltip content="Add to Liked Songs" position="top">
+  <Icon icon={faHeart} />
+</Tooltip>
+
+// Click to show
+<Tooltip content="More info..." trigger="click">
+  <Button>Info</Button>
+</Tooltip>
+
+// Delayed appearance
+<Tooltip content="Helpful tip" delay={500}>
+  <Icon icon={faQuestion} />
+</Tooltip>
+\`\`\`
+
+## Common Use Cases
+- Icon button labels
+- Feature descriptions
+- Disabled button explanations
+- Player control labels
+        `,
       },
     },
   },

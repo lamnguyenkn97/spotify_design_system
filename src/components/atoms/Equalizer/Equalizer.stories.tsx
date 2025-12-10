@@ -8,6 +8,43 @@ import { colors } from '../../../styles';
 const meta: Meta<typeof Equalizer> = {
   title: 'Atoms/Equalizer',
   component: Equalizer,
+  parameters: {
+    docs: {
+      description: {
+        component: `
+# Equalizer Component
+
+Animated audio equalizer bars that indicate active playback.
+
+## Features
+- 3 animated bars with wave effect when playing
+- 3 sizes (sm, md, lg)
+- Customizable color (defaults to Spotify brand green)
+- Paused state shows static bars
+
+## Usage
+
+\`\`\`tsx
+import { Equalizer } from 'spotify-design-system';
+
+// Show playing animation
+<Equalizer isPlaying={true} size="md" />
+
+// Static bars (paused)
+<Equalizer isPlaying={false} size="sm" />
+
+// Custom color
+<Equalizer isPlaying={true} color="#FF0000" />
+\`\`\`
+
+## Common Use Cases
+- Next to currently playing track in playlist
+- In now playing bar
+- Track list to show active song
+        `,
+      },
+    },
+  },
   tags: ['autodocs'],
   argTypes: {
     isPlaying: {

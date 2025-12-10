@@ -17,6 +17,59 @@ export default {
         { name: 'light', value: '#ffffff' },
       ],
     },
+    docs: {
+      description: {
+        component: `
+# App Header Component
+
+Top navigation header with search, authentication, and navigation controls.
+
+## Features
+- Logo/brand
+- Navigation arrows (back/forward)
+- Search bar
+- Authentication state (logged in/out)
+- User menu with avatar
+- Custom actions/links
+- Install app button
+- Responsive layout
+
+## Usage
+
+\`\`\`tsx
+import { AppHeader } from 'spotify-design-system';
+
+// Unauthenticated
+<AppHeader
+  onLogin={() => showLogin()}
+  onSearch={(query) => search(query)}
+  onInstallApp={() => downloadApp()}
+/>
+
+// Authenticated
+<AppHeader
+  isAuthenticated
+  user={{
+    name: 'John Doe',
+    email: 'john@example.com',
+    avatar: '/avatar.jpg',
+  }}
+  onSearch={(query) => search(query)}
+  customActions={[
+    { label: 'Profile', onClick: () => goToProfile() },
+    { label: 'Settings', onClick: () => goToSettings() },
+    { label: 'Logout', onClick: () => logout() },
+  ]}
+/>
+\`\`\`
+
+## Sections
+- Left: Logo + navigation arrows
+- Center: Search bar (full width)
+- Right: Auth buttons or user menu
+        `,
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {

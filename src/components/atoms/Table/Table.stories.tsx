@@ -27,6 +27,59 @@ type SpotifyTrack = {
 const meta: Meta<typeof Table<SpotifyTrack>> = {
   title: 'atoms/Table',
   component: Table,
+  parameters: {
+    docs: {
+      description: {
+        component: `
+# Table Component
+
+Flexible table component with custom column rendering for displaying track lists, playlists, and data.
+
+## Features
+- Fully TypeScript generic \`<Table<T>>\` for type safety
+- Custom cell rendering with \`renderCell\`
+- Column width control (fixed or auto)
+- Row click and hover handlers
+- Sticky header support
+
+## Usage
+
+\`\`\`tsx
+import { Table } from 'spotify-design-system';
+
+const columns = [
+  {
+    key: 'title',
+    label: 'Title',
+    width: 'auto',
+    renderCell: (track) => (
+      <Stack direction="row" spacing="sm">
+        <Image src={track.cover} size="sm" />
+        <Typography>{track.title}</Typography>
+      </Stack>
+    ),
+  },
+  {
+    key: 'duration',
+    label: 'Duration',
+    width: '60px',
+    align: 'right',
+    renderCell: (track) => <span>{track.duration}</span>,
+  },
+];
+
+<Table data={tracks} columns={columns} onRowClick={playTrack} />
+\`\`\`
+
+## Common Use Cases
+- Playlist track lists
+- Search results
+- Queue display
+- Liked songs view
+        `,
+      },
+    },
+  },
   tags: ['autodocs'],
   decorators: [
     (Story) => (

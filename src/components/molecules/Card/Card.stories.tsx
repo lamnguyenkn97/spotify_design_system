@@ -9,6 +9,51 @@ const meta: Meta<typeof Card> = {
   component: Card,
   parameters: {
     layout: 'padded',
+    docs: {
+      description: {
+        component: `
+# Card Component
+
+Clickable card for albums, playlists, and podcasts with hover effects.
+
+## Features
+- 2 variants (default for albums/playlists, artist for circular images)
+- 3 sizes (sm, md, lg)
+- Play button appears on hover
+- Smooth hover effects (lift + background change)
+- Optional subtitle (hidden for artist variant)
+
+## Usage
+
+\`\`\`tsx
+import { Card } from 'spotify-design-system';
+
+// Album/Playlist card
+<Card
+  title="Midnights"
+  subtitle="Taylor Swift"
+  imageUrl="/album-cover.jpg"
+  onClick={() => openAlbum()}
+  showPlayButton
+/>
+
+// Artist card
+<Card
+  variant="artist"
+  title="Taylor Swift"
+  imageUrl="/artist-photo.jpg"
+  onClick={() => openArtist()}
+/>
+\`\`\`
+
+## Hover Effects
+- Card lifts 4px with shadow
+- Background darkens slightly
+- Play button fades in with scale animation
+- Smooth transitions (0.2s)
+        `,
+      },
+    },
   },
   tags: ['autodocs'],
   argTypes: {

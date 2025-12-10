@@ -81,53 +81,6 @@ npm install spotify-design-system
 | **📚 Living Documentation** | Interactive Storybook with real-world examples |
 
 ---
-
-## 💡 Technical Highlights & Learnings
-
-### 🏗️ **Advanced Patterns Implemented**
-
-**Portal Rendering & Z-Index Management**
-- Drawer/Modal components use React Portals to escape CSS containment
-- Layered z-index system prevents overlay conflicts (modal: 500, drawer: 1300, tooltip: 1000)
-- Proper focus management and keyboard trap handling
-
-**Drag-and-Drop with Visual Feedback**
-- HTML5 Drag & Drop API with three-state system (idle → dragging → drop-target)
-- Smooth CSS transitions via styled-components for professional feel
-- Optimistic UI updates with callback-driven state management
-
-**Generic Component Composition**
-- Single `Sidebar` component supports multiple variants (Library, Queue)
-- Type-safe discriminated unions for variant-specific props
-- Backward compatibility layer for deprecated APIs
-
-**Design Token Architecture**
-- 100% elimination of hardcoded values (colors, spacing, typography, shadows)
-- Centralized theming system enables instant visual updates
-- Example: `padding: spacing.md` instead of `padding: '16px'`
-
-### 📚 **Key Learnings**
-
-**1. Simplification Over Features**
-- Reduced component complexity by 60% (Image: 156 → 77 lines, Stack: 20 → 4 props)
-- **Insight**: Real use cases trump theoretical flexibility
-
-**2. Leverage Existing Solutions**
-- Replaced 60+ lines of custom CSS animations with FontAwesome's `spin` prop
-- **Insight**: Always check if the ecosystem already solved the problem
-
-**3. Documentation Drives Adoption**
-- Standardized README format across all components (Overview → Props → Examples → A11y)
-- **Result**: Developers can implement components in under 2 minutes
-
-**4. Test User Journeys, Not Implementation**
-- 70+ focused tests on interactions, accessibility, and error states
-- **Insight**: Tests should mirror real user behavior
-
-**5. Storybook as Living Documentation**
-- Used real Spotify content (actual album covers, artist names) to reveal design gaps
-- Demonstrated composition patterns developers can copy-paste
-
 ### 🎯 **Production Quality Gates**
 
 ✅ **100% TypeScript** - All components fully typed with enums & interfaces  
@@ -188,9 +141,7 @@ import { colors, spacing, borderRadius } from 'spotify-design-system';
 
 ### Real-World Implementation
 
-See this design system in action: **[Spotify Clone Application →](https://github.com/lamnguyenkn97)**
-
-Features drag-drop queue management, playlist creation, and music playback using these components.
+See this design system in action: **[Spotify Clone Application →](https://github.com/lamnguyenkn97/spotify_fanmade)**
 
 ---
 
@@ -222,7 +173,6 @@ Button/
 ├── Button.types.ts      # TypeScript interfaces & enums
 ├── Button.stories.tsx   # Storybook documentation
 ├── Button.spec.tsx      # Jest + RTL tests
-├── README.md            # Usage guide
 └── index.tsx            # Public exports
 ```
 
@@ -249,33 +199,6 @@ npm run lint              # Check code quality
 npm publish               # Publish to NPM (after build)
 ```
 
-### Component Guidelines
-
-✅ Use TypeScript with strict mode  
-✅ Follow atomic design hierarchy  
-✅ Use design tokens (no hardcoded values)  
-✅ Write tests for user interactions  
-✅ Document with Storybook stories  
-✅ Include README with examples  
-✅ Ensure WCAG AA compliance
-
----
-
-## 📊 Project Stats
-
-| Metric | Value |
-|--------|-------|
-| **Version** | 1.2.1 |
-| **Components** | 24 (16 Atoms, 6 Molecules, 3 Organisms) |
-| **Published to NPM** | ✅ Active deployment & versioning |
-| **Test Cases** | 70+ (Jest + React Testing Library) |
-| **Storybook Stories** | 100% component coverage |
-| **TypeScript** | 100% type coverage |
-| **Design Tokens** | 100% (zero hardcoded values) |
-| **Accessibility** | WCAG AA compliant |
-| **Bundle** | Tree-shakeable, optimized |
-
----
 
 ## 🤝 Contributing
 
@@ -292,17 +215,6 @@ Contributions welcome! Please follow these steps:
 
 ---
 
-## 🔗 Links & Resources
-
-| Resource | URL |
-|----------|-----|
-| **NPM Package** | [npmjs.com/package/spotify-design-system](https://www.npmjs.com/package/spotify-design-system) |
-| **Storybook Docs** | [spotify-storybook.vercel.app](https://spotify-storybook.vercel.app) |
-| **Live Application** | [Spotify Clone (GitHub)](https://github.com/lamnguyenkn97) |
-| **Source Code** | [github.com/lamnguyenkn97/spotify_design_system](https://github.com/lamnguyenkn97/spotify_design_system) |
-| **Issues** | [GitHub Issues](https://github.com/lamnguyenkn97/spotify_design_system/issues) |
-
----
 
 ## 📄 License
 
@@ -310,7 +222,7 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 **Spotify** - Design inspiration  
 **React** - Component framework  
@@ -322,4 +234,4 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ---
 
-**Built by [Lam Nguyen](https://github.com/lamnguyenkn97)** • Version 1.1.0
+**Built by [Lam Nguyen](https://github.com/lamnguyenkn97)**

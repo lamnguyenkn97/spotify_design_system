@@ -10,8 +10,37 @@ const meta: Meta<typeof CategoryCard> = {
     layout: 'padded',
     docs: {
       description: {
-        component:
-          'A specialized card component for displaying content categories with background colors and optional overlay images. Used in Spotify\'s browse and category sections.',
+        component: `
+# Category Card
+
+Colorful card for browsing content categories with background colors and overlay images.
+
+## Features
+- Custom background color per category
+- Optional overlay image (tilted, positioned right)
+- Bold title text
+- Hover effects (lift + brightness)
+- Rounded corners
+
+## Usage
+
+\`\`\`tsx
+import { CategoryCard } from 'spotify-design-system';
+
+<CategoryCard
+  title="Pop"
+  backgroundColor="#8D67AB"
+  overlayImageUrl="/pop-cover.jpg"
+  onClick={() => browseCategory('pop')}
+/>
+\`\`\`
+
+## Design
+- Vibrant colors for each category
+- Overlay image rotated 25° for dynamic look
+- Smooth hover transition with scale
+- Used in Spotify's browse/search pages
+        `,
       },
     },
   },
