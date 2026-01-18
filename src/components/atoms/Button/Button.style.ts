@@ -10,8 +10,9 @@ import {
   scale,
   opacity,
   borders,
+  fontWeights,
 } from '../../../styles';
-import { ButtonSize, ButtonVariant } from './Button.types';
+import { ButtonSize, ButtonVariant, ButtonFontWeight } from './Button.types';
 
 // Design tokens for button-specific configurations
 const buttonTokens = {
@@ -30,6 +31,14 @@ const buttonTokens = {
   },
 } as const;
 
+// Font weight mapping
+const fontWeightMap: Record<ButtonFontWeight, number> = {
+  [ButtonFontWeight.Light]: fontWeights.light,
+  [ButtonFontWeight.Regular]: fontWeights.regular,
+  [ButtonFontWeight.Medium]: fontWeights.medium,
+  [ButtonFontWeight.Bold]: fontWeights.bold,
+};
+
 // Enhanced overlay colors using design tokens
 const overlayColors = {
   whiteSubtle: `rgba(255, 255, 255, ${opacity.overlay.subtle})`,
@@ -43,27 +52,33 @@ const sizeConfig = {
     fontSize: `${fontSizes.sm}rem`,
     fontFamily: `${fonts.circular.medium}, sans-serif`,
     minHeight: buttonTokens.minHeight.small,
+    defaultFontWeight: fontWeights.medium,
   },
   [ButtonSize.Medium]: {
     padding: `${spacing.sm} ${spacing.md}`,
     fontSize: `${fontSizes.md}rem`,
     fontFamily: `${fonts.circular.medium}, sans-serif`,
     minHeight: buttonTokens.minHeight.medium,
+    defaultFontWeight: fontWeights.medium,
   },
   [ButtonSize.Large]: {
     padding: `${spacing.md} ${spacing.lg}`,
     fontSize: `${fontSizes.lg}rem`,
     fontFamily: `${fonts.circular.bold}, sans-serif`,
     minHeight: buttonTokens.minHeight.large,
+    defaultFontWeight: fontWeights.bold,
   },
 } as const;
 
-export const getSizeStyles = (size: ButtonSize) => {
+export const getSizeStyles = (size: ButtonSize, fontWeight?: ButtonFontWeight) => {
   const config = sizeConfig[size] || sizeConfig[ButtonSize.Medium];
+  const weight = fontWeight ? fontWeightMap[fontWeight] : config.defaultFontWeight;
+  
   return css`
     padding: ${config.padding};
     font-size: ${config.fontSize};
     font-family: ${config.fontFamily};
+    font-weight: ${weight};
     min-height: ${config.minHeight};
   `;
 };
@@ -199,15 +214,16 @@ const getVariantStyles = (variant: ButtonVariant) => {
 
 export const StyledButton = styled.button.withConfig({
   shouldForwardProp: (prop) =>
-    !['size', 'variant', 'fullWidth', 'loading', 'circular'].includes(prop),
+    !['size', 'variant', 'fullWidth', 'loading', 'circular', 'fontWeight'].includes(prop),
 })<{
   size: ButtonSize;
   variant: ButtonVariant;
   fullWidth?: boolean;
   loading?: boolean;
   circular?: boolean;
+  fontWeight?: ButtonFontWeight;
 }>`
-  ${(props) => getSizeStyles(props.size)};
+  ${(props) => getSizeStyles(props.size, props.fontWeight)};
   ${(props) => getVariantStyles(props.variant)};
 
   /* Base styles using global design tokens */

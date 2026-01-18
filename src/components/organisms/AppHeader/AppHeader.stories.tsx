@@ -1,9 +1,7 @@
 import React from 'react';
 import { Meta, StoryFn } from '@storybook/react';
 import { AppHeader } from './AppHeader';
-import { AppHeaderProps, HeaderAction, HeaderLink } from './AppHeader.types';
-import { Icon } from '../../atoms';
-import { faHeart, faUser, faCog, faBell } from '@fortawesome/free-solid-svg-icons';
+import { AppHeaderProps, HeaderLink } from './AppHeader.types';
 
 export default {
   title: 'Organisms/AppHeader',
@@ -22,51 +20,67 @@ export default {
         component: `
 # App Header Component
 
-Top navigation header with search, authentication, and navigation controls.
+Modern Spotify-style navigation header with search, authentication, and navigation controls.
 
 ## Features
-- Logo/brand
-- Navigation arrows (back/forward)
-- Search bar
-- Authentication state (logged in/out)
-- User menu with avatar
-- Custom actions/links
+- Back/forward navigation arrows
+- Integrated search bar
+- Customizable guest links (Premium, Support, Download, etc.)
+- Authentication state (Sign up/Log in buttons)
+- User profile with avatar
 - Install app button
-- Responsive layout
+- Notification icon
+- Fully responsive design
+- Smooth hover animations
 
 ## Usage
 
 \`\`\`tsx
 import { AppHeader } from 'spotify-design-system';
 
-// Unauthenticated
+// Guest user with custom links
 <AppHeader
+  isAuthenticated={false}
   onLogin={() => showLogin()}
+  onSignUp={() => showSignUp()}
   onSearch={(query) => search(query)}
   onInstallApp={() => downloadApp()}
+  customLinks={[
+    { id: 'premium', label: 'Premium', href: '/premium' },
+    { id: 'support', label: 'Support', href: '/support' },
+    { id: 'download', label: 'Download', href: '/download' },
+  ]}
 />
 
-// Authenticated
+// Authenticated user
 <AppHeader
-  isAuthenticated
+  isAuthenticated={true}
   user={{
     name: 'John Doe',
-    email: 'john@example.com',
     avatar: '/avatar.jpg',
   }}
   onSearch={(query) => search(query)}
-  customActions={[
-    { label: 'Profile', onClick: () => goToProfile() },
-    { label: 'Settings', onClick: () => goToSettings() },
-    { label: 'Logout', onClick: () => logout() },
+  onBack={() => goBack()}
+  onForward={() => goForward()}
+  canGoBack={true}
+  canGoForward={false}
+/>
+\`\`\`
+
+## Custom Links
+You can customize the guest links displayed in the header by passing the \`customLinks\` prop:
+
+\`\`\`tsx
+<AppHeader
+  customLinks={[
+    { id: 'about', label: 'About Us', href: '/about' },
+    { id: 'pricing', label: 'Pricing', href: '/pricing' },
+    { id: 'contact', label: 'Contact', href: '/contact' },
   ]}
 />
 \`\`\`
 
-## Sections
-- Left: Logo + navigation arrows
-- Center: Search bar (full width)
-- Right: Auth buttons or user menu
+Each link can also have an optional \`onClick\` handler for custom behavior.
         `,
       },
     },
@@ -89,21 +103,29 @@ import { AppHeader } from 'spotify-design-system';
       action: 'login',
       description: 'Login handler',
     },
+    onSignUp: {
+      action: 'signup',
+      description: 'Sign up handler',
+    },
     onInstallApp: {
       action: 'install',
       description: 'Install app handler',
+    },
+    onBack: {
+      action: 'back',
+      description: 'Navigate back handler',
+    },
+    onForward: {
+      action: 'forward',
+      description: 'Navigate forward handler',
     },
     onHomeClick: {
       action: 'home',
       description: 'Home click handler',
     },
-    customActions: {
-      control: 'object',
-      description: 'Custom actions for authenticated users',
-    },
     customLinks: {
       control: 'object',
-      description: 'Custom links for guest users',
+      description: 'Custom navigation links for guest users. Each link should have id, label, and href properties.',
     },
     showInstallApp: {
       control: 'boolean',
@@ -117,132 +139,222 @@ import { AppHeader } from 'spotify-design-system';
       control: 'boolean',
       description: 'Whether to show custom links for guests',
     },
+    showNavigationControls: {
+      control: 'boolean',
+      description: 'Whether to show back/forward navigation arrows',
+    },
+    canGoBack: {
+      control: 'boolean',
+      description: 'Whether the back button is enabled',
+    },
+    canGoForward: {
+      control: 'boolean',
+      description: 'Whether the forward button is enabled',
+    },
   },
 } as Meta<typeof AppHeader>;
 
 const Template: StoryFn<AppHeaderProps> = (args) => <AppHeader {...args} />;
 
-export const LoggedOut: StoryFn<AppHeaderProps> = Template.bind({});
-LoggedOut.args = {
+// Default guest user with standard Spotify links
+export const GuestDefault: StoryFn<AppHeaderProps> = Template.bind({});
+GuestDefault.args = {
   isAuthenticated: false,
   onSearch: (value) => console.log('Searching for:', value),
-  onLogin: () => alert('Log in clicked'),
-  onInstallApp: () => alert('Install App clicked'),
-  onHomeClick: () => alert('Home clicked'),
+  onLogin: () => console.log('Log in clicked'),
+  onSignUp: () => console.log('Sign up clicked'),
+  onInstallApp: () => console.log('Install App clicked'),
+  onBack: () => console.log('Back clicked'),
+  onForward: () => console.log('Forward clicked'),
+  canGoBack: true,
+  canGoForward: false,
 };
 
-export const LoggedIn: StoryFn<AppHeaderProps> = Template.bind({});
-LoggedIn.args = {
+// Guest user with custom links
+export const GuestWithCustomLinks: StoryFn<AppHeaderProps> = Template.bind({});
+GuestWithCustomLinks.args = {
+  isAuthenticated: false,
+  onSearch: (value) => console.log('Searching for:', value),
+  onLogin: () => console.log('Log in clicked'),
+  onSignUp: () => console.log('Sign up clicked'),
+  onInstallApp: () => console.log('Install App clicked'),
+  customLinks: [
+    { id: 'about', label: 'About Us', href: '/about' },
+    { id: 'pricing', label: 'Pricing', href: '/pricing' },
+    { id: 'features', label: 'Features', href: '/features' },
+    { id: 'contact', label: 'Contact', href: '/contact' },
+  ],
+  canGoBack: false,
+  canGoForward: false,
+};
+
+// Guest with custom links that have onClick handlers
+export const GuestWithInteractiveLinks: StoryFn<AppHeaderProps> = Template.bind({});
+GuestWithInteractiveLinks.args = {
+  isAuthenticated: false,
+  onSearch: (value) => console.log('Searching for:', value),
+  onLogin: () => console.log('Log in clicked'),
+  onSignUp: () => console.log('Sign up clicked'),
+  onInstallApp: () => console.log('Install App clicked'),
+  customLinks: [
+    { 
+      id: 'premium', 
+      label: 'Premium', 
+      href: '#premium',
+      onClick: () => console.log('Premium link clicked!')
+    },
+    { 
+      id: 'support', 
+      label: 'Support', 
+      href: '#support',
+      onClick: () => console.log('Support link clicked!')
+    },
+    { 
+      id: 'blog', 
+      label: 'Blog', 
+      href: '#blog',
+      onClick: () => console.log('Blog link clicked!')
+    },
+  ],
+};
+
+// Authenticated user
+export const Authenticated: StoryFn<AppHeaderProps> = Template.bind({});
+Authenticated.args = {
   isAuthenticated: true,
   user: {
     name: 'Lana Nguyen',
     avatar: 'https://i.scdn.co/image/ab67706f00000002619c41c539a47b0b910728d0',
   },
   onSearch: (value) => console.log('Searching for:', value),
-  onLogin: () => alert('Log in clicked'),
-  onInstallApp: () => alert('Install App clicked'),
-  onHomeClick: () => alert('Home clicked'),
+  onLogin: () => console.log('Log in clicked'),
+  onInstallApp: () => console.log('Install App clicked'),
+  onBack: () => console.log('Back clicked'),
+  onForward: () => console.log('Forward clicked'),
+  canGoBack: true,
+  canGoForward: true,
 };
 
-export const LoggedInWithoutUser: StoryFn<AppHeaderProps> = Template.bind({});
-LoggedInWithoutUser.args = {
+// Authenticated without avatar
+export const AuthenticatedNoAvatar: StoryFn<AppHeaderProps> = Template.bind({});
+AuthenticatedNoAvatar.args = {
   isAuthenticated: true,
+  user: {
+    name: 'John Doe',
+    avatar: '',
+  },
   onSearch: (value) => console.log('Searching for:', value),
-  onLogin: () => alert('Log in clicked'),
-  onInstallApp: () => alert('Install App clicked'),
-  onHomeClick: () => alert('Home clicked'),
+  onLogin: () => console.log('Log in clicked'),
+  onInstallApp: () => console.log('Install App clicked'),
+  canGoBack: false,
+  canGoForward: true,
 };
 
-// Dynamic configuration examples
+// Minimal guest (no links, no buttons)
 export const MinimalGuest: StoryFn<AppHeaderProps> = Template.bind({});
 MinimalGuest.args = {
   isAuthenticated: false,
   onSearch: (value) => console.log('Searching for:', value),
-  onLogin: () => alert('Log in clicked'),
-  onInstallApp: () => alert('Install App clicked'),
-  onHomeClick: () => alert('Home clicked'),
+  onLogin: () => console.log('Log in clicked'),
+  onInstallApp: () => console.log('Install App clicked'),
   showInstallApp: false,
   showAuthButtons: false,
   showCustomLinks: false,
+  showNavigationControls: false,
 };
 
-export const CustomGuestLinks: StoryFn<AppHeaderProps> = Template.bind({});
-CustomGuestLinks.args = {
+// Guest without navigation controls
+export const GuestNoNavigation: StoryFn<AppHeaderProps> = Template.bind({});
+GuestNoNavigation.args = {
   isAuthenticated: false,
   onSearch: (value) => console.log('Searching for:', value),
-  onLogin: () => alert('Log in clicked'),
-  onInstallApp: () => alert('Install App clicked'),
-  onHomeClick: () => alert('Home clicked'),
+  onLogin: () => console.log('Log in clicked'),
+  onSignUp: () => console.log('Sign up clicked'),
+  onInstallApp: () => console.log('Install App clicked'),
+  showNavigationControls: false,
+};
+
+// Real-world example: E-commerce site
+export const EcommerceHeader: StoryFn<AppHeaderProps> = Template.bind({});
+EcommerceHeader.args = {
+  isAuthenticated: false,
+  onSearch: (value) => console.log('Searching for:', value),
+  onLogin: () => console.log('Log in clicked'),
+  onSignUp: () => console.log('Sign up clicked'),
+  onInstallApp: () => console.log('Install App clicked'),
   customLinks: [
-    { id: 'about', label: 'About', href: '#about' },
-    { id: 'contact', label: 'Contact', href: '#contact' },
-    { id: 'help', label: 'Help', href: '#help' },
+    { id: 'shop', label: 'Shop', href: '/shop' },
+    { id: 'deals', label: 'Deals', href: '/deals' },
+    { id: 'new', label: 'New Arrivals', href: '/new' },
+    { id: 'brands', label: 'Brands', href: '/brands' },
   ],
   showInstallApp: false,
 };
 
-export const CustomAuthenticatedActions: StoryFn<AppHeaderProps> = Template.bind({});
-CustomAuthenticatedActions.args = {
-  isAuthenticated: true,
-  user: {
-    name: 'Lana Nguyen',
-    avatar: 'https://i.scdn.co/image/ab67706f00000002619c41c539a47b0b910728d0',
-  },
+// Real-world example: SaaS product
+export const SaaSHeader: StoryFn<AppHeaderProps> = Template.bind({});
+SaaSHeader.args = {
+  isAuthenticated: false,
   onSearch: (value) => console.log('Searching for:', value),
-  onLogin: () => alert('Log in clicked'),
-  onInstallApp: () => alert('Install App clicked'),
-  onHomeClick: () => alert('Home clicked'),
-  customActions: [
-    {
-      id: 'favorites',
-      label: 'Favorites',
-      onClick: () => alert('Favorites clicked'),
-      icon: <Icon icon={faHeart} size="sm" />,
-      variant: 'text',
+  onLogin: () => console.log('Log in clicked'),
+  onSignUp: () => console.log('Sign up clicked'),
+  onInstallApp: () => console.log('Install App clicked'),
+  customLinks: [
+    { id: 'features', label: 'Features', href: '/features' },
+    { id: 'pricing', label: 'Pricing', href: '/pricing' },
+    { id: 'docs', label: 'Docs', href: '/docs' },
+    { id: 'api', label: 'API', href: '/api' },
+  ],
+  showInstallApp: false,
+};
+
+// Demo: Custom links with all features (href + onClick + external URLs)
+export const CustomLinksShowcase: StoryFn<AppHeaderProps> = Template.bind({});
+CustomLinksShowcase.args = {
+  isAuthenticated: false,
+  onSearch: (value) => console.log('Searching for:', value),
+  onLogin: () => console.log('Log in clicked'),
+  onSignUp: () => console.log('Sign up clicked'),
+  onInstallApp: () => console.log('Install App clicked'),
+  customLinks: [
+    { 
+      id: 'internal', 
+      label: 'Internal Link', 
+      href: '/internal-page',
+      onClick: () => console.log('Internal link clicked - you can add analytics here!')
     },
-    {
-      id: 'notifications',
-      label: 'Notifications',
-      onClick: () => alert('Notifications clicked'),
-      icon: <Icon icon={faBell} size="sm" />,
-      variant: 'text',
+    { 
+      id: 'external', 
+      label: 'External Link', 
+      href: 'https://spotify.com',
+      onClick: () => console.log('External link clicked - tracking event sent!')
     },
-    {
-      id: 'settings',
-      label: 'Settings',
-      onClick: () => alert('Settings clicked'),
-      icon: <Icon icon={faCog} size="sm" />,
-      variant: 'text',
+    { 
+      id: 'hash', 
+      label: 'Hash Link', 
+      href: '#section',
+      onClick: () => console.log('Hash link clicked - smooth scroll to section!')
+    },
+    { 
+      id: 'simple', 
+      label: 'Simple Link', 
+      href: '/about'
+      // No onClick - just navigates
     },
   ],
   showInstallApp: false,
 };
 
-export const MixedCustomActions: StoryFn<AppHeaderProps> = Template.bind({});
-MixedCustomActions.args = {
-  isAuthenticated: true,
-  user: {
-    name: 'Lana Nguyen',
-    avatar: 'https://i.scdn.co/image/ab67706f00000002619c41c539a47b0b910728d0',
-  },
+// Custom link names example: "link1 link2 link3 | Login Button"
+export const CustomLinkNames: StoryFn<AppHeaderProps> = Template.bind({});
+CustomLinkNames.args = {
+  isAuthenticated: false,
   onSearch: (value) => console.log('Searching for:', value),
-  onLogin: () => alert('Log in clicked'),
-  onInstallApp: () => alert('Install App clicked'),
-  onHomeClick: () => alert('Home clicked'),
-  customActions: [
-    {
-      id: 'profile',
-      label: 'Profile',
-      onClick: () => alert('Profile clicked'),
-      icon: <Icon icon={faUser} size="sm" />,
-      variant: 'text',
-    },
-    {
-      id: 'premium-link',
-      label: 'Go Premium',
-      onClick: () => alert('Premium clicked'),
-      type: 'link',
-      href: '#premium',
-    },
+  onLogin: () => console.log('Log in clicked'),
+  onInstallApp: () => console.log('Install App clicked'),
+  customLinks: [
+    { id: 'link1', label: 'Link 1', href: '/link1' },
+    { id: 'link2', label: 'Link 2', href: '/link2' },
+    { id: 'link3', label: 'Link 3', href: '/link3' },
   ],
 };

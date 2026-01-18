@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Button } from './Button';
-import { ButtonSize, ButtonVariant } from './Button.types';
+import { ButtonSize, ButtonVariant, ButtonFontWeight } from './Button.types';
 import { Icon } from '../Icon';
 import { Stack } from '../Stack';
 import {
@@ -27,6 +27,7 @@ A versatile button component with multiple variants and sizes for Spotify-themed
 ## Features
 - 6 variants (Primary, Secondary, White, Circular, FlatWhite, Text)
 - 3 sizes (Small, Medium, Large)
+- 4 font weights (Light, Regular, Medium, Bold)
 - Icon support with FontAwesome
 - Loading states with animated spinner
 - Full keyboard and screen reader accessibility
@@ -60,6 +61,14 @@ import { Button, ButtonVariant } from 'spotify-design-system';
   icon={<Icon icon={faPlay} />}
   aria-label="Play song"
 />
+
+// With custom font weight (e.g., bold text like Spotify's Sign up button)
+<Button 
+  variant={ButtonVariant.White}
+  fontWeight={ButtonFontWeight.Bold}
+>
+  Sign up
+</Button>
 \`\`\`
 
 ## Design Tokens
@@ -87,6 +96,11 @@ import { Button, ButtonVariant } from 'spotify-design-system';
     size: {
       control: 'select',
       options: Object.values(ButtonSize),
+    },
+    fontWeight: {
+      control: 'select',
+      options: Object.values(ButtonFontWeight),
+      description: 'Font weight for button text (Light, Regular, Medium, Bold)',
     },
     fullWidth: {
       control: 'boolean',
@@ -249,5 +263,63 @@ export const AllVariants: Story = {
   ),
   parameters: {
     layout: 'fullscreen',
+  },
+};
+
+export const FontWeights: Story = {
+  render: () => (
+    <Stack
+      spacing="lg"
+      style={{
+        padding: '20px',
+        backgroundColor: '#121212',
+      }}
+    >
+      <Stack direction="row" spacing="md" style={{ flexWrap: 'wrap' }}>
+        <Button 
+          text="Light" 
+          variant={ButtonVariant.White} 
+          fontWeight={ButtonFontWeight.Light}
+        />
+        <Button 
+          text="Regular" 
+          variant={ButtonVariant.White} 
+          fontWeight={ButtonFontWeight.Regular}
+        />
+        <Button 
+          text="Medium" 
+          variant={ButtonVariant.White} 
+          fontWeight={ButtonFontWeight.Medium}
+        />
+        <Button 
+          text="Bold" 
+          variant={ButtonVariant.White} 
+          fontWeight={ButtonFontWeight.Bold}
+        />
+      </Stack>
+      
+      <Stack direction="row" spacing="md" style={{ flexWrap: 'wrap' }}>
+        <Button 
+          text="Sign up" 
+          variant={ButtonVariant.White} 
+          fontWeight={ButtonFontWeight.Bold}
+          size={ButtonSize.Small}
+        />
+        <Button 
+          text="Log in" 
+          variant={ButtonVariant.Text} 
+          fontWeight={ButtonFontWeight.Bold}
+          size={ButtonSize.Small}
+        />
+      </Stack>
+    </Stack>
+  ),
+  parameters: {
+    layout: 'fullscreen',
+    docs: {
+      description: {
+        story: 'Demonstrates different font weights available for buttons. Bold is perfect for important actions like "Sign up" buttons.',
+      },
+    },
   },
 };

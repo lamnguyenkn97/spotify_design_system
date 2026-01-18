@@ -16,6 +16,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps & { circular?: b
   children,
   as,
   circular = false,
+  fontWeight,
   ...props
 }, ref) => {
   const content = children || text;
@@ -41,6 +42,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps & { circular?: b
       loading={loading}
       disabled={disabled || loading}
       circular={circular}
+      fontWeight={fontWeight}
       as={as}
       {...props}
     >
