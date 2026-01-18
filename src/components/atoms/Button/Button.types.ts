@@ -15,6 +15,13 @@ export enum ButtonSize {
   Large = 'large',
 }
 
+export enum ButtonFontWeight {
+  Light = 'light',
+  Regular = 'regular',
+  Medium = 'medium',
+  Bold = 'bold',
+}
+
 export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'size'> {
   onClick?: MouseEventHandler<HTMLButtonElement>;
   size?: ButtonSize;
@@ -23,6 +30,7 @@ export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
   icon?: React.ReactNode;
   fullWidth?: boolean;
   loading?: boolean;
+  fontWeight?: ButtonFontWeight;
   as?: keyof React.JSX.IntrinsicElements | React.ComponentType<any>;
   children?: React.ReactNode;
 }
