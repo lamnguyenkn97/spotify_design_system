@@ -1,6 +1,6 @@
 import React, { forwardRef, useCallback, useState } from 'react';
 import { AppHeaderProps, HeaderLink } from './AppHeader.types';
-import { Icon, Input, Button } from '../../atoms';
+import { Icon, Input, Button, Divider, Image } from '../../atoms';
 import { ButtonSize, ButtonVariant, ButtonFontWeight } from '../../atoms/Button';
 import { colors } from '../../../styles';
 import { faSpotify } from '@fortawesome/free-brands-svg-icons';
@@ -22,10 +22,8 @@ import {
   GuestActions,
   GuestLinks,
   GuestLink,
-  Divider,
   AuthenticatedActions,
   UserProfile,
-  UserAvatar,
   UserName,
   IconButton,
 } from './AppHeader.style';
@@ -193,19 +191,18 @@ export const AppHeader = forwardRef<HTMLElement, AppHeaderProps>(
                 aria-label={user ? `${user.name}'s profile` : 'User profile'}
                 title={user?.name || 'User'}
               >
-                <UserAvatar>
-                  {user?.avatar ? (
-                    <img 
-                      src={user.avatar} 
-                      alt={user.name}
-                      onError={(e) => {
-                        e.currentTarget.src = 'https://via.placeholder.com/28x28/333333/ffffff?text=U';
-                      }}
-                    />
-                  ) : (
-                    <Icon icon={faHome} size="sm" color="white" />
-                  )}
-                </UserAvatar>
+                {user?.avatar ? (
+                  <Image
+                    src={user.avatar}
+                    alt={user.name}
+                    size="sm"
+                    shape="circle"
+                    variant="avatar"
+                    fallbackSrc="https://via.placeholder.com/28x28/333333/ffffff?text=U"
+                  />
+                ) : (
+                  <Icon icon={faHome} size="sm" color="white" />
+                )}
                 {user?.name && <UserName>{user.name}</UserName>}
               </UserProfile>
             </AuthenticatedActions>
@@ -213,58 +210,28 @@ export const AppHeader = forwardRef<HTMLElement, AppHeaderProps>(
             <GuestActions>
               {renderGuestLinks()}
               
-              {showCustomLinks && customLinks && customLinks.length > 0 && (
-                <Divider />
+              {(showCustomLinks && customLinks && customLinks.length > 0) && showAuthButtons && (
+                <Divider 
+                  orientation="vertical" 
+                  color="muted"
+                  fullWidth={false}
+                />
               )}
 
               {showAuthButtons && (
-                <>
-                  {onSignUp && (
-                    <Button
-                      onClick={handleSignUp}
-                      variant={ButtonVariant.White}
-                      size={ButtonSize.Small}
-                      fontWeight={ButtonFontWeight.Bold}
-                      text="Sign up"
-                      aria-label="Sign up for Spotify"
-                      style={{
-                        borderRadius: '500px',
-                        padding: '8px 32px',
-                        letterSpacing: '-0.01em',
-                      }}
-                    />
-                  )}
-                  <Button
-                    onClick={handleLogin}
-                    variant={ButtonVariant.Text}
-                    size={ButtonSize.Small}
-                    fontWeight={ButtonFontWeight.Bold}
-                    text="Log in"
-                    aria-label="Log in to Spotify"
-                    style={{
-                      padding: '8px 16px',
-                    }}
-                  />
-                </>
-              )}
-              
-              {showInstallApp && (
-                <>
-                  {showAuthButtons && <Divider />}
-                  <Button
-                    onClick={handleInstallApp}
-                    variant={ButtonVariant.Text}
-                    size={ButtonSize.Small}
-                    fontWeight={ButtonFontWeight.Bold}
-                    icon={<Icon icon={faDownload} size="sm" />}
-                    text="Install App"
-                    aria-label="Install Spotify app"
-                    title="Install App"
-                    style={{
-                      color: colors.grey.grey4,
-                    }}
-                  />
-                </>
+                <Button
+                  onClick={handleLogin}
+                  variant={ButtonVariant.White}
+                  size={ButtonSize.Small}
+                  fontWeight={ButtonFontWeight.Bold}
+                  text="Log in"
+                  aria-label="Log in to Spotify"
+                  style={{
+                    borderRadius: '500px',
+                    padding: '8px 32px',
+                    letterSpacing: '-0.01em',
+                  }}
+                />
               )}
             </GuestActions>
           )}

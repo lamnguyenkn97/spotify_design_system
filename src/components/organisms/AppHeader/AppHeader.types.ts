@@ -23,6 +23,10 @@ export interface AppHeaderProps extends React.HTMLAttributes<HTMLElement> {
   className?: string;
   
   // Dynamic configuration options
+  /**
+   * Custom links to display in the header (replaces default Premium, Support, Download links)
+   * Each link can have custom id, label, href, and optional onClick handler
+   */
   customLinks?: HeaderLink[];
   showInstallApp?: boolean;
   showAuthButtons?: boolean;

@@ -344,3 +344,17 @@ CustomLinksShowcase.args = {
   ],
   showInstallApp: false,
 };
+
+// Custom link names example: "link1 link2 link3 | Login Button"
+export const CustomLinkNames: StoryFn<AppHeaderProps> = Template.bind({});
+CustomLinkNames.args = {
+  isAuthenticated: false,
+  onSearch: (value) => console.log('Searching for:', value),
+  onLogin: () => console.log('Log in clicked'),
+  onInstallApp: () => console.log('Install App clicked'),
+  customLinks: [
+    { id: 'link1', label: 'Link 1', href: '/link1' },
+    { id: 'link2', label: 'Link 2', href: '/link2' },
+    { id: 'link3', label: 'Link 3', href: '/link3' },
+  ],
+};

@@ -1,18 +1,28 @@
 import styled from 'styled-components';
-import { colors, spacing, fontSizes, fontWeights, shadows } from '../../../styles';
+import { 
+  colors, 
+  spacing, 
+  fontSizes, 
+  fontWeights, 
+  sizes, 
+  borderRadius, 
+  borders,
+  animations,
+  opacity,
+} from '../../../styles';
 
 export const HeaderContainer = styled.header`
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: ${sizes.zIndex.sticky};
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: ${spacing.sm} ${spacing.lg};
   background: ${colors.primary.black};
-  height: 64px;
+  height: calc(${spacing.xl} * 2);
   backdrop-filter: blur(10px);
-  transition: background 0.3s ease;
+  transition: ${animations.transitions.colors};
 
   @media (max-width: 768px) {
     padding: ${spacing.sm} ${spacing.md};
@@ -34,47 +44,47 @@ export const NavigationControls = styled.div`
 `;
 
 export const NavButton = styled.button<{ disabled?: boolean }>`
-  width: 32px;
-  height: 32px;
+  width: ${sizes.height.lg};
+  height: ${sizes.height.lg};
   display: flex;
   align-items: center;
   justify-content: center;
   background: ${colors.primary.black};
-  border: none;
-  border-radius: 50%;
+  border: ${borders.width.none} ${borders.style.none};
+  border-radius: ${borderRadius.round};
   color: ${props => props.disabled ? colors.grey.grey3 : colors.primary.white};
   cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
-  transition: all 0.2s ease;
-  opacity: ${props => props.disabled ? 0.5 : 1};
+  transition: ${animations.transitions.button};
+  opacity: ${props => props.disabled ? opacity.disabled : 1};
 
   &:hover:not(:disabled) {
-    transform: scale(1.05);
+    transform: scale(${animations.scale.small});
     background: ${colors.grey.grey1};
   }
 
   &:active:not(:disabled) {
-    transform: scale(0.95);
+    transform: scale(${animations.scale.pressed});
   }
 
   svg {
-    width: 16px;
-    height: 16px;
+    width: ${sizes.icon.lg};
+    height: ${sizes.icon.lg};
   }
 `;
 
 export const SearchContainer = styled.div`
   flex: 1;
-  max-width: 364px;
-  min-width: 200px;
+  max-width: ${sizes.maxWidth.modal};
+  min-width: calc(${spacing.image.md} * 2);
 
   @media (max-width: 768px) {
-    max-width: 300px;
-    min-width: 150px;
+    max-width: calc(${spacing.image.md} * 3);
+    min-width: calc(${spacing.image.md} * 1.5);
   }
 
   @media (max-width: 480px) {
-    max-width: 180px;
-    min-width: 120px;
+    max-width: calc(${spacing.image.md} * 1.875);
+    min-width: calc(${spacing.image.md} * 1.25);
   }
 `;
 
@@ -110,7 +120,7 @@ export const GuestLink = styled.a`
   text-decoration: none;
   font-size: ${fontSizes.sm}rem;
   font-weight: ${fontWeights.bold};
-  transition: color 0.2s ease;
+  transition: ${animations.transitions.colors};
   white-space: nowrap;
 
   &:hover {
@@ -118,16 +128,6 @@ export const GuestLink = styled.a`
   }
 `;
 
-export const Divider = styled.div`
-  width: 1px;
-  height: 16px;
-  background: ${colors.grey.grey3};
-  margin: 0 ${spacing.xs};
-
-  @media (max-width: 1024px) {
-    display: none;
-  }
-`;
 
 
 export const AuthenticatedActions = styled.div`
@@ -141,80 +141,64 @@ export const UserProfile = styled.button`
   align-items: center;
   gap: ${spacing.xs};
   background: ${colors.grey.grey1};
-  border: none;
-  border-radius: 23px; // Slightly rounded pill
-  padding: 2px;
+  border: ${borders.width.none} ${borders.style.none};
+  border-radius: ${borderRadius.md};
+  padding: ${spacing.xs};
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: ${animations.transitions.button};
 
   &:hover {
     background: ${colors.grey.grey2};
-    transform: scale(1.02);
+    transform: scale(${animations.scale.subtle});
   }
 
   &:active {
-    transform: scale(0.98);
+    transform: scale(${animations.scale.pressed});
   }
 `;
 
-export const UserAvatar = styled.div`
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  overflow: hidden;
-  background: ${colors.grey.grey3};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-`;
 
 export const UserName = styled.span`
   color: ${colors.primary.white};
   font-size: ${fontSizes.sm}rem;
   font-weight: ${fontWeights.bold};
-  padding: 0 ${spacing.xs} 0 ${spacing.xs};
-  max-width: 120px;
+  padding: 0 ${spacing.xs};
+  max-width: calc(${spacing.image.md} * 1.25);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 
   @media (max-width: 768px) {
-    display: none; // Hide username on mobile
+    display: none;
   }
 `;
 
 export const IconButton = styled.button<{ variant?: 'default' | 'highlight' }>`
-  width: 32px;
-  height: 32px;
+  width: ${sizes.height.lg};
+  height: ${sizes.height.lg};
   display: flex;
   align-items: center;
   justify-content: center;
   background: transparent;
-  border: none;
-  border-radius: 50%;
+  border: ${borders.width.none} ${borders.style.none};
+  border-radius: ${borderRadius.round};
   color: ${props => props.variant === 'highlight' ? colors.primary.brand : colors.grey.grey4};
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: ${animations.transitions.button};
 
   &:hover {
     color: ${colors.primary.white};
     background: ${colors.grey.grey1};
-    transform: scale(1.05);
+    transform: scale(${animations.scale.small});
   }
 
   &:active {
-    transform: scale(0.95);
+    transform: scale(${animations.scale.pressed});
   }
 
   svg {
-    width: 16px;
-    height: 16px;
+    width: ${sizes.icon.lg};
+    height: ${sizes.icon.lg};
   }
 `;
 
