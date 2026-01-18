@@ -12,7 +12,7 @@
 | Metric | Value |
 |--------|-------|
 | **Components** | 24 (16 Atoms, 7 Molecules, 4 Organisms) |
-| **Version** | 1.2.2 |
+| **Version** | 1.3.0 |
 | **Monthly Downloads** | 2.5k+ |
 | **TypeScript** | 100% |
 | **Test Coverage** | 70+ test cases |
